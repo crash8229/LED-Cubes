@@ -14,65 +14,24 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L MCU_Module:Arduino_UNO_R3 A1
-U 1 1 5DBEB90E
-P 1200 5400
-F 0 "A1" H 1200 6581 50  0000 C CNN
-F 1 "Arduino_UNO_R3" H 1200 6490 50  0000 C CNN
-F 2 "Module:Arduino_UNO_R3" H 1350 4350 50  0001 L CNN
-F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 1000 6450 50  0001 C CNN
-	1    1200 5400
-	-1   0    0    1   
-$EndComp
-$Comp
-L power:+5V #PWR013
-U 1 1 5DC12890
-P 1800 6400
-F 0 "#PWR013" H 1800 6250 50  0001 C CNN
-F 1 "+5V" H 1815 6573 50  0000 C CNN
-F 2 "" H 1800 6400 50  0001 C CNN
-F 3 "" H 1800 6400 50  0001 C CNN
-	1    1800 6400
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR07
-U 1 1 5DC13E14
-P 900 4300
-F 0 "#PWR07" H 900 4050 50  0001 C CNN
-F 1 "GND" H 905 4127 50  0000 C CNN
-F 2 "" H 900 4300 50  0001 C CNN
-F 3 "" H 900 4300 50  0001 C CNN
-	1    900  4300
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
-	1100 4300 900  4300
+	1700 4900 2000 4900
 Wire Wire Line
-	1700 4900 1900 4900
+	2000 4900 2000 3900
 Wire Wire Line
-	1900 4900 1900 4800
+	1700 5000 2100 5000
 Wire Wire Line
-	1700 5000 2000 5000
+	2100 5000 2100 4000
 Wire Wire Line
-	2000 5000 2000 3900
+	1700 5100 2200 5100
 Wire Wire Line
-	1700 5100 2100 5100
-Wire Wire Line
-	2100 5100 2100 4000
-Wire Wire Line
-	1700 5700 2200 5700
-Wire Wire Line
-	2200 5700 2200 3700
+	2200 5100 2200 3700
 Wire Wire Line
 	2200 3700 2300 3700
 Wire Wire Line
 	2100 4000 2500 4000
 Wire Wire Line
 	2000 3900 2400 3900
-Wire Wire Line
-	1900 4800 3700 4800
 Wire Wire Line
 	2300 3700 3700 3700
 Connection ~ 2300 3700
@@ -129,8 +88,6 @@ Wire Wire Line
 Wire Wire Line
 	6000 6400 5950 6400
 Connection ~ 6000 6400
-Wire Wire Line
-	6000 6950 5800 6950
 Wire Wire Line
 	6000 6400 6000 6950
 Wire Wire Line
@@ -353,7 +310,7 @@ F 1 "4.7K" H 5888 6705 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 5975 6750 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 6750 50  0001 C CNN
 	1    5600 6750
-	-1   0    0    1   
+	1    0    0    1   
 $EndComp
 $Comp
 L Transistor_FET:DMG2305UX Q1
@@ -540,8 +497,6 @@ Wire Wire Line
 	8000 5950 6450 5950
 Wire Wire Line
 	6450 6400 8000 6400
-Wire Wire Line
-	1800 6400 1300 6400
 $Comp
 L Device:R_Small_US R3
 U 1 1 5DDDA881
@@ -569,4 +524,18 @@ F 3 "" H 1400 3900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1600 3900 1400 3900
+Text Label 1700 4700 2    50   ~ 0
+ArduinoD13
+Text Label 1700 4800 2    50   ~ 0
+ArduinoD11
+Text Label 1700 4900 2    50   ~ 0
+ArduinoD10
+Text Label 1700 5000 2    50   ~ 0
+ArduinoD9
+Text Label 1700 5100 2    50   ~ 0
+ArduinoD3
+Wire Wire Line
+	1700 4800 3700 4800
+Wire Wire Line
+	5400 6950 6000 6950
 $EndSCHEMATC
