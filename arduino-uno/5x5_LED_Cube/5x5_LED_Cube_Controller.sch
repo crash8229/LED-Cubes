@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:5x5_LED_Cube_Controller-cache
 EELAYER 30 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -15,15 +14,9 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Wire Wire Line
-	1700 4900 2000 4900
-Wire Wire Line
 	2000 4900 2000 3900
 Wire Wire Line
-	1700 5000 2100 5000
-Wire Wire Line
 	2100 5000 2100 4000
-Wire Wire Line
-	1700 5100 2200 5100
 Wire Wire Line
 	2200 5100 2200 3700
 Wire Wire Line
@@ -61,13 +54,9 @@ Wire Wire Line
 Wire Wire Line
 	2600 4700 2600 2500
 Wire Wire Line
-	2700 4900 3700 4900
-Wire Wire Line
-	2700 2600 2700 4900
+	2700 2600 2700 4800
 Wire Wire Line
 	3700 2600 2700 2600
-Wire Wire Line
-	1700 4700 2600 4700
 Wire Wire Line
 	5800 4300 6250 4300
 Connection ~ 5800 4300
@@ -225,19 +214,6 @@ F 3 "" H 5950 4600 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5100 4300 5800 4300
-$Comp
-L Device:R_Small_US R1
-U 1 1 5DBED8D0
-P 3400 1300
-F 0 "R1" V 3500 1350 50  0000 L CNN
-F 1 "2.7K" V 3500 1150 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" H 3400 1300 50  0001 C CNN
-F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 3400 1300 50  0001 C CNN
-	1    3400 1300
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3700 1300 3500 1300
 Wire Wire Line
 	4400 900  4000 900 
 Wire Wire Line
@@ -349,58 +325,38 @@ Wire Wire Line
 Wire Wire Line
 	3600 3100 4000 3100
 $Comp
-L power:GND #PWR02
-U 1 1 5DD21A8D
-P 3050 1200
-F 0 "#PWR02" H 3050 950 50  0001 C CNN
-F 1 "GND" H 3055 1027 50  0000 C CNN
-F 2 "" H 3050 1200 50  0001 C CNN
-F 3 "" H 3050 1200 50  0001 C CNN
-	1    3050 1200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3700 1200 3200 1200
-Wire Wire Line
-	3300 1300 3200 1300
-Wire Wire Line
-	3200 1300 3200 1200
-Connection ~ 3200 1200
-Wire Wire Line
-	3200 1200 3050 1200
-$Comp
 L Device:R_Small_US R2
 U 1 1 5DD2D000
-P 3400 3500
-F 0 "R2" V 3500 3550 50  0000 L CNN
-F 1 "2.7K" V 3500 3350 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" H 3400 3500 50  0001 C CNN
-F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 3400 3500 50  0001 C CNN
-	1    3400 3500
+P 3250 3500
+F 0 "R2" V 3350 3550 50  0000 L CNN
+F 1 "2.7K" V 3350 3350 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 3250 3500 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 3250 3500 50  0001 C CNN
+	1    3250 3500
 	0    1    1    0   
 $EndComp
 $Comp
 L power:GND #PWR05
 U 1 1 5DD2D006
-P 3050 3400
-F 0 "#PWR05" H 3050 3150 50  0001 C CNN
-F 1 "GND" H 3055 3227 50  0000 C CNN
-F 2 "" H 3050 3400 50  0001 C CNN
-F 3 "" H 3050 3400 50  0001 C CNN
-	1    3050 3400
+P 2900 3400
+F 0 "#PWR05" H 2900 3150 50  0001 C CNN
+F 1 "GND" H 2905 3227 50  0000 C CNN
+F 2 "" H 2900 3400 50  0001 C CNN
+F 3 "" H 2900 3400 50  0001 C CNN
+	1    2900 3400
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3700 3400 3200 3400
+	3700 3400 3050 3400
 Wire Wire Line
-	3300 3500 3200 3500
+	3150 3500 3050 3500
 Wire Wire Line
-	3200 3500 3200 3400
-Connection ~ 3200 3400
+	3050 3500 3050 3400
+Connection ~ 3050 3400
 Wire Wire Line
-	3200 3400 3050 3400
+	3050 3400 2900 3400
 Wire Wire Line
-	3700 3500 3500 3500
+	3800 3500 3700 3500
 $Sheet
 S 8000 1100 1150 5400
 U 5DD345F8
@@ -431,11 +387,11 @@ F23 "LED22" O L 8000 3900 50
 F24 "LED23" O L 8000 4000 50 
 F25 "LED24" O L 8000 4100 50 
 F26 "LED25" O L 8000 4200 50 
-F27 "Layer1" I L 8000 4600 50 
-F28 "Layer2" I L 8000 5050 50 
+F27 "Layer1" I L 8000 5300 50 
+F28 "Layer2" I L 8000 5400 50 
 F29 "Layer3" I L 8000 5500 50 
-F30 "Layer4" I L 8000 5950 50 
-F31 "Layer5" I L 8000 6400 50 
+F30 "Layer4" I L 8000 5600 50 
+F31 "Layer5" I L 8000 5700 50 
 $EndSheet
 Wire Wire Line
 	5100 1200 8000 1200
@@ -488,15 +444,7 @@ Wire Wire Line
 Wire Wire Line
 	8000 4200 5100 4200
 Wire Wire Line
-	6450 4600 8000 4600
-Wire Wire Line
-	8000 5050 6450 5050
-Wire Wire Line
-	6450 5500 8000 5500
-Wire Wire Line
-	8000 5950 6450 5950
-Wire Wire Line
-	6450 6400 8000 6400
+	6450 4600 6900 4600
 $Comp
 L Device:R_Small_US R3
 U 1 1 5DDDA881
@@ -535,7 +483,204 @@ ArduinoD9
 Text Label 1700 5100 2    50   ~ 0
 ArduinoD3
 Wire Wire Line
-	1700 4800 3700 4800
-Wire Wire Line
 	5400 6950 6000 6950
+$Comp
+L Connector_Generic:Conn_01x05 J1
+U 1 1 5DC949CE
+P 1000 4900
+F 0 "J1" H 918 4475 50  0000 C CNN
+F 1 "Conn_01x05" H 918 4566 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 1000 4900 50  0001 C CNN
+F 3 "~" H 1000 4900 50  0001 C CNN
+	1    1000 4900
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1200 4700 2600 4700
+Wire Wire Line
+	1200 4900 2000 4900
+Wire Wire Line
+	1200 5000 2100 5000
+Wire Wire Line
+	1200 5100 2200 5100
+$Comp
+L Connector_Generic:Conn_01x05 J2
+U 1 1 5DD192EE
+P 7700 6200
+F 0 "J2" H 7618 5775 50  0000 C CNN
+F 1 "Conn_01x05" H 7618 5866 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 7700 6200 50  0001 C CNN
+F 3 "~" H 7700 6200 50  0001 C CNN
+	1    7700 6200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6900 4600 6900 5300
+Wire Wire Line
+	6800 5050 6800 5400
+Wire Wire Line
+	6800 5050 6450 5050
+Wire Wire Line
+	6900 6400 6900 5700
+Wire Wire Line
+	6900 5700 7500 5700
+Wire Wire Line
+	6800 5600 7600 5600
+Wire Wire Line
+	6450 5500 7700 5500
+Wire Wire Line
+	6800 5400 7800 5400
+Wire Wire Line
+	6900 5300 7900 5300
+Wire Wire Line
+	7900 6000 7900 5300
+Connection ~ 7900 5300
+Wire Wire Line
+	7900 5300 8000 5300
+Wire Wire Line
+	7800 6000 7800 5400
+Connection ~ 7800 5400
+Wire Wire Line
+	7800 5400 8000 5400
+Wire Wire Line
+	7700 6000 7700 5500
+Connection ~ 7700 5500
+Wire Wire Line
+	7700 5500 8000 5500
+Wire Wire Line
+	7600 6000 7600 5600
+Connection ~ 7600 5600
+Wire Wire Line
+	7600 5600 8000 5600
+Wire Wire Line
+	7500 6000 7500 5700
+Connection ~ 7500 5700
+Wire Wire Line
+	7500 5700 8000 5700
+Wire Wire Line
+	6450 6400 6900 6400
+Wire Wire Line
+	6800 5600 6800 5950
+Wire Wire Line
+	6800 5950 6450 5950
+Text Label 6950 5300 0    39   ~ 0
+Layer1
+Text Label 6950 5400 0    39   ~ 0
+Layer2
+Text Label 6950 5500 0    39   ~ 0
+Layer3
+Text Label 6950 5600 0    39   ~ 0
+Layer4
+Text Label 6950 5700 0    39   ~ 0
+Layer5
+Text Label 6950 4200 0    39   ~ 0
+LED25
+Text Label 6950 4100 0    39   ~ 0
+LED24
+Text Label 6950 4000 0    39   ~ 0
+LED23
+Text Label 6950 3900 0    39   ~ 0
+LED22
+Text Label 6950 3800 0    39   ~ 0
+LED21
+Text Label 6950 3700 0    39   ~ 0
+LED20
+Text Label 6950 3600 0    39   ~ 0
+LED19
+Text Label 6950 3500 0    39   ~ 0
+LED18
+Text Label 6950 3400 0    39   ~ 0
+LED17
+Text Label 6950 2700 0    39   ~ 0
+LED16
+Text Label 6950 2600 0    39   ~ 0
+LED15
+Text Label 6950 2500 0    39   ~ 0
+LED14
+Text Label 6950 2400 0    39   ~ 0
+LED13
+Text Label 6950 2300 0    39   ~ 0
+LED12
+Text Label 6950 2200 0    39   ~ 0
+LED11
+Text Label 6950 2100 0    39   ~ 0
+LED10
+Text Label 6950 2000 0    39   ~ 0
+LED9
+Text Label 6950 1900 0    39   ~ 0
+LED8
+Text Label 6950 1800 0    39   ~ 0
+LED7
+Text Label 6950 1700 0    39   ~ 0
+LED6
+Text Label 6950 1600 0    39   ~ 0
+LED5
+Text Label 6950 1500 0    39   ~ 0
+LED4
+Text Label 6950 1400 0    39   ~ 0
+LED3
+Text Label 6950 1300 0    39   ~ 0
+LED2
+Text Label 6950 1200 0    39   ~ 0
+LED1
+Text Label 5150 4700 0    39   ~ 0
+Layer5Gate
+Text Label 5150 4600 0    39   ~ 0
+Layer4Gate
+Text Label 5150 4500 0    39   ~ 0
+Layer3Gate
+Text Label 5150 4400 0    39   ~ 0
+Layer2Gate
+Text Label 5150 4300 0    39   ~ 0
+Layer1Gate
+Text Label 3400 3500 0    39   ~ 0
+IREF2
+Wire Wire Line
+	1200 4800 2700 4800
+Connection ~ 3700 3500
+Wire Wire Line
+	3700 3500 3350 3500
+Text Label 3400 1300 0    39   ~ 0
+IREF1
+Wire Wire Line
+	3050 1200 2900 1200
+Connection ~ 3050 1200
+Wire Wire Line
+	3050 1300 3050 1200
+Wire Wire Line
+	3150 1300 3050 1300
+Wire Wire Line
+	3700 1200 3050 1200
+$Comp
+L power:GND #PWR02
+U 1 1 5DD21A8D
+P 2900 1200
+F 0 "#PWR02" H 2900 950 50  0001 C CNN
+F 1 "GND" H 2905 1027 50  0000 C CNN
+F 2 "" H 2900 1200 50  0001 C CNN
+F 3 "" H 2900 1200 50  0001 C CNN
+	1    2900 1200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 1300 3350 1300
+$Comp
+L Device:R_Small_US R1
+U 1 1 5DBED8D0
+P 3250 1300
+F 0 "R1" V 3350 1350 50  0000 L CNN
+F 1 "2.7K" V 3350 1150 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 3250 1300 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 3250 1300 50  0001 C CNN
+	1    3250 1300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3700 2700 2800 2700
+Wire Wire Line
+	2800 2700 2800 4800
+Wire Wire Line
+	3700 4800 2800 4800
+Text Label 3450 2700 0    39   ~ 0
+SOUT1
 $EndSCHEMATC
