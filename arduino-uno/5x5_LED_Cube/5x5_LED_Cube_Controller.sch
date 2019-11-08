@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:5x5_LED_Cube_Controller-cache
 EELAYER 30 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -8,17 +9,13 @@ Title "5x5 LED Cube Controller"
 Date "2019-11-03"
 Rev "A1"
 Comp ""
-Comment1 "Power to be supplied by external module."
+Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
 Wire Wire Line
-	2000 4900 2000 3900
-Wire Wire Line
-	2100 5000 2100 4000
-Wire Wire Line
-	2200 5100 2200 3700
+	2200 5000 2200 3700
 Wire Wire Line
 	2200 3700 2300 3700
 Wire Wire Line
@@ -47,14 +44,7 @@ Wire Wire Line
 Wire Wire Line
 	3700 1800 2500 1800
 Wire Wire Line
-	2600 4700 3700 4700
-Connection ~ 2600 4700
-Wire Wire Line
 	2600 2500 3700 2500
-Wire Wire Line
-	2600 4700 2600 2500
-Wire Wire Line
-	2700 2600 2700 4800
 Wire Wire Line
 	3700 2600 2700 2600
 Wire Wire Line
@@ -130,10 +120,10 @@ $EndComp
 Wire Wire Line
 	6050 5950 5950 5950
 $Comp
-L power:+5V #PWR012
+L power:+5V #PWR013
 U 1 1 5DC35B0C
 P 5950 5950
-F 0 "#PWR012" H 5950 5800 50  0001 C CNN
+F 0 "#PWR013" H 5950 5800 50  0001 C CNN
 F 1 "+5V" H 5965 6123 50  0000 C CNN
 F 2 "" H 5950 5950 50  0001 C CNN
 F 3 "" H 5950 5950 50  0001 C CNN
@@ -154,10 +144,10 @@ $EndComp
 Wire Wire Line
 	6050 5500 5950 5500
 $Comp
-L power:+5V #PWR011
+L power:+5V #PWR010
 U 1 1 5DC3229A
 P 5950 5500
-F 0 "#PWR011" H 5950 5350 50  0001 C CNN
+F 0 "#PWR010" H 5950 5350 50  0001 C CNN
 F 1 "+5V" H 5965 5673 50  0000 C CNN
 F 2 "" H 5950 5500 50  0001 C CNN
 F 3 "" H 5950 5500 50  0001 C CNN
@@ -178,10 +168,10 @@ $EndComp
 Wire Wire Line
 	6050 5050 5950 5050
 $Comp
-L power:+5V #PWR09
+L power:+5V #PWR08
 U 1 1 5DC30191
 P 5950 5050
-F 0 "#PWR09" H 5950 4900 50  0001 C CNN
+F 0 "#PWR08" H 5950 4900 50  0001 C CNN
 F 1 "+5V" H 5965 5223 50  0000 C CNN
 F 2 "" H 5950 5050 50  0001 C CNN
 F 3 "" H 5950 5050 50  0001 C CNN
@@ -202,10 +192,10 @@ $EndComp
 Wire Wire Line
 	6050 4600 5950 4600
 $Comp
-L power:+5V #PWR08
+L power:+5V #PWR07
 U 1 1 5DC23E48
 P 5950 4600
-F 0 "#PWR08" H 5950 4450 50  0001 C CNN
+F 0 "#PWR07" H 5950 4450 50  0001 C CNN
 F 1 "+5V" H 5965 4773 50  0000 C CNN
 F 2 "" H 5950 4600 50  0001 C CNN
 F 3 "" H 5950 4600 50  0001 C CNN
@@ -219,10 +209,10 @@ Wire Wire Line
 Wire Wire Line
 	4400 5200 4000 5200
 $Comp
-L power:GND #PWR010
+L power:GND #PWR09
 U 1 1 5DC0990B
 P 4000 5200
-F 0 "#PWR010" H 4000 4950 50  0001 C CNN
+F 0 "#PWR09" H 4000 4950 50  0001 C CNN
 F 1 "GND" H 4005 5027 50  0000 C CNN
 F 2 "" H 4000 5200 50  0001 C CNN
 F 3 "" H 4000 5200 50  0001 C CNN
@@ -281,8 +271,8 @@ $Comp
 L Device:R_Network05_US RN1
 U 1 1 5DBE7F7D
 P 5600 6750
-F 0 "RN1" H 5888 6796 50  0000 L CNN
-F 1 "4.7K" H 5888 6705 50  0000 L CNN
+F 0 "RN1" H 5150 6800 50  0000 L CNN
+F 1 "4.7K" H 5150 6700 50  0000 L CNN
 F 2 "Resistor_THT:R_Array_SIP6" V 5975 6750 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 6750 50  0001 C CNN
 	1    5600 6750
@@ -355,8 +345,6 @@ Wire Wire Line
 Connection ~ 3050 3400
 Wire Wire Line
 	3050 3400 2900 3400
-Wire Wire Line
-	3800 3500 3700 3500
 $Sheet
 S 8000 1100 1150 5400
 U 5DD345F8
@@ -472,48 +460,18 @@ F 3 "" H 1400 3900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1600 3900 1400 3900
-Text Label 1700 4700 2    50   ~ 0
-ArduinoD13
-Text Label 1700 4800 2    50   ~ 0
-ArduinoD11
-Text Label 1700 4900 2    50   ~ 0
-ArduinoD10
-Text Label 1700 5000 2    50   ~ 0
-ArduinoD9
-Text Label 1700 5100 2    50   ~ 0
-ArduinoD3
+Text Label 1300 4600 0    39   ~ 0
+ArduinoD11(SIN)
+Text Label 1300 4900 0    39   ~ 0
+ArduinoD10(BLANK)
+Text Label 1300 4800 0    39   ~ 0
+ArduinoD9(XLAT)
+Text Label 1300 5000 0    39   ~ 0
+ArduinoD3(GSCLK)
 Wire Wire Line
 	5400 6950 6000 6950
-$Comp
-L Connector_Generic:Conn_01x05 J1
-U 1 1 5DC949CE
-P 1000 4900
-F 0 "J1" H 918 4475 50  0000 C CNN
-F 1 "Conn_01x05" H 918 4566 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 1000 4900 50  0001 C CNN
-F 3 "~" H 1000 4900 50  0001 C CNN
-	1    1000 4900
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
-	1200 4700 2600 4700
-Wire Wire Line
-	1200 4900 2000 4900
-Wire Wire Line
-	1200 5000 2100 5000
-Wire Wire Line
-	1200 5100 2200 5100
-$Comp
-L Connector_Generic:Conn_01x05 J2
-U 1 1 5DD192EE
-P 7700 6200
-F 0 "J2" H 7618 5775 50  0000 C CNN
-F 1 "Conn_01x05" H 7618 5866 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 7700 6200 50  0001 C CNN
-F 3 "~" H 7700 6200 50  0001 C CNN
-	1    7700 6200
-	0    1    1    0   
-$EndComp
+	1200 5000 2200 5000
 Wire Wire Line
 	6900 4600 6900 5300
 Wire Wire Line
@@ -636,10 +594,7 @@ Layer1Gate
 Text Label 3400 3500 0    39   ~ 0
 IREF2
 Wire Wire Line
-	1200 4800 2700 4800
-Connection ~ 3700 3500
-Wire Wire Line
-	3700 3500 3350 3500
+	1200 4700 2600 4700
 Text Label 3400 1300 0    39   ~ 0
 IREF1
 Wire Wire Line
@@ -683,4 +638,102 @@ Wire Wire Line
 	3700 4800 2800 4800
 Text Label 3450 2700 0    39   ~ 0
 SOUT1
+Wire Wire Line
+	3700 3500 3350 3500
+$Comp
+L Connector_Generic:Conn_01x05 J3
+U 1 1 5DD192EE
+P 7700 6200
+F 0 "J3" H 7618 5775 50  0000 C CNN
+F 1 "Layers" H 7618 5866 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 7700 6200 50  0001 C CNN
+F 3 "~" H 7700 6200 50  0001 C CNN
+	1    7700 6200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1200 4900 2000 4900
+Wire Wire Line
+	2000 3900 2000 4900
+Wire Wire Line
+	1200 4800 2100 4800
+Wire Wire Line
+	2100 4800 2100 4000
+Wire Wire Line
+	2700 2600 2700 4600
+Wire Wire Line
+	1200 4600 2700 4600
+Wire Wire Line
+	2600 2500 2600 4700
+Text Label 1300 4700 0    39   ~ 0
+ArduinoD13(SCLK)
+Wire Wire Line
+	3700 4700 2600 4700
+Connection ~ 2600 4700
+$Comp
+L power:GND #PWR012
+U 1 1 5DDB55DD
+P 2000 5750
+F 0 "#PWR012" H 2000 5500 50  0001 C CNN
+F 1 "GND" H 2005 5577 50  0000 C CNN
+F 2 "" H 2000 5750 50  0001 C CNN
+F 3 "" H 2000 5750 50  0001 C CNN
+	1    2000 5750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR011
+U 1 1 5DDB757A
+P 2000 5650
+F 0 "#PWR011" H 2000 5500 50  0001 C CNN
+F 1 "+5V" H 2015 5823 50  0000 C CNN
+F 2 "" H 2000 5650 50  0001 C CNN
+F 3 "" H 2000 5650 50  0001 C CNN
+	1    2000 5650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 5200 1700 5200
+Wire Wire Line
+	1200 5100 1800 5100
+Text Label 1300 5200 0    39   ~ 0
+ArduinoVIN
+Text Label 1300 5100 0    39   ~ 0
+ArduinoGND
+$Comp
+L Connector_Generic:Conn_01x02 J2
+U 1 1 5DD2338E
+P 1000 5650
+F 0 "J2" H 918 5867 50  0000 C CNN
+F 1 "Power" H 918 5776 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical" H 1000 5650 50  0001 C CNN
+F 3 "~" H 1000 5650 50  0001 C CNN
+	1    1000 5650
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x07 J1
+U 1 1 5DD22551
+P 1000 4900
+F 0 "J1" H 918 5417 50  0000 C CNN
+F 1 "Arduino" H 918 5326 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x07_P1.00mm_Vertical" H 1000 4900 50  0001 C CNN
+F 3 "~" H 1000 4900 50  0001 C CNN
+	1    1000 4900
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 5750 1800 5750
+Wire Wire Line
+	1200 5650 1700 5650
+Wire Wire Line
+	1700 5200 1700 5650
+Connection ~ 1700 5650
+Wire Wire Line
+	1700 5650 2000 5650
+Wire Wire Line
+	1800 5100 1800 5750
+Connection ~ 1800 5750
+Wire Wire Line
+	1800 5750 2000 5750
 $EndSCHEMATC
