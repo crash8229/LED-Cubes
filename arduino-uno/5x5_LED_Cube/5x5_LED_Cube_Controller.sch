@@ -5,9 +5,9 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 2
-Title "5x5 LED Cube Controller"
+Title "5x5 LED Cube Driver"
 Date "2019-11-03"
-Rev "A1"
+Rev "1.0"
 Comp ""
 Comment1 ""
 Comment2 ""
