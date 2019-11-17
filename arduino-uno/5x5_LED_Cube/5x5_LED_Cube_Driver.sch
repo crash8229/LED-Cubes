@@ -1,13 +1,13 @@
 EESchema Schematic File Version 4
-LIBS:5x5_LED_Cube_Controller-cache
+LIBS:5x5_LED_Cube_Driver-cache
 EELAYER 30 0
 EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 2
-Title "5x5 LED Cube Controller"
+Title "5x5 LED Cube Driver"
 Date "2019-11-03"
-Rev "A1"
+Rev "1.0"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -268,17 +268,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/tlc5940.pdf" H 4000 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R_Network05_US RN1
-U 1 1 5DBE7F7D
-P 5600 6750
-F 0 "RN1" H 5150 6800 50  0000 L CNN
-F 1 "4.7K" H 5150 6700 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP6" V 5975 6750 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 6750 50  0001 C CNN
-	1    5600 6750
-	1    0    0    1   
-$EndComp
-$Comp
 L My_Library:DMG2305UX Q1
 U 1 1 5DBE6712
 P 6250 4500
@@ -468,8 +457,6 @@ Text Label 1300 4800 0    39   ~ 0
 ArduinoD9(XLAT)
 Text Label 1300 5000 0    39   ~ 0
 ArduinoD3(GSCLK)
-Wire Wire Line
-	5400 6950 6000 6950
 Wire Wire Line
 	1200 5000 2200 5000
 Wire Wire Line
@@ -703,13 +690,13 @@ ArduinoGND
 $Comp
 L Connector_Generic:Conn_01x02 J2
 U 1 1 5DD2338E
-P 1000 5750
-F 0 "J2" H 918 5425 50  0000 C CNN
-F 1 "Power" H 918 5516 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical" H 1000 5750 50  0001 C CNN
-F 3 "~" H 1000 5750 50  0001 C CNN
-	1    1000 5750
-	-1   0    0    1   
+P 1000 5650
+F 0 "J2" H 918 5867 50  0000 C CNN
+F 1 "Power" H 918 5776 50  0000 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical" H 1000 5650 50  0001 C CNN
+F 3 "~" H 1000 5650 50  0001 C CNN
+	1    1000 5650
+	-1   0    0    -1  
 $EndComp
 $Comp
 L Connector_Generic:Conn_01x07 J1
@@ -736,4 +723,17 @@ Wire Wire Line
 Connection ~ 1800 5750
 Wire Wire Line
 	1800 5750 2000 5750
+Wire Wire Line
+	5400 6950 6000 6950
+$Comp
+L Device:R_Network05_US RN1
+U 1 1 5DBE7F7D
+P 5600 6750
+F 0 "RN1" H 5150 6800 50  0000 L CNN
+F 1 "4.7K" H 5150 6700 50  0000 L CNN
+F 2 "Resistor_THT:R_Array_SIP6" V 5975 6750 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 6750 50  0001 C CNN
+	1    5600 6750
+	1    0    0    1   
+$EndComp
 $EndSCHEMATC
