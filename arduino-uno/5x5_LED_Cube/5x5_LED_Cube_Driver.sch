@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:5x5_LED_Cube_Driver-cache
 EELAYER 30 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -50,25 +49,9 @@ Wire Wire Line
 Wire Wire Line
 	5800 4300 6250 4300
 Connection ~ 5800 4300
-Wire Wire Line
-	5800 6550 5800 4300
 Connection ~ 5700 4750
-Wire Wire Line
-	5700 6550 5700 4750
 Connection ~ 5600 5200
-Wire Wire Line
-	5600 6550 5600 5200
 Connection ~ 5500 5650
-Wire Wire Line
-	5500 6550 5500 5650
-Connection ~ 5400 6100
-Wire Wire Line
-	5400 6550 5400 6100
-Wire Wire Line
-	6000 6400 5950 6400
-Connection ~ 6000 6400
-Wire Wire Line
-	6000 6400 6000 6950
 Wire Wire Line
 	5400 6100 6250 6100
 Wire Wire Line
@@ -93,8 +76,6 @@ Wire Wire Line
 	5700 4400 5700 4750
 Wire Wire Line
 	5100 4400 5700 4400
-Wire Wire Line
-	6050 6400 6000 6400
 $Comp
 L power:+5V #PWR014
 U 1 1 5DC390C0
@@ -723,17 +704,115 @@ Wire Wire Line
 Connection ~ 1800 5750
 Wire Wire Line
 	1800 5750 2000 5750
-Wire Wire Line
-	5400 6950 6000 6950
 $Comp
-L Device:R_Network05_US RN1
-U 1 1 5DBE7F7D
-P 5600 6750
-F 0 "RN1" H 5150 6800 50  0000 L CNN
-F 1 "4.7K" H 5150 6700 50  0000 L CNN
-F 2 "Resistor_THT:R_Array_SIP6" V 5975 6750 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/31509/csc.pdf" H 5600 6750 50  0001 C CNN
-	1    5600 6750
-	1    0    0    1   
+L Device:R_Small_US R8
+U 1 1 5DD11EE6
+P 5000 6700
+F 0 "R8" V 5100 6750 50  0000 L CNN
+F 1 "4.7K" V 5100 6550 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5000 6700 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 5000 6700 50  0001 C CNN
+	1    5000 6700
+	-1   0    0    1   
 $EndComp
+Wire Wire Line
+	5950 6400 6050 6400
+$Comp
+L Device:R_Small_US R7
+U 1 1 5DD185D6
+P 5200 6700
+F 0 "R7" V 5300 6750 50  0000 L CNN
+F 1 "4.7K" V 5300 6550 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5200 6700 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 5200 6700 50  0001 C CNN
+	1    5200 6700
+	-1   0    0    1   
+$EndComp
+Connection ~ 5400 6100
+Wire Wire Line
+	5400 6200 5400 6100
+$Comp
+L Device:R_Small_US R6
+U 1 1 5DD44E39
+P 5400 6700
+F 0 "R6" V 5500 6750 50  0000 L CNN
+F 1 "4.7K" V 5500 6550 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5400 6700 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 5400 6700 50  0001 C CNN
+	1    5400 6700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_Small_US R5
+U 1 1 5DD45353
+P 5600 6700
+F 0 "R5" V 5700 6750 50  0000 L CNN
+F 1 "4.7K" V 5700 6550 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5600 6700 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 5600 6700 50  0001 C CNN
+	1    5600 6700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R_Small_US R4
+U 1 1 5DD45991
+P 5800 6700
+F 0 "R4" V 5900 6750 50  0000 L CNN
+F 1 "4.7K" V 5900 6550 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5800 6700 50  0001 C CNN
+F 3 "https://www.newark.com/panasonic/erj-2gej272x/res-thick-film-2k7-5-0-1w-0402/dp/97W7160" H 5800 6700 50  0001 C CNN
+	1    5800 6700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5800 4300 5800 6600
+Wire Wire Line
+	5400 6200 5000 6200
+Wire Wire Line
+	5000 6200 5000 6600
+Wire Wire Line
+	5500 6300 5200 6300
+Wire Wire Line
+	5200 6300 5200 6600
+Wire Wire Line
+	5500 5650 5500 6300
+Wire Wire Line
+	5600 6400 5400 6400
+Wire Wire Line
+	5400 6400 5400 6600
+Wire Wire Line
+	5600 5200 5600 6400
+Wire Wire Line
+	5700 6500 5600 6500
+Wire Wire Line
+	5600 6500 5600 6600
+Wire Wire Line
+	5700 4750 5700 6500
+Wire Wire Line
+	5950 6400 5950 6900
+Wire Wire Line
+	5950 6900 5800 6900
+Wire Wire Line
+	5000 6900 5000 6800
+Connection ~ 5950 6400
+Wire Wire Line
+	5200 6800 5200 6900
+Connection ~ 5200 6900
+Wire Wire Line
+	5200 6900 5000 6900
+Wire Wire Line
+	5400 6800 5400 6900
+Connection ~ 5400 6900
+Wire Wire Line
+	5400 6900 5200 6900
+Wire Wire Line
+	5600 6800 5600 6900
+Connection ~ 5600 6900
+Wire Wire Line
+	5600 6900 5400 6900
+Wire Wire Line
+	5800 6800 5800 6900
+Connection ~ 5800 6900
+Wire Wire Line
+	5800 6900 5600 6900
 $EndSCHEMATC
