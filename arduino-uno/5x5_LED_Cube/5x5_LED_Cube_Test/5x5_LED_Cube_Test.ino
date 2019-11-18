@@ -58,6 +58,7 @@ void setup()
   /* Call Tlc.init() to setup the tlc.
      You can optionally pass an initial PWM value (0 - 4095) for all channels.*/
   Tlc.init();
+  delay(200);
 }
 
 /* This loop will create a Knight Rider-like effect if you have LEDs plugged
@@ -71,17 +72,41 @@ void loop()
 //  Tlc.set(0, 2000);
 //  Tlc.set(27, 2000);
 //  Tlc.update();
+  layerTest();
+  ledTest();
   
-  Tlc.clear();
-  for (int led = 0; led < 25; led++){
-    Tlc.set(led, 4095);
+}
+
+void layerTest(){
+  while (layer < 5){
+    Tlc.clear();
+    for (int led = 0; led < 25; led++){
+      Tlc.set(led, 4095);
+    }
+    Tlc.set(25+layer, 4095);
+    Tlc.update();
+//    if (layer == 4){
+//      layer = 0;
+//    } else {
+//      layer++;
+//    }
+    layer++;
+    delay(200);
   }
-  Tlc.set(25+layer, 4095);
-  Tlc.update();
-  if (layer == 4){
-    layer = 0;
-  } else {
+  layer = 0;
+}
+
+void ledTest()
+{
+  while (layer < 5){
+    for (int led = 0; led < 25; led++){
+      Tlc.clear();
+      Tlc.set(led, 4095);
+      Tlc.set(25+layer, 4095);
+      Tlc.update();
+      delay(100);
+    }
     layer++;
   }
-  delay(1000);
+  layer = 0;
 }
