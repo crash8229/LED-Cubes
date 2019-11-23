@@ -85,11 +85,6 @@ void layerTest(){
     }
     Tlc.set(25+layer, 4095);
     Tlc.update();
-//    if (layer == 4){
-//      layer = 0;
-//    } else {
-//      layer++;
-//    }
     layer++;
     delay(200);
   }

@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:5x5_LED_Cube_Driver-cache
 EELAYER 30 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -614,7 +615,7 @@ U 1 1 5DD192EE
 P 7700 6200
 F 0 "J3" H 7618 5775 50  0000 C CNN
 F 1 "Layers" H 7618 5866 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 7700 6200 50  0001 C CNN
+F 2 "Connector_PinHeader_2.00mm:PinHeader_1x05_P2.00mm_Vertical" H 7700 6200 50  0001 C CNN
 F 3 "~" H 7700 6200 50  0001 C CNN
 	1    7700 6200
 	0    1    1    0   
@@ -674,7 +675,7 @@ U 1 1 5DD2338E
 P 1000 5650
 F 0 "J2" H 918 5867 50  0000 C CNN
 F 1 "Power" H 918 5776 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x02_P1.00mm_Vertical" H 1000 5650 50  0001 C CNN
+F 2 "Connector_PinHeader_2.00mm:PinHeader_1x02_P2.00mm_Vertical" H 1000 5650 50  0001 C CNN
 F 3 "~" H 1000 5650 50  0001 C CNN
 	1    1000 5650
 	-1   0    0    -1  
@@ -685,7 +686,7 @@ U 1 1 5DD22551
 P 1000 4900
 F 0 "J1" H 918 5417 50  0000 C CNN
 F 1 "Arduino" H 918 5326 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x07_P1.00mm_Vertical" H 1000 4900 50  0001 C CNN
+F 2 "Connector_PinHeader_2.00mm:PinHeader_1x07_P2.00mm_Vertical" H 1000 4900 50  0001 C CNN
 F 3 "~" H 1000 4900 50  0001 C CNN
 	1    1000 4900
 	-1   0    0    -1  
