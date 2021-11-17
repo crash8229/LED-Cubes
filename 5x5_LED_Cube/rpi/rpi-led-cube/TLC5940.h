@@ -12,14 +12,12 @@ class TLC5940 {
 private:
     uint8_t xlat;
     uint8_t blank;
-    uint8_t vprg;
     uint8_t gsclk;
     int spi;
 
 public:
-    TLC5940(unsigned spi_ch, uint8_t xlat, uint8_t blank, uint8_t vprg, uint8_t gsclk);
+    TLC5940(unsigned spi_ch, uint8_t xlat, uint8_t blank, uint8_t gsclk);
     ~TLC5940();
-    void setDOTCorrection(const uint8_t values[16]) const;
     void setGrayscale(const uint16_t values[16]) const;
     void setLEDs(uint16_t states) const;
 };
