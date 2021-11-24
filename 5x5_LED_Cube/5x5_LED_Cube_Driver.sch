@@ -187,7 +187,7 @@ $EndComp
 Wire Wire Line
 	5100 4300 5800 4300
 Wire Wire Line
-	4400 900  4000 900 
+	4400 900  4050 900 
 Wire Wire Line
 	4400 5200 4000 5200
 $Comp
@@ -204,38 +204,12 @@ $EndComp
 $Comp
 L power:+5V #PWR01
 U 1 1 5DC088D5
-P 4000 900
-F 0 "#PWR01" H 4000 750 50  0001 C CNN
-F 1 "+5V" H 4015 1073 50  0000 C CNN
-F 2 "" H 4000 900 50  0001 C CNN
-F 3 "" H 4000 900 50  0001 C CNN
-	1    4000 900 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4400 3100 4000 3100
-Wire Wire Line
-	4400 3000 4750 3000
-$Comp
-L power:GND #PWR03
-U 1 1 5DC0729E
-P 4750 3000
-F 0 "#PWR03" H 4750 2750 50  0001 C CNN
-F 1 "GND" H 4755 2827 50  0000 C CNN
-F 2 "" H 4750 3000 50  0001 C CNN
-F 3 "" H 4750 3000 50  0001 C CNN
-	1    4750 3000
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+5V #PWR04
-U 1 1 5DC04361
-P 4000 3100
-F 0 "#PWR04" H 4000 2950 50  0001 C CNN
-F 1 "+5V" H 4015 3273 50  0000 C CNN
-F 2 "" H 4000 3100 50  0001 C CNN
-F 3 "" H 4000 3100 50  0001 C CNN
-	1    4000 3100
+P 4050 900
+F 0 "#PWR01" H 4050 750 50  0001 C CNN
+F 1 "+5V" H 4065 1073 50  0000 C CNN
+F 2 "" H 4050 900 50  0001 C CNN
+F 3 "" H 4050 900 50  0001 C CNN
+	1    4050 900 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -260,8 +234,6 @@ F 3 "https://www.diodes.com/assets/Datasheets/DMG2305UX.pdf" H 6250 4500 50  000
 	1    6250 4500
 	0    1    1    0   
 $EndComp
-Connection ~ 4000 900 
-Connection ~ 4000 3100
 $Comp
 L Driver_LED:TLC5940NT U2
 U 1 1 5DBE9F69
@@ -274,17 +246,11 @@ F 3 "http://www.ti.com/lit/ds/symlink/tlc5940.pdf" H 4000 4800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3600 900  3600 1400
+	3600 1200 3600 1400
 Wire Wire Line
 	3600 1400 3700 1400
 Wire Wire Line
-	3600 900  4000 900 
-Wire Wire Line
-	3600 3100 3600 3600
-Wire Wire Line
 	3600 3600 3700 3600
-Wire Wire Line
-	3600 3100 4000 3100
 $Comp
 L Device:R_Small_US R2
 U 1 1 5DD2D000
@@ -308,7 +274,7 @@ F 3 "" H 2900 3400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3700 3400 3050 3400
+	3700 3400 3600 3400
 Wire Wire Line
 	3150 3500 3050 3500
 Wire Wire Line
@@ -574,7 +540,7 @@ Wire Wire Line
 Wire Wire Line
 	3150 1300 3050 1300
 Wire Wire Line
-	3700 1200 3050 1200
+	3700 1200 3600 1200
 $Comp
 L power:GND #PWR02
 U 1 1 5DD21A8D
@@ -816,4 +782,38 @@ Wire Wire Line
 Connection ~ 5800 6900
 Wire Wire Line
 	5800 6900 5600 6900
+Wire Wire Line
+	3600 3400 3600 3600
+Wire Wire Line
+	4400 3000 4750 3000
+$Comp
+L power:GND #PWR03
+U 1 1 5DC0729E
+P 4750 3000
+F 0 "#PWR03" H 4750 2750 50  0001 C CNN
+F 1 "GND" H 4755 2827 50  0000 C CNN
+F 2 "" H 4750 3000 50  0001 C CNN
+F 3 "" H 4750 3000 50  0001 C CNN
+	1    4750 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4400 3100 4050 3100
+$Comp
+L power:+5V #PWR04
+U 1 1 5DC04361
+P 4050 3100
+F 0 "#PWR04" H 4050 2950 50  0001 C CNN
+F 1 "+5V" H 4065 3273 50  0000 C CNN
+F 2 "" H 4050 3100 50  0001 C CNN
+F 3 "" H 4050 3100 50  0001 C CNN
+	1    4050 3100
+	1    0    0    -1  
+$EndComp
+Connection ~ 3600 3400
+Wire Wire Line
+	3600 3400 3050 3400
+Connection ~ 3600 1200
+Wire Wire Line
+	3600 1200 3050 1200
 $EndSCHEMATC

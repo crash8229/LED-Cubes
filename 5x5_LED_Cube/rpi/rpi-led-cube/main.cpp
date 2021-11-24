@@ -1,20 +1,28 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "modernize-use-bool-literals"
 #include <iostream>
 #include "TLC5940.h"
 
-
 int main() {
-    uint16_t states[16] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768};
-//    TLC5940 led(0, 4, 5, 6, 12);
-    TLC5940 led(0, 4, 5, 12);
-    struct timespec sleep_time = {0, 30000000};
-//    struct timespec sleep_time = {0, 20000000};
+    TLC5940 led(2, 0, 4, 5, 6);
 
-    for (int num = 0; num < 10; num++){
-        for (uint16_t state: states) {
-            led.setLEDs(state);
-            while (nanosleep(&sleep_time, &sleep_time));
+    char data[5][32] = {{0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                        {0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                        {0,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                        {0,0,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                        {0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+    for (int num = 0; num < 1000; num++){
+        for (char* datum: data) {
+            led.setGrayscale(datum);
+            TLC5940::sleep({0, 1000000});
         }
     }
 
+//    char cube_on[32] = {0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+//    led.setRawGrayscale(cube_on);
+//    TLC5940::sleep({0, 50000});
+
     return 0;
 }
+
+#pragma clang diagnostic pop
