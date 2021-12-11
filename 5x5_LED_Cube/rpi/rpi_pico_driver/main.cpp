@@ -9,8 +9,8 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/i2c.h"
-#include "TLC5940.h"
-#include "W25Q64.h"
+#include "tlc5940.h"
+#include "w25q64.h"
 
 #define DEBUG 1
 

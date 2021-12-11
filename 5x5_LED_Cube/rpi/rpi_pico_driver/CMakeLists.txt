@@ -24,7 +24,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(rpi_pico_driver RPiPicoDriver.cpp TLC5940.cpp TLC5940.h W25Q64.cpp W25Q64.h)
+add_executable(rpi_pico_driver main.cpp tlc5940.cpp tlc5940.h w25q64.cpp w25q64.h)
 
 pico_set_program_name(rpi_pico_driver "RPi Pico Driver")
 pico_set_program_version(rpi_pico_driver "0.1")

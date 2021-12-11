@@ -6,7 +6,7 @@
 //
 
 
-#include "TLC5940.h"
+#include "tlc5940.h"
 #include "pico/stdlib.h"
 
 TLC5940::TLC5940(const TLC5940Config *tlc_config) {

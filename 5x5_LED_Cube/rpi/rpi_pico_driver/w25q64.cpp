@@ -5,7 +5,7 @@
 // Created by mike on 11/30/21.
 //
 
-#include "W25Q64.h"
+#include "w25q64.h"
 #include <cstdio>
 #include "pico/stdlib.h"
 
