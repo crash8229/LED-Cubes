@@ -15,7 +15,7 @@ set(PICO_SDK_PATH "/home/mike/.local/sdk/pico/pico-sdk")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(RPiPicoDriver C CXX ASM)
+project(rpi_pico_driver C CXX ASM)
 
 set(PICO_CXX_ENABLE_EXCEPTIONS 0)
 
@@ -24,22 +24,22 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(RPiPicoDriver RPiPicoDriver.cpp TLC5940.cpp TLC5940.h W25Q64.cpp W25Q64.h)
+add_executable(rpi_pico_driver RPiPicoDriver.cpp TLC5940.cpp TLC5940.h W25Q64.cpp W25Q64.h)
 
-pico_set_program_name(RPiPicoDriver "RPiPicoDriver")
-pico_set_program_version(RPiPicoDriver "0.1")
+pico_set_program_name(rpi_pico_driver "RPi Pico Driver")
+pico_set_program_version(rpi_pico_driver "0.1")
 
-pico_enable_stdio_uart(RPiPicoDriver 1)
-pico_enable_stdio_usb(RPiPicoDriver 1)
+pico_enable_stdio_uart(rpi_pico_driver 1)
+pico_enable_stdio_usb(rpi_pico_driver 1)
 
 # Add the standard library to the build
-target_link_libraries(RPiPicoDriver pico_stdlib)
+target_link_libraries(rpi_pico_driver pico_stdlib)
 
 # Add any user requested libraries
-target_link_libraries(RPiPicoDriver
+target_link_libraries(rpi_pico_driver
         hardware_spi
         hardware_i2c
         )
 
 #create files beyond the executable (.uf2, .hex, .bin, .map, .dis) using an SDK provided function
-pico_add_extra_outputs(RPiPicoDriver)
+pico_add_extra_outputs(rpi_pico_driver)
