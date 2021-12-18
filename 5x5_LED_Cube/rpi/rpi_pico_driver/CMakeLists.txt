@@ -8,9 +8,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
-# initalize pico_sdk from installed location
+# initialize pico_sdk from installed location
 # (note this can come from environment, CMake cache etc)
-set(PICO_SDK_PATH "/home/mike/.local/sdk/pico/pico-sdk")
+set(PICO_SDK_PATH "$ENV{PICO_SDK_PATH}")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -30,7 +30,7 @@ pico_set_program_name(rpi_pico_driver "RPi Pico Driver")
 pico_set_program_version(rpi_pico_driver "0.1")
 
 pico_enable_stdio_uart(rpi_pico_driver 1)
-pico_enable_stdio_usb(rpi_pico_driver 1)
+pico_enable_stdio_usb(rpi_pico_driver 0)
 
 # Add the standard library to the build
 target_link_libraries(rpi_pico_driver pico_stdlib)
