@@ -52,13 +52,23 @@ std::string hexStr(uint8_t *data, uint32_t len)
 }
 
 int main() {
-
+    sleep_ms(5);
 #if DEBUG == 1
     sleep_ms(100);
 #endif
 
     stdio_init_all();
-    printf("");
+    printf("\n");
+
+    const SPIConfig w25_config = {
+            W25_PORT,
+            W25_MISO,
+            W25_CS,
+            W25_SCK,
+            W25_MOSI
+    };
+    W25Q64 w25 = W25Q64(&w25_config);
+
     const TLC5940Config tlc_config = {
             TLC_PORT,
             TLC_MISO,
@@ -71,15 +81,6 @@ int main() {
             TLV_GSCLK
     };
     TLC5940 tlc = TLC5940(&tlc_config);
-
-    const SPIConfig w25_config = {
-            W25_PORT,
-            W25_MISO,
-            W25_CS,
-            W25_SCK,
-            W25_MOSI
-    };
-    W25Q64 w25 = W25Q64(&w25_config);
 
     // Double Pyramid
     uint8_t data[5][32] = {{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
@@ -108,13 +109,9 @@ int main() {
 //        }
 //    }
 
-//    gpio_put(LED_PIN, 1);
-//    sleep_ms(5000);
-//    gpio_put(LED_PIN, 0);
-
-
-    uint8_t data_buffer[1024] = {0xAA, 0xBB, 0xCC, 0xDD};
+    uint8_t data_buffer[1024];
     uint32_t bytes_read;
+    uint8_t data_out[4] = {0xAA, 0xBB, 0xCC, 0xDD};
 
     // Trigger pulse
     gpio_init(2);
@@ -122,29 +119,50 @@ int main() {
     gpio_put(2, 1);
     gpio_put(2, 0);
 
-    // Write data
-    uint8_t data_out[4] = {0xAA, 0xBB, 0xCC, 0xDD};
-    w25.writeEnable();
-    absolute_time_t start = get_absolute_time();
-    w25.writeData(0, 4, data_out);
-    uint8_t reg = w25.getRawStatusRegister1();
-    while ((reg & 0b11) != 0) {
-        reg = w25.getRawStatusRegister1();
+    //Bytes before
+//    bytes_read = w25.readData(0, 4, data_buffer);
+//    printf("Bytes read: %s\n", hexStr(data_out, bytes_read).c_str());
 
-    }
-    printf("Time to write: %llu us\n", absolute_time_diff_us(start, get_absolute_time()));
+    // Write enable
+//    printf("Reg1: %d\n", w25.getRawStatusRegister1());
+//    w25.writeEnable();
+//    printf("Reg1: %d\n", w25.getRawStatusRegister1());
+
+    // Write data
+//    w25.writeEnable();
+//    printf("Reg1: %d\n", w25.getRawStatusRegister1());
+//    absolute_time_t start = get_absolute_time();
+//    w25.writeDataBlocking(0, 4, data_out);
+//    printf("Reg1: %d\n", w25.getRawStatusRegister1());
+//    printf("Time to write: %llu us\n", absolute_time_diff_us(start, get_absolute_time()));
 
     // Read data
-    start = get_absolute_time();
-    bytes_read = w25.readData(0, 4, data_buffer);
-    printf("Time to read: %llu us\n", absolute_time_diff_us(start, get_absolute_time()));
-    printf("Bytes read: %s\n", hexStr(data_out, bytes_read).c_str());
+//    start = get_absolute_time();
+//    bytes_read = w25.readData(0, 4, data_buffer);
+//    printf("\nTime to read: %llu us\n", absolute_time_diff_us(start, get_absolute_time()));
+//    printf("Bytes read: %s\n", hexStr(data_buffer, bytes_read).c_str());
 
+    // Erase 4KB
+//    start = get_absolute_time();
+//    w25.erase4KBlocking(0);
+//    printf("\nTime to erase 4KB: %llu us\n", absolute_time_diff_us(start, get_absolute_time()));
+//    bytes_read = w25.readData(0, 4, data_buffer);
+//    printf("Bytes read: %s\n", hexStr(data_buffer, bytes_read).c_str());
+
+    printf("Reg1: %d\n", w25.getRawStatusRegister1());
     while (1) {
+        gpio_put(2, 1);
+        gpio_put(2, 0);
+        w25.writeEnable();
+        printf("Reg1: %d\n", w25.getRawStatusRegister1());
+        sleep_us(50);
+        w25.writeDisable();
+        printf("Reg1: %d\n", w25.getRawStatusRegister1());
+        sleep_us(50);
         gpio_put(LED_PIN, 1);
-        sleep_ms(1000);
+        sleep_ms(500);
         gpio_put(LED_PIN, 0);
-        sleep_ms(1000);
+        sleep_ms(500);
     }
 }
 

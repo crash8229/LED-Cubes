@@ -23,6 +23,7 @@ W25Q64::W25Q64(const SPIConfig *spi_config) {
     // Chip select is active-low, so we'll initialise it to a driven-high state
     gpio_set_dir(cfg->spi_cs, GPIO_OUT);
     gpio_put(cfg->spi_cs, 1);
+    sleep_ms(5);
 }
 
 W25Q64::~W25Q64() {
@@ -96,6 +97,14 @@ StatusReg2 W25Q64::getStatusRegister2() {
     return reg;
 }
 
+bool W25Q64::isBusy() {
+    return getRawStatusRegister1() & 1;
+}
+
+void W25Q64::busyWait() {
+    while (isBusy());
+}
+
 void W25Q64::writeEnable(){
     uint8_t cmd[] = {0x06};
     sendSPI(cmd, 1);
@@ -121,9 +130,20 @@ size_t W25Q64::writeData(uint32_t address, uint16_t num_bytes, uint8_t *data) {
     return bytes_written;
 }
 
+size_t W25Q64::writeDataBlocking(uint32_t address, uint16_t num_bytes, uint8_t *data) {
+    size_t bytes_written = writeData(address, num_bytes, data);
+    busyWait();
+    return bytes_written;
+}
+
 void W25Q64::erase4K(uint32_t address) {
     uint8_t cmd[] = {0x20, static_cast<uint8_t>(address >> 16 & 0xFF), static_cast<uint8_t>(address >> 8 & 0xFF), static_cast<uint8_t>(address & 0xFF)};
     sendSPI(cmd, 4);
+}
+
+void W25Q64::erase4KBlocking(uint32_t address) {
+    erase4K(address);
+    busyWait();
 }
 
 void W25Q64::erase32K(uint32_t address) {
@@ -131,14 +151,29 @@ void W25Q64::erase32K(uint32_t address) {
     sendSPI(cmd, 4);
 }
 
+void W25Q64::erase32KBlocking(uint32_t address) {
+    erase32K(address);
+    busyWait();
+}
+
 void W25Q64::erase64K(uint32_t address) {
     uint8_t cmd[] = {0xD8, static_cast<uint8_t>(address >> 16 & 0xFF), static_cast<uint8_t>(address >> 8 & 0xFF), static_cast<uint8_t>(address & 0xFF)};
     sendSPI(cmd, 4);
 }
 
+void W25Q64::erase64KBlocking(uint32_t address) {
+    erase64K(address);
+    busyWait();
+}
+
 void W25Q64::eraseChip() {
     uint8_t cmd[] = {0xC7};
     sendSPI(cmd, 1);
+}
+
+void W25Q64::eraseChipBlocking() {
+    eraseChip();
+    busyWait();
 }
 
 void W25Q64::suspend() {

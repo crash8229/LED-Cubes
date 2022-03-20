@@ -62,6 +62,10 @@ public:
 
     StatusReg2 getStatusRegister2();
 
+    bool isBusy();
+
+    void busyWait();
+
     void writeEnable();
 
     void writeDisable();
@@ -70,13 +74,23 @@ public:
 
     size_t writeData(uint32_t address, uint16_t num_bytes, uint8_t *data);
 
+    size_t writeDataBlocking(uint32_t address, uint16_t num_bytes, uint8_t *data);
+
     void erase4K(uint32_t address);
+
+    void erase4KBlocking(uint32_t address);
 
     void erase32K(uint32_t address);
 
+    void erase32KBlocking(uint32_t address);
+
     void erase64K(uint32_t address);
 
+    void erase64KBlocking(uint32_t address);
+
     void eraseChip();
+
+    void eraseChipBlocking();
 
     void suspend();
 
