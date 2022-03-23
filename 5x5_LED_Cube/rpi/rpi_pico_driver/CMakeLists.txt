@@ -24,22 +24,27 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(rpi_pico_driver main.cpp tlc5940.cpp tlc5940.h w25q64.cpp w25q64.h)
+add_executable(${PROJECT_NAME} main.cpp config.h tlc5940.h tlc5940.cpp sd_config.cpp)
 
-pico_set_program_name(rpi_pico_driver "RPi Pico Driver")
-pico_set_program_version(rpi_pico_driver "0.1")
+pico_set_program_name(${PROJECT_NAME} "RPi Pico Driver")
+pico_set_program_version(${PROJECT_NAME} "0.1")
 
-pico_enable_stdio_uart(rpi_pico_driver 1)
-pico_enable_stdio_usb(rpi_pico_driver 0)
+# Tell CMake where to find other source code
+add_subdirectory(lib/spi_sd_fat/FatFs_SPI build)
+
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
 
 # Add the standard library to the build
-target_link_libraries(rpi_pico_driver pico_stdlib)
+target_link_libraries(${PROJECT_NAME} pico_stdlib)
 
 # Add any user requested libraries
-target_link_libraries(rpi_pico_driver
+target_link_libraries(${PROJECT_NAME}
         hardware_spi
         hardware_i2c
+        pico_stdlib
+        FatFs_SPI
         )
 
 #create files beyond the executable (.uf2, .hex, .bin, .map, .dis) using an SDK provided function
-pico_add_extra_outputs(rpi_pico_driver)
+pico_add_extra_outputs(${PROJECT_NAME})
