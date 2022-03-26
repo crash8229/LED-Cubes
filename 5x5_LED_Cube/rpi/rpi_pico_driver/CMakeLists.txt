@@ -2,49 +2,37 @@
 
 cmake_minimum_required(VERSION 3.13)
 
+# Global Variables -----------------------------------------------------------------------------------------------------
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
+set(PICO_CXX_ENABLE_EXCEPTIONS 0)
+
+# Add cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
 # initialize pico_sdk from installed location
 # (note this can come from environment, CMake cache etc)
 set(PICO_SDK_PATH "$ENV{PICO_SDK_PATH}")
 
+# Modules --------------------------------------------------------------------------------------------------------------
+
 # Pull in Raspberry Pi Pico SDK (must be before project)
-include(pico_sdk_import.cmake)
+include(pico_sdk_import)
 
+# Libraries ------------------------------------------------------------------------------------------------------------
+
+# Additional Pre-project Setup -----------------------------------------------------------------------------------------
+
+# Project --------------------------------------------------------------------------------------------------------------
 project(rpi_pico_driver C CXX ASM)
-
-set(PICO_CXX_ENABLE_EXCEPTIONS 0)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
-
-add_executable(${PROJECT_NAME} main.cpp config.h tlc5940.h tlc5940.cpp sd_config.cpp)
-
-pico_set_program_name(${PROJECT_NAME} "RPi Pico Driver")
-pico_set_program_version(${PROJECT_NAME} "0.1")
-
-# Tell CMake where to find other source code
-add_subdirectory(lib/spi_sd_fat/FatFs_SPI build)
-
-pico_enable_stdio_uart(${PROJECT_NAME} 1)
-pico_enable_stdio_usb(${PROJECT_NAME} 0)
-
-# Add the standard library to the build
-target_link_libraries(${PROJECT_NAME} pico_stdlib)
-
-# Add any user requested libraries
-target_link_libraries(${PROJECT_NAME}
-        hardware_spi
-        hardware_i2c
-        pico_stdlib
-        FatFs_SPI
-        )
-
-#create files beyond the executable (.uf2, .hex, .bin, .map, .dis) using an SDK provided function
-pico_add_extra_outputs(${PROJECT_NAME})
+# Subdirectories
+add_subdirectory(src)
