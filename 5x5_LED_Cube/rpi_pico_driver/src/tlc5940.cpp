@@ -9,30 +9,15 @@
 #include "tlc5940.h"
 #include "pico/stdlib.h"
 
+TLC5940::TLC5940() = default;
+
 TLC5940::TLC5940(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
                  uint8_t num) {
-    // Init class variables
-    cfg = {
-            port,
-            miso,
-            cs,
-            sclk,
-            mosi,
-            num,
-            xlat,
-            blank,
-            gsclk
-    };
-
-    init();
-
+    init(port, miso, cs, sclk, mosi, xlat, blank, gsclk, num);
 }
 
 TLC5940::TLC5940(TLC5940Config *tlc_config) {
-    // Init class variables
-    cfg = *tlc_config;
-
-    init();
+    init(tlc_config);
 }
 
 TLC5940::~TLC5940() {
@@ -76,6 +61,31 @@ void TLC5940::init() {
 
 // Public
 /* ********************************************************************** */
+void TLC5940::init(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
+                   uint8_t num) {
+    // Init class variables
+    cfg = {
+            port,
+            miso,
+            cs,
+            sclk,
+            mosi,
+            num,
+            xlat,
+            blank,
+            gsclk
+    };
+
+    init();
+}
+
+void TLC5940::init(TLC5940Config *tlc_config) {
+    // Init class variables
+    cfg = *tlc_config;
+
+    init();
+}
+
 const TLC5940Config *TLC5940::getConfig() {
     return &cfg;
 }
