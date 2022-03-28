@@ -72,7 +72,7 @@ int main() {
     int ret;
     char buf[100];
     char filename[] = "test02.txt";
-    const TCHAR sd_drive[] = "0:";
+    const TCHAR sd_drive[] = SD_DRIVE;
 
     // Wait for user to press 'enter' to continue
     printf("\r\nSD card test. Press 'enter' to start.\r\n");
