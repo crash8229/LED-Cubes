@@ -3,17 +3,12 @@
 #pragma ide diagnostic ignored "modernize-use-bool-literals"
 #pragma ide diagnostic ignored "modernize-deprecated-headers"
 
-#include <cstdio>
-#include <sstream>
 #include <iomanip>
 #include "pico/stdlib.h"
-#include "hardware/spi.h"
 
 #include "config.h"
 #include "tlc5940.h"
 #include "ledcube.h"
-
-const uint LED = 25;
 
 std::string hexStr(uint8_t *data, uint32_t len)
 {
@@ -29,9 +24,6 @@ std::string hexStr(uint8_t *data, uint32_t len)
 int main() {
     stdio_init_all();
 
-    gpio_init(LED);
-    gpio_set_dir(LED, GPIO_OUT);
-
     TLC5940 tlc(TLC_PORT, TLC_MISO, TLC_CS, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
 
     // Double Pyramid
@@ -41,7 +33,6 @@ int main() {
                            {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
                            {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0}};
     printf("\nDriving TLC\n");
-    gpio_put(LED, 1);
     for (int i = 0; i < 3;i++) {
         for (uint8_t *datum: data) {
             tlc.setGrayscale(datum);
@@ -49,7 +40,6 @@ int main() {
         }
     }
     tlc.ledAllOff();
-    gpio_put(LED, 0);
 
     // SD Card Testing
     LEDCube cube;
