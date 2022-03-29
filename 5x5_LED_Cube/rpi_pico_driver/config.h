@@ -6,7 +6,7 @@
 #define RPI_PICO_DRIVER_CONFIG_H
 
 // TODO: Figure out how to turn off led when interacting to SD
-#define DEBUG 1
+//#define DEBUG
 //#define NO_PICO_LED
 //#define USE_LED 0
 

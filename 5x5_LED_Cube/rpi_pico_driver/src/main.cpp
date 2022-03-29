@@ -27,13 +27,7 @@ std::string hexStr(uint8_t *data, uint32_t len)
 }
 
 int main() {
-    sleep_ms(5);
-#if DEBUG == 1
-    sleep_ms(100);
-#endif
-
     stdio_init_all();
-    printf("\n");
 
     gpio_init(LED);
     gpio_set_dir(LED, GPIO_OUT);
@@ -46,7 +40,7 @@ int main() {
                            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                            {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
                            {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0}};
-    printf("Driving TLC\n\n");
+    printf("\nDriving TLC\n");
     gpio_put(LED, 1);
     for (int i = 0; i < 3;i++) {
         for (uint8_t *datum: data) {
@@ -64,7 +58,7 @@ int main() {
     uint numBytes;
     printf("\nReading from %s\n", SD_FILE);
     cube.getBytes(buf, &numBytes,len);
-    printf("Bytes from file: %s\n", hexStr(buf, len).c_str());
+    printf("Bytes from file: 0x%s\n", hexStr(buf, len).c_str());
 
 
     // End infinite loop
