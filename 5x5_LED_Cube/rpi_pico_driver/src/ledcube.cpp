@@ -31,11 +31,11 @@ LEDCube::LEDCube() {
     assert(sd_init_driver());
 
     // Mount drive
-    fr = f_mount(&fs, sd_drive, 1);
+    fr = f_mount(&fs, sdDrive, 1);
     assert(fr == FR_OK);
 
     // Open file to read
-    fr = f_open(&file, filename, FA_READ);
+    fr = f_open(&file, fileName, FA_READ);
     assert(fr == FR_OK);
 
     sleep_ms(100);
@@ -44,7 +44,7 @@ LEDCube::LEDCube() {
 
 LEDCube::~LEDCube() {
     f_close(&file);
-    f_unmount(sd_drive);
+    f_unmount(sdDrive);
 }
 
 // Private

@@ -10,23 +10,23 @@
 
 typedef struct TLC5940Config {
     // SPI
-    spi_inst_t *spi_port;
-    uint spi_miso;
-    uint spi_cs;
-    uint spi_sclk;
-    uint spi_mosi;
+    spi_inst_t *spiPort;
+    uint spiMiso;
+    uint spiCs;
+    uint spiSclk;
+    uint spiMosi;
 
     // TLC5940 specific
-    uint8_t tlc_num;
-    uint tlc_xlat;
-    uint tlc_blank;
-    uint tlc_gsclk;
+    uint8_t tlcNum;
+    uint tlcXlat;
+    uint tlcBlank;
+    uint tlcGsclk;
 } TLC5940Config;
 
 class TLC5940 {
 private:
     TLC5940Config cfg{};
-    mutable std::vector<uint8_t> gs_out_data;
+    mutable std::vector<uint8_t> gsOutData;
     void init();
 
 public:
@@ -41,9 +41,9 @@ public:
 
     const TLC5940Config *getConfig();
 
-    void setRawGrayscale(uint8_t *out_data) const;
+    void setRawGrayscale(uint8_t *outData) const;
 
-    uint8_t *getRawGrayscale(const uint16_t *valueds) const;
+    uint8_t *getRawGrayscale(const uint16_t *values) const;
 
     void setGrayscale(const uint16_t *values) const;
 

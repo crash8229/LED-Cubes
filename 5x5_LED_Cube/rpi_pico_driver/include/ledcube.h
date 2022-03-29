@@ -15,8 +15,8 @@ private:
     TLC5940 tlc;
     FATFS fs;
     FIL file;
-    static constexpr TCHAR sd_drive[] = SD_DRIVE;
-    static constexpr TCHAR filename[] = SD_FILE;
+    static constexpr TCHAR sdDrive[] = SD_DRIVE;
+    static constexpr TCHAR fileName[] = SD_FILE;
 
 public:
     LEDCube();
