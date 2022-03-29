@@ -1,3 +1,3 @@
 [submodule "5x5_LED_Cube/rpi_pico_driver/extern/spi_sd_fat"]
 	path = 5x5_LED_Cube/rpi_pico_driver/extern/spi_sd_fat
-	url = https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico.git
+	url = git@github.com:crash8229/no-OS-FatFS-SD-SPI-RPi-Pico.git
