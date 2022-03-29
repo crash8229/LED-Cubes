@@ -29,5 +29,6 @@
 #define SD_MOSI 11
 #define SD_RATE 1000 * 1000  // 1MHz
 #define SD_DRIVE "0:"  // Logical Drive Number
+#define SD_FILE "LEDCUBE.bin"
 
 #endif //RPI_PICO_DRIVER_CONFIG_H

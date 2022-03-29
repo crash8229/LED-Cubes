@@ -15,6 +15,7 @@ target_include_directories(${executable_name}
 target_sources(${executable_name} PRIVATE
         sd_config.cpp
         tlc5940.cpp
+        ledcube.cpp
         )
 
 # Configure PICO stdio
