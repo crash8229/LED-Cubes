@@ -18,12 +18,20 @@ private:
     static constexpr TCHAR sdDrive[] = SD_DRIVE;
     static constexpr TCHAR fileName[] = SD_FILE;
 
+    bool sdMount();
+
+    static bool sdUnmount();
+
+    bool sdOpenFile();
+
+    bool sdCloseFile();
+
 public:
     LEDCube();
 
     ~LEDCube();
 
-    FRESULT getBytes(uint8_t *buf, uint *read, uint len);
+    bool getBytes(uint8_t *buf, uint *read, uint len);
 };
 
 

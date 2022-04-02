@@ -11,7 +11,7 @@
 #include "ff.h"
 
 LEDCube::LEDCube() {
-    FRESULT fr;
+
 
     /* Init TLC5940 */
     tlc.init(
@@ -26,19 +26,11 @@ LEDCube::LEDCube() {
         TLC_NUM
     );
 
-    /* Mount SD Card */
+    /* Mount SD card and open the file */
     // Initialize SD card
     assert(sd_init_driver());
-
-    // Mount drive
-    fr = f_mount(&fs, sdDrive, 1);
-    assert(fr == FR_OK);
-
-    // Open file to read
-    fr = f_open(&file, fileName, FA_READ);
-    assert(fr == FR_OK);
-
-    sleep_ms(100);
+    assert(sdMount());
+    assert(sdOpenFile());
 
 }
 
@@ -49,12 +41,26 @@ LEDCube::~LEDCube() {
 
 // Private
 /* ****************************************************************************************************************** */
+bool LEDCube::sdMount() {
+    return f_mount(&fs, sdDrive, 1) == FR_OK;
+}
 
+bool LEDCube::sdUnmount() {
+    return f_mount(nullptr, sdDrive, 0) == FR_OK;
+}
+
+bool LEDCube::sdOpenFile() {
+    return f_open(&file, fileName, FA_READ) == FR_OK;
+}
+
+bool LEDCube::sdCloseFile() {
+    return f_close(&file) == FR_OK;
+}
 
 // Public
 /* ****************************************************************************************************************** */
-FRESULT LEDCube::getBytes(uint8_t *buf, uint *read, uint len) {
-    return f_read(&file, buf, len, read);
+bool LEDCube::getBytes(uint8_t *buf, uint *read, uint len) {
+    return f_read(&file, buf, len, read) == FR_OK;
 }
 
 #pragma clang diagnostic pop
