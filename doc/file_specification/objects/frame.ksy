@@ -2,7 +2,7 @@ meta:
   id: frame
   imports:
     - primary_header
-    - frame_v1
+    - frame/frame_v1
   endian: be
 
 doc: Single animation frame
@@ -16,4 +16,3 @@ seq:
       cases:
         1: frame_v1
     doc: The structure is determined by the version
-  

@@ -1,9 +1,9 @@
 meta:
   id: library_v1
   imports:
-    - animation
+    - ../animation
   endian: be
-  
+
 doc: Version 1 of the library specification
 
 seq:
@@ -13,7 +13,7 @@ seq:
     type: animation
     repeat: expr
     repeat-expr: secondary_header.animation_count
-    
+
 types:
   secondary_header:
     doc: Houses the library metadata

@@ -1,9 +1,9 @@
 meta:
   id: animation_v1
   imports:
-    - frame
+    - ../frame
   endian: be
-  
+
 doc: Version 1 of the animation specification
 
 seq:
@@ -13,7 +13,7 @@ seq:
     type: frame
     repeat: expr
     repeat-expr: secondary_header.frame_count
-    
+
 types:
   secondary_header:
     doc: Houses the animation metadata

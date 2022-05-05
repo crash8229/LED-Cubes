@@ -2,7 +2,7 @@ meta:
   id: animation
   imports:
     - primary_header
-    - animation_v1
+    - animation/animation_v1
   endian: be
 
 doc: LED Cube animation
@@ -16,4 +16,3 @@ seq:
       cases:
         1: animation_v1
     doc: The structure is determined by the version
-  
