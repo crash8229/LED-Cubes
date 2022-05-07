@@ -1,8 +1,8 @@
 meta:
   id: cube_file
   imports:
-    - objects/primary_header
-    - objects/library/library_v1
+    - primary_header
+    - library
   endian: be
 
 doc: LED Cube file
@@ -14,5 +14,5 @@ seq:
     type:
       switch-on: primary_header.version
       cases:
-        1: library_v1
+        1: library
     doc: The structure is determined by the version

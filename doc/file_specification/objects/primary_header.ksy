@@ -16,3 +16,4 @@ enums:
     0: frame
     1: animation
     2: library
+    3: file
