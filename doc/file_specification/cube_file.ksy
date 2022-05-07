@@ -1,5 +1,5 @@
 meta:
-  id: file
+  id: cube_file
   imports:
     - objects/primary_header
     - objects/library/library_v1
