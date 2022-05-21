@@ -17,6 +17,7 @@ _autosave-*
 fp-info-cache
 *.~*#
 .history
+__pycache__
 
 # Netlist files (exported from Eeschema)
 *.net
@@ -32,3 +33,6 @@ fp-info-cache
 # CMAKE
 cmake-build-debug*
 build
+
+# VSCode
+.vscode/launch.json

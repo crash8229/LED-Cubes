@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "ledcube"
+version = "0.1.0"
+description = "Parsers for my LED cube file format"
+authors = ["crash8229 <mu304007@gmail.com>"]
+license = "GPL-3.0-or-later"
+repository = "https://github.com/crash8229/LED-Cubes"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+kaitaistruct = "^0.9"
+PyYAML = "^6.0"
+construct = "^2.10.68"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
