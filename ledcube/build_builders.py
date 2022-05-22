@@ -61,7 +61,8 @@ def _process_seq(seq: dict, types) -> str:
     return struct_fields
 
 
-def _process_ksy(ksy_file: Union[Path, str]) -> str:
+def _process_ksy(ksy_file: Path) -> Tuple[str, str]:
+    ksy_dir = ksy_file.parent
     with open(ksy_file, "r") as f:
         yaml_data = load(f)
 
@@ -75,7 +76,7 @@ def _process_ksy(ksy_file: Union[Path, str]) -> str:
     struct_fields = _process_seq(yaml_data["seq"], types)
 
     # Build the final struct
-    return f"{yaml_data['meta']['id']} = {STRUCT_STR.substitute(fields=struct_fields[:-2])}"
+    return yaml_data['meta']['id'], STRUCT_STR.substitute(fields=struct_fields[:-2])
 
 
 class Types():
@@ -107,20 +108,25 @@ class Types():
             self.__custom_types[type_key] = STRUCT_STR.substitute(fields = struct_fields[:-2])
 
 
-def construct_builders(yaml_files: Iterable[Union[str, Path]], output_directory: Path = out_dir) -> Path:
+def construct_builders(yaml_files: Iterable[Path], output_directory: Path = out_dir) -> Path:
+    # Assemble builders
     builders = list()
     for yaml_file in yaml_files:
-        builders.append(BITWISE_STR.substitute(item=_process_ksy(yaml_file)))
+        seq_name, seq_type = _process_ksy(yaml_file)
+        builders.append(f"{seq_name} = {BITWISE_STR.substitute(item=seq_type)}")
+
+    # Write the builder moddule
     out_path = output_directory.joinpath("builder.py")
     with open(out_path, "w") as out:
         out.write("import construct\n\n")
         for builder in builders:
             out.write(f"{builder}\n")
+
     return out_path
 
 
 if __name__ == "__main__":
 
-    construct_builders(("../doc/file_specification/objects/frame/frame_v1.ksy",))
+    construct_builders((Path("../doc/file_specification/objects/frame/frame_v1.ksy"),))
     pass
 
