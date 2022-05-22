@@ -1,4 +1,5 @@
 {
     "esbonio.sphinx.confDir": "",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "mypy.dmypyExecutable": "${workspaceFolder}/ledcube/.venv/bin/dmypy"
 }

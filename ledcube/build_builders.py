@@ -1,8 +1,7 @@
-from ast import Str
 from yaml import safe_load as load
 from os import mkdir
 from pathlib import Path
-from typing import Union, Optional, Tuple, List, Iterable
+from typing import Dict, Set, Union, Optional, Tuple, List, Iterable
 from string import Template
 
 
@@ -16,14 +15,13 @@ except FileExistsError:
 
 # Construct templates
 STRUCT_STR = Template("construct.Struct(${fields})")
-BITSTRUCT_STR = Template("construct.BitStruct(${fields})")
 ARRAY_STR = Template("construct.Array(${size}, ${element})")
-BYTEWISE_STR = Template("construct.Bytewise(${item})")
+BITWISE_STR = Template("construct.Bitwise(${item})")
 
 
-def _check_array(field: dict, seq_ids: List[str]) -> Tuple[bool, int]:
+def _check_array(field: dict, seq_ids: Iterable[str]) -> Tuple[bool, Union[int, str]]:
     array = False
-    array_size = 0
+    array_size: Union[int, str] = 0
     if "repeat" in field:
         array = True
         if "expr" in field["repeat"]:
@@ -31,7 +29,7 @@ def _check_array(field: dict, seq_ids: List[str]) -> Tuple[bool, int]:
     return array, array_size
 
 
-def _get_array_size(repeat: str, ids: List[str]) -> Union[str, int]:
+def _get_array_size(repeat: str, ids: Iterable[str]) -> Union[str, int]:
     if isinstance(repeat, str):
         for seq_id in ids:
             if seq_id in repeat:
@@ -43,9 +41,9 @@ def _get_array_size(repeat: str, ids: List[str]) -> Union[str, int]:
         return repeat
 
 
-def _process_seq(seq: dict, types):
+def _process_seq(seq: dict, types) -> str:
     struct_fields = str()
-    seq_ids = set()
+    seq_ids: Set[str] = set()
     for field in seq:
         field_type = types.get_type(field["type"])
 
@@ -63,17 +61,34 @@ def _process_seq(seq: dict, types):
     return struct_fields
 
 
+def _process_ksy(ksy_file: Union[Path, str]) -> str:
+    with open(ksy_file, "r") as f:
+        yaml_data = load(f)
+
+    # Get types and any custom types
+    if "types" in yaml_data:
+        types = Types(yaml_data["types"])
+    else:
+        types = Types()
+
+    # Process seq tag
+    struct_fields = _process_seq(yaml_data["seq"], types)
+
+    # Build the final struct
+    return f"{yaml_data['meta']['id']} = {STRUCT_STR.substitute(fields=struct_fields[:-2])}"
+
+
 class Types():
-    __types = {
-        "u": (Template("construct.Bytewise(construct.BytesInteger(${num}))")),
-        "b": (Template("construct.BitsInteger(${num})"))
+    __types: Dict[str, Template] = {
+        "u": Template("construct.Bytewise(construct.BytesInteger(${num}))"),
+        "b": Template("construct.BitsInteger(${num})")
     }
 
     def __init__(self, custom_types: dict = dict()) -> None:
-        self.__custom_types = dict()
+        self.__custom_types: Dict[str, str] = dict()
         self.__build_types(custom_types)
 
-    def get_type(self, type_str: str) -> Tuple[str, bool]:
+    def get_type(self, type_str: str) -> Union[str, Template]:
         if type_str in self.__custom_types:
             return self.__custom_types[type_str]
 
@@ -92,28 +107,16 @@ class Types():
             self.__custom_types[type_key] = STRUCT_STR.substitute(fields = struct_fields[:-2])
 
 
-def construct_builders(yaml_files: Iterable[Union[str, Path]], output_directory: Union[str, Path] = out_dir) -> Optional[Path]:
+def construct_builders(yaml_files: Iterable[Union[str, Path]], output_directory: Path = out_dir) -> Path:
     builders = list()
     for yaml_file in yaml_files:
-        with open(yaml_file, "r") as f:
-            yaml_data = load(f)
-
-        # Get types and any custom types
-        if "types" in yaml_data:
-            types = Types(yaml_data["types"])
-        else:
-            types = Types()
-
-        # Process seq tag
-        struct_fields = _process_seq(yaml_data["seq"], types)
-
-        # Build the final struct
-        struct_template = BITSTRUCT_STR
-        builders.append(f"{yaml_data['meta']['id']} = {struct_template.substitute(fields=struct_fields[:-2])}")
-    with open(output_directory.joinpath("builder.py"), "w") as out:
+        builders.append(BITWISE_STR.substitute(item=_process_ksy(yaml_file)))
+    out_path = output_directory.joinpath("builder.py")
+    with open(out_path, "w") as out:
         out.write("import construct\n\n")
         for builder in builders:
             out.write(f"{builder}\n")
+    return out_path
 
 
 if __name__ == "__main__":
