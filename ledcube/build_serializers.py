@@ -1,7 +1,7 @@
 from yaml import safe_load as load
 from os import mkdir
 from pathlib import Path
-from typing import Dict, Set, Union, Optional, Tuple, List, Iterable
+from typing import Dict, Set, Union, Tuple, Iterable
 from string import Template
 
 
