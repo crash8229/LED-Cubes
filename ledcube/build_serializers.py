@@ -5,14 +5,6 @@ from typing import Dict, Set, Union, Optional, Tuple, List, Iterable
 from string import Template
 
 
-out_dir = Path("ledcube")
-
-try:
-    mkdir(out_dir)
-except FileExistsError:
-    pass
-
-
 # Construct templates
 STRUCT_STR = Template("construct.Struct(${fields})")
 ARRAY_STR = Template("construct.Array(${size}, ${element})")
@@ -108,7 +100,7 @@ class Serializer():
                 return repeat
 
 
-    def __init__(self,output_directory: Path = out_dir) -> None:
+    def __init__(self,output_directory: Path = Path("ledcube")) -> None:
         self.output_directory = output_directory
 
     def construct_serializers(self, ksy_files: Iterable[Path]) -> Path:
@@ -121,6 +113,10 @@ class Serializer():
 
         # Write the serializer module
         out_path = self.output_directory.joinpath("serializer.py")
+        try:
+            mkdir(self.output_directory)
+        except FileExistsError:
+            pass
         with open(out_path, "w") as out:
             out.write("import construct\n\n")
             for seq_name, seq_type in serializers.items():
