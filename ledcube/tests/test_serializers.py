@@ -599,3 +599,193 @@ def test_library():
     test_binary = b.build(test_data)
 
     assert test_binary == data, "library serializer did not build the same data as the library_v1.bin binary"
+
+
+def test_cube_file():
+    b = ledcube.serializer.cube_file
+
+    with open("../doc/file_specification/objects/cube_file/cube_file_v1.bin", "rb") as f:
+        data = f.read()
+    test_data = {
+        "primary_header": {
+            "type": 3,
+            "version": 1
+        },
+        "file": {
+            "primary_header": {
+                "type": 2,
+                "version": 1
+            },
+            "library": {
+                "secondary_header": {
+                    "name": "Test Library",
+                    "time": 0x3E8,
+                    "crc": 0xFFFFFFFF,
+                    "tlc_count": 2,
+                    "animation_count": 2,
+                    "data_length": 0x1B2
+                },
+                "animations": [
+                    {
+                        "primary_header": {
+                            "type": 1,
+                            "version": 1
+                        },
+                        "animation": {
+                            "secondary_header": {
+                                "name": "Test",
+                                "time": 0x3E8,
+                                "crc": 0xFFFFFFFF,
+                                "tlc_count": 2,
+                                "frame_count": 3,
+                                "data_length": 0xA2
+                            },
+                            "frames": [
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0x111]*16
+                                            },
+                                            {
+                                                "state": [0x222]*16
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0x333]*16
+                                            },
+                                            {
+                                                "state": [0x444]*16
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0x555]*16
+                                            },
+                                            {
+                                                "state": [0x666]*16
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "primary_header": {
+                            "type": 1,
+                            "version": 1
+                        },
+                        "animation": {
+                            "secondary_header": {
+                                "name": "Test",
+                                "time": 0x3E8,
+                                "crc": 0xFFFFFFFF,
+                                "tlc_count": 2,
+                                "frame_count": 3,
+                                "data_length": 0xA2
+                            },
+                            "frames": [
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0xAAA]*16
+                                            },
+                                            {
+                                                "state": [0xBBB]*16
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0xCCC]*16
+                                            },
+                                            {
+                                                "state": [0xDDD]*16
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "primary_header": {
+                                        "type": 0,
+                                        "version": 1
+                                    },
+                                    "frame": {
+                                        "secondary_header": {
+                                            "duration": 5,
+                                            "data_length": 48
+                                        },
+                                        "tlc_states": [
+                                            {
+                                                "state": [0xEEE]*16
+                                            },
+                                            {
+                                                "state": [0xFFF]*16
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    test_binary = b.build(test_data)
+
+    assert test_binary == data, "cube_file serializer did not build the same data as the library_v1.bin binary"
