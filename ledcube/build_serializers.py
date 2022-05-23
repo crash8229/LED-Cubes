@@ -20,7 +20,7 @@ BITWISE_STR = Template("construct.Bitwise(${item})")
 SWITCH_STR = Template("construct.Switch(${switch}, ${cases})")
 
 
-class Builder():
+class Serializer():
     class Types():
         __types: Dict[str, Template] = {
             "u": Template("construct.Bytewise(construct.BytesInteger(${num}))"),
@@ -61,13 +61,13 @@ class Builder():
         def build_types(self, data: dict) -> None:
             for type_key in data.keys():
                 # Process seq tag
-                struct_fields = Builder._process_seq(data[type_key]["seq"], self)
+                struct_fields = Serializer._process_seq(data[type_key]["seq"], self)
 
                 self.__custom_types[type_key] = STRUCT_STR.substitute(fields = struct_fields[:-2])
 
         def build_imports(self, base_dir: Path, import_files: Iterable[str]) -> None:
             for import_file in import_files:
-                seq_name, seq_type, seq_imports = Builder._process_ksy(base_dir.joinpath(f"{import_file}.ksy"))
+                seq_name, seq_type, seq_imports = Serializer._process_ksy(base_dir.joinpath(f"{import_file}.ksy"))
                 self.__imports[seq_name] = seq_type
 
         # TODO: Support enums types
@@ -97,13 +97,13 @@ class Builder():
             if "repeat" in field:
                 array = True
                 if "expr" in field["repeat"]:
-                    array_size = Builder.Types._get_array_size(field['repeat-expr'], seq_ids)
+                    array_size = Serializer.Types._get_array_size(field['repeat-expr'], seq_ids)
             return array, array_size
 
         @staticmethod
         def _get_array_size(repeat: str, ids: Iterable[str]) -> Union[str, int]:
             if isinstance(repeat, str):
-                return Builder.Types._process_expr_str(repeat, ids)
+                return Serializer.Types._process_expr_str(repeat, ids)
             else:
                 return repeat
 
@@ -111,19 +111,19 @@ class Builder():
     def __init__(self,output_directory: Path = out_dir) -> None:
         self.output_directory = output_directory
 
-    def construct_builders(self, ksy_files: Iterable[Path]) -> Path:
-        # Assemble builders
-        builders = dict()
+    def construct_serializers(self, ksy_files: Iterable[Path]) -> Path:
+        # Assemble serializers
+        serializers = dict()
         for yaml_file in ksy_files:
             seq_name, seq_type, seq_imports = self._process_ksy(yaml_file)
-            builders.update(seq_imports)
-            builders[seq_name] = seq_type
+            serializers.update(seq_imports)
+            serializers[seq_name] = seq_type
 
-        # Write the builder moddule
-        out_path = self.output_directory.joinpath("builder.py")
+        # Write the serializer module
+        out_path = self.output_directory.joinpath("serializer.py")
         with open(out_path, "w") as out:
             out.write("import construct\n\n")
-            for seq_name, seq_type in builders.items():
+            for seq_name, seq_type in serializers.items():
                 out.write(f"{seq_name} = {BITWISE_STR.substitute(item=seq_type)}\n")
 
         return out_path
@@ -135,7 +135,7 @@ class Builder():
             yaml_data = load(f)
 
         # Get types and any custom types
-        types = Builder.Types()
+        types = Serializer.Types()
         if "imports" in yaml_data["meta"]:
             types.build_imports(ksy_dir, yaml_data["meta"]["imports"])
         if "types" in yaml_data:
@@ -143,7 +143,7 @@ class Builder():
 
 
         # Process seq tag
-        struct_fields = Builder._process_seq(yaml_data["seq"], types)
+        struct_fields = Serializer._process_seq(yaml_data["seq"], types)
 
         # Build the final struct
         return yaml_data['meta']['id'], STRUCT_STR.substitute(fields=struct_fields[:-2]), types.imports
@@ -156,7 +156,7 @@ class Builder():
             field_type = types.get_type(field["type"], seq_ids, field["size"] if "size" in field else 0)
 
             # Check if it is an array
-            array, array_size = Builder.Types._check_array(field, seq_ids)
+            array, array_size = Serializer.Types._check_array(field, seq_ids)
 
             if array:
                 struct_field = f"{field_type}"
@@ -170,7 +170,7 @@ class Builder():
 
 
 if __name__ == "__main__":
-    Builder().construct_builders(
+    Serializer().construct_serializers(
         (
             Path("../doc/file_specification/objects/frame.ksy"),
             Path("../doc/file_specification/objects/animation.ksy"),

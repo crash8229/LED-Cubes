@@ -3,7 +3,7 @@ import ledcube
 
 
 def test_frame_v1():
-    b = ledcube.builder.frame_v1
+    b = ledcube.serializer.frame_v1
 
     with open("../doc/file_specification/objects/frame/frame_v1.bin", "rb") as f:
         data = f.read()[2:]
@@ -23,11 +23,11 @@ def test_frame_v1():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "frame_v1 builder did not build the same data as the frame_v1.bin binary"
+    assert test_binary == data, "frame_v1 serializer did not build the same data as the frame_v1.bin binary"
 
 
 def test_primary_header():
-    b = ledcube.builder.primary_header
+    b = ledcube.serializer.primary_header
 
     with open("../doc/file_specification/objects/frame/frame_v1.bin", "rb") as f:
         data = f.read()[:2]
@@ -37,11 +37,11 @@ def test_primary_header():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "primary header builder did not build the same data as the primary header in frame_v1.bin binary"
+    assert test_binary == data, "primary header serializer did not build the same data as the primary header in frame_v1.bin binary"
 
 
 def test_frame():
-    b = ledcube.builder.frame
+    b = ledcube.serializer.frame
 
     with open("../doc/file_specification/objects/frame/frame_v1.bin", "rb") as f:
         data = f.read()
@@ -67,10 +67,10 @@ def test_frame():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "frame builder did not build the same data as the frame_v1.bin binary"
+    assert test_binary == data, "frame serializer did not build the same data as the frame_v1.bin binary"
 
 def test_animation_v1():
-    b = ledcube.builder.animation_v1
+    b = ledcube.serializer.animation_v1
 
     with open("../doc/file_specification/objects/animation/animation_v1.bin", "rb") as f:
         data = f.read()[2:]
@@ -148,11 +148,11 @@ def test_animation_v1():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "animation_v1 builder did not build the same data as the animation_v1.bin binary"
+    assert test_binary == data, "animation_v1 serializer did not build the same data as the animation_v1.bin binary"
 
 
 def test_animation():
-    b = ledcube.builder.animation
+    b = ledcube.serializer.animation
 
     with open("../doc/file_specification/objects/animation/animation_v1.bin", "rb") as f:
         data = f.read()
@@ -236,11 +236,11 @@ def test_animation():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "animation builder did not build the same data as the animation_v1.bin binary"
+    assert test_binary == data, "animation serializer did not build the same data as the animation_v1.bin binary"
 
 
 def test_library_v1():
-    b = ledcube.builder.library_v1
+    b = ledcube.serializer.library_v1
 
     with open("../doc/file_specification/objects/library/library_v1.bin", "rb") as f:
         data = f.read()[2:]
@@ -414,11 +414,11 @@ def test_library_v1():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "library_v1 builder did not build the same data as the library_v1.bin binary"
+    assert test_binary == data, "library_v1 serializer did not build the same data as the library_v1.bin binary"
 
 
 def test_library():
-    b = ledcube.builder.library
+    b = ledcube.serializer.library
 
     with open("../doc/file_specification/objects/library/library_v1.bin", "rb") as f:
         data = f.read()
@@ -598,4 +598,4 @@ def test_library():
     }
     test_binary = b.build(test_data)
 
-    assert test_binary == data, "library builder did not build the same data as the library_v1.bin binary"
+    assert test_binary == data, "library serializer did not build the same data as the library_v1.bin binary"

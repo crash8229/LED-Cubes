@@ -1,5 +1,5 @@
 from ledcube.parser.parser import Parser
-from ledcube import builder
+from ledcube import serializer
 
 __version__ = '0.1.0'
-__all__ = ["Parser", "builder"]
+__all__ = ["Parser", "serializer"]
