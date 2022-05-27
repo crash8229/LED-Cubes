@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from yaml import safe_load as load
 from os import mkdir
 from pathlib import Path
