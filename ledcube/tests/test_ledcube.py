@@ -1,4 +1,3 @@
-import pytest
 from ledcube import __version__
 
 
