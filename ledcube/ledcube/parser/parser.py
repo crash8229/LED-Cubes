@@ -37,13 +37,13 @@ class Parser(KaitaiStruct):
         _pos = self._io.pos()
         self._io.seek(0)
         _on = self.primary_header.type
-        if _on == PrimaryHeader.Type.frame:
+        if _on == primary_header.PrimaryHeader.Type.frame:
             self._m_object = frame.Frame(self._io)
-        elif _on == PrimaryHeader.Type.animation:
+        elif _on == primary_header.PrimaryHeader.Type.animation:
             self._m_object = animation.Animation(self._io)
-        elif _on == PrimaryHeader.Type.library:
+        elif _on == primary_header.PrimaryHeader.Type.library:
             self._m_object = library.Library(self._io)
-        elif _on == PrimaryHeader.Type.file:
+        elif _on == primary_header.PrimaryHeader.Type.file:
             self._m_object = cube_file.CubeFile(self._io)
         self._io.seek(_pos)
         return self._m_object if hasattr(self, '_m_object') else None
