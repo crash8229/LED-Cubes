@@ -248,7 +248,6 @@ def test_library_v1():
             "name": "Test Library",
             "time": 0x3E8,
             "crc": 0xFFFFFFFF,
-            "tlc_count": 2,
             "animation_count": 2,
             "data_length": 0x1B2
         },
@@ -431,7 +430,6 @@ def test_library():
                 "name": "Test Library",
                 "time": 0x3E8,
                 "crc": 0xFFFFFFFF,
-                "tlc_count": 2,
                 "animation_count": 2,
                 "data_length": 0x1B2
             },
@@ -620,7 +618,6 @@ def test_cube_file():
                     "name": "Test Library",
                     "time": 0x3E8,
                     "crc": 0xFFFFFFFF,
-                    "tlc_count": 2,
                     "animation_count": 2,
                     "data_length": 0x1B2
                 },
