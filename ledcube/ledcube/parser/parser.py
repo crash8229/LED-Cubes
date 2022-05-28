@@ -8,11 +8,11 @@ from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
 if parse_version(kaitaistruct.__version__) < parse_version('0.9'):
     raise Exception("Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have %s" % (kaitaistruct.__version__))
 
-from ledcube.parser import animation
 from ledcube.parser import primary_header
 from ledcube.parser import library
 from ledcube.parser import frame
 from ledcube.parser import cube_file
+from ledcube.parser import animation
 class Parser(KaitaiStruct):
     """LED Cube Master Parser
     This parser looks at the primary header to determine how to parse the data

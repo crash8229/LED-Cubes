@@ -72,12 +72,11 @@ def test_animation_v1():
     b = ledcube.serializer.animation_v1
 
     with open("../doc/file_specification/objects/animation/animation_v1.bin", "rb") as f:
-        data = f.read()[2:]
+        data = f.read()[2:-4]
     test_data = {
         "secondary_header": {
             "name": "Test",
             "time": 0x3E8,
-            "crc": 0xFFFFFFFF,
             "tlc_count": 2,
             "frame_count": 3,
             "data_length": 0xA2
@@ -164,7 +163,6 @@ def test_animation():
             "secondary_header": {
                 "name": "Test",
                 "time": 0x3E8,
-                "crc": 0xFFFFFFFF,
                 "tlc_count": 2,
                 "frame_count": 3,
                 "data_length": 0xA2
@@ -231,7 +229,8 @@ def test_animation():
                     }
                 }
             ]
-        }
+        },
+        "crc": 0xAABBCCDD
     }
     test_binary = b.build(test_data)
 
@@ -261,7 +260,6 @@ def test_library_v1():
                     "secondary_header": {
                         "name": "Test",
                         "time": 0x3E8,
-                        "crc": 0xFFFFFFFF,
                         "tlc_count": 2,
                         "frame_count": 3,
                         "data_length": 0xA2
@@ -328,7 +326,8 @@ def test_library_v1():
                             }
                         }
                     ]
-                }
+                },
+                "crc": 0xAABBCCDD
             },
             {
                 "primary_header": {
@@ -339,7 +338,6 @@ def test_library_v1():
                     "secondary_header": {
                         "name": "Test",
                         "time": 0x3E8,
-                        "crc": 0xFFFFFFFF,
                         "tlc_count": 2,
                         "frame_count": 3,
                         "data_length": 0xA2
@@ -406,7 +404,8 @@ def test_library_v1():
                             }
                         }
                     ]
-                }
+                },
+                "crc": 0xAABBCCDD
             }
         ]
     }
@@ -443,7 +442,6 @@ def test_library():
                         "secondary_header": {
                             "name": "Test",
                             "time": 0x3E8,
-                            "crc": 0xFFFFFFFF,
                             "tlc_count": 2,
                             "frame_count": 3,
                             "data_length": 0xA2
@@ -510,7 +508,8 @@ def test_library():
                                 }
                             }
                         ]
-                    }
+                    },
+                    "crc": 0xAABBCCDD
                 },
                 {
                     "primary_header": {
@@ -521,7 +520,6 @@ def test_library():
                         "secondary_header": {
                             "name": "Test",
                             "time": 0x3E8,
-                            "crc": 0xFFFFFFFF,
                             "tlc_count": 2,
                             "frame_count": 3,
                             "data_length": 0xA2
@@ -588,7 +586,8 @@ def test_library():
                                 }
                             }
                         ]
-                    }
+                    },
+                    "crc": 0xAABBCCDD
                 }
             ]
         }
@@ -631,7 +630,6 @@ def test_cube_file():
                             "secondary_header": {
                                 "name": "Test",
                                 "time": 0x3E8,
-                                "crc": 0xFFFFFFFF,
                                 "tlc_count": 2,
                                 "frame_count": 3,
                                 "data_length": 0xA2
@@ -698,7 +696,8 @@ def test_cube_file():
                                     }
                                 }
                             ]
-                        }
+                        },
+                        "crc": 0xAABBCCDD
                     },
                     {
                         "primary_header": {
@@ -709,7 +708,6 @@ def test_cube_file():
                             "secondary_header": {
                                 "name": "Test",
                                 "time": 0x3E8,
-                                "crc": 0xFFFFFFFF,
                                 "tlc_count": 2,
                                 "frame_count": 3,
                                 "data_length": 0xA2
@@ -776,7 +774,8 @@ def test_cube_file():
                                     }
                                 }
                             ]
-                        }
+                        },
+                        "crc": 0xAABBCCDD
                     }
                 ]
             }

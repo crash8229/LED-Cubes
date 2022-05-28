@@ -8,8 +8,8 @@ from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
 if parse_version(kaitaistruct.__version__) < parse_version('0.9'):
     raise Exception("Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have %s" % (kaitaistruct.__version__))
 
-from ledcube.parser import animation_v1
 from ledcube.parser import primary_header
+from ledcube.parser import animation_v1
 class Animation(KaitaiStruct):
     """LED Cube animation."""
     def __init__(self, _io, _parent=None, _root=None):
@@ -23,5 +23,6 @@ class Animation(KaitaiStruct):
         _on = self.primary_header.version
         if _on == 1:
             self.animation = animation_v1.AnimationV1(self._io)
+        self.crc = self._io.read_u4be()
 
 

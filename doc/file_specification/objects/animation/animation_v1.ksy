@@ -26,9 +26,6 @@ types:
       - id: time
         type: u8
         doc: UNIX timestamp of file creation
-      - id: crc
-        type: u4
-        doc: CRC of the contents after this field
       - id: tlc_count
         type: u1
         doc: Number of TLC 5940 chained together
