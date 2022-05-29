@@ -9,6 +9,9 @@ doc: Version 1 of the library specification
 seq:
   - id: secondary_header
     type: secondary_header
+  - id: crc
+    type: u4
+    doc: CRC of the secondary header
   - id: animations
     type: animation
     repeat: expr
@@ -26,9 +29,6 @@ types:
       - id: time
         type: u8
         doc: UNIX timestamp of file creation
-      - id: crc
-        type: u4
-        doc: CRC of the contents after this field
       - id: animation_count
         type: u4
         doc: Number of animations in the library

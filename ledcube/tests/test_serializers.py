@@ -246,10 +246,10 @@ def test_library_v1():
         "secondary_header": {
             "name": "Test Library",
             "time": 0x3E8,
-            "crc": 0xFFFFFFFF,
             "animation_count": 2,
-            "data_length": 0x1B2
+            "data_length": 0x1B6
         },
+        "crc": 0xFFFFFFFF,
         "animations": [
             {
                 "primary_header": {
@@ -428,10 +428,10 @@ def test_library():
             "secondary_header": {
                 "name": "Test Library",
                 "time": 0x3E8,
-                "crc": 0xFFFFFFFF,
                 "animation_count": 2,
-                "data_length": 0x1B2
+                "data_length": 0x1B6
             },
+            "crc": 0xFFFFFFFF,
             "animations": [
                 {
                     "primary_header": {
@@ -616,10 +616,10 @@ def test_cube_file():
                 "secondary_header": {
                     "name": "Test Library",
                     "time": 0x3E8,
-                    "crc": 0xFFFFFFFF,
                     "animation_count": 2,
-                    "data_length": 0x1B2
+                    "data_length": 0x1B6
                 },
+                "crc": 0xFFFFFFFF,
                 "animations": [
                     {
                         "primary_header": {

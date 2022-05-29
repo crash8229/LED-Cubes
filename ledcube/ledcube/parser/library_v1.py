@@ -19,6 +19,7 @@ class LibraryV1(KaitaiStruct):
 
     def _read(self):
         self.secondary_header = LibraryV1.SecondaryHeader(self._io, self, self._root)
+        self.crc = self._io.read_u4be()
         self.animations = [None] * (self.secondary_header.animation_count)
         for i in range(self.secondary_header.animation_count):
             self.animations[i] = animation.Animation(self._io)
@@ -35,7 +36,6 @@ class LibraryV1(KaitaiStruct):
         def _read(self):
             self.name = (self._io.read_bytes(32)).decode(u"UTF-8")
             self.time = self._io.read_u8be()
-            self.crc = self._io.read_u4be()
             self.animation_count = self._io.read_u4be()
             self.data_length = self._io.read_u8be()
 
