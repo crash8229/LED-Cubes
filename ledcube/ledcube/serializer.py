@@ -1,10 +1,78 @@
 import construct
 
-primary_header = construct.Bitwise(construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))))
-frame_v1 = construct.Bitwise(construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12))))))
-frame = construct.Bitwise(construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))})))
-animation_v1 = construct.Bitwise(construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "tlc_count" / construct.Bytewise(construct.BytesInteger(1)), "frame_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(4))), "frames" / construct.Array(construct.this.secondary_header.frame_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))})))))
-animation = construct.Bitwise(construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "animation" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "tlc_count" / construct.Bytewise(construct.BytesInteger(1)), "frame_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(4))), "frames" / construct.Array(construct.this.secondary_header.frame_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))}))))}), "crc" / construct.Bytewise(construct.BytesInteger(4))))
-library_v1 = construct.Bitwise(construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "animation_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(8))), "crc" / construct.Bytewise(construct.BytesInteger(4)), "animations" / construct.Array(construct.this.secondary_header.animation_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "animation" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "tlc_count" / construct.Bytewise(construct.BytesInteger(1)), "frame_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(4))), "frames" / construct.Array(construct.this.secondary_header.frame_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))}))))}), "crc" / construct.Bytewise(construct.BytesInteger(4))))))
-library = construct.Bitwise(construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "library" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "animation_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(8))), "crc" / construct.Bytewise(construct.BytesInteger(4)), "animations" / construct.Array(construct.this.secondary_header.animation_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "animation" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "tlc_count" / construct.Bytewise(construct.BytesInteger(1)), "frame_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(4))), "frames" / construct.Array(construct.this.secondary_header.frame_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))}))))}), "crc" / construct.Bytewise(construct.BytesInteger(4)))))})))
-cube_file = construct.Bitwise(construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "file" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "library" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "animation_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(8))), "crc" / construct.Bytewise(construct.BytesInteger(4)), "animations" / construct.Array(construct.this.secondary_header.animation_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "animation" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("name" / construct.Bytewise(construct.PaddedString(32, 'utf8')), "time" / construct.Bytewise(construct.BytesInteger(8)), "tlc_count" / construct.Bytewise(construct.BytesInteger(1)), "frame_count" / construct.Bytewise(construct.BytesInteger(4)), "data_length" / construct.Bytewise(construct.BytesInteger(4))), "frames" / construct.Array(construct.this.secondary_header.frame_count, construct.Struct("primary_header" / construct.Struct("type" / construct.Bytewise(construct.BytesInteger(1)), "version" / construct.Bytewise(construct.BytesInteger(1))), "frame" / construct.Switch(construct.this.primary_header.version, {1: construct.Struct("secondary_header" / construct.Struct("duration" / construct.Bytewise(construct.BytesInteger(2)), "data_length" / construct.Bytewise(construct.BytesInteger(2))), "tlc_states" / construct.Array(construct.this.secondary_header.data_length // 24, construct.Struct("state" / construct.Array(16, construct.BitsInteger(12)))))}))))}), "crc" / construct.Bytewise(construct.BytesInteger(4)))))}))})))
+primary_header_primary_header = construct.Struct(
+    "type" / construct.BytesInteger(1), "version" / construct.BytesInteger(1)
+)
+
+frame_v1_secondary_header = construct.Struct(
+    "duration" / construct.BytesInteger(2), "data_length" / construct.BytesInteger(2)
+)
+
+frame_v1_tlc = construct.BitStruct(
+    "state" / construct.Array(16, construct.BitsInteger(12))
+)
+
+frame_v1_frame_v1 = construct.Struct(
+    "secondary_header" / frame_v1_secondary_header,
+    "tlc_states"
+    / construct.Array(construct.this.secondary_header.data_length // 24, frame_v1_tlc),
+)
+
+frame_frame = construct.Struct(
+    "primary_header" / primary_header_primary_header,
+    "frame"
+    / construct.Switch(construct.this.primary_header.version, {1: frame_v1_frame_v1}),
+)
+
+animation_v1_secondary_header = construct.Struct(
+    "name" / construct.PaddedString(32, "utf8"),
+    "time" / construct.BytesInteger(8),
+    "tlc_count" / construct.BytesInteger(1),
+    "frame_count" / construct.BytesInteger(4),
+    "data_length" / construct.BytesInteger(4),
+)
+
+animation_v1_animation_v1 = construct.Struct(
+    "secondary_header" / animation_v1_secondary_header,
+    "frames"
+    / construct.Array(construct.this.secondary_header.frame_count, frame_frame),
+)
+
+animation_animation = construct.Struct(
+    "primary_header" / primary_header_primary_header,
+    "animation"
+    / construct.Switch(
+        construct.this.primary_header.version, {1: animation_v1_animation_v1}
+    ),
+    "crc" / construct.BytesInteger(4),
+)
+
+library_v1_secondary_header = construct.Struct(
+    "name" / construct.PaddedString(32, "utf8"),
+    "time" / construct.BytesInteger(8),
+    "animation_count" / construct.BytesInteger(4),
+    "data_length" / construct.BytesInteger(8),
+)
+
+library_v1_library_v1 = construct.Struct(
+    "secondary_header" / library_v1_secondary_header,
+    "crc" / construct.BytesInteger(4),
+    "animations"
+    / construct.Array(
+        construct.this.secondary_header.animation_count, animation_animation
+    ),
+)
+
+library_library = construct.Struct(
+    "primary_header" / primary_header_primary_header,
+    "library"
+    / construct.Switch(
+        construct.this.primary_header.version, {1: library_v1_library_v1}
+    ),
+)
+
+cube_file_cube_file = construct.Struct(
+    "primary_header" / primary_header_primary_header,
+    "file"
+    / construct.Switch(construct.this.primary_header.version, {1: library_library}),
+)

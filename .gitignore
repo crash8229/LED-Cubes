@@ -18,6 +18,9 @@ fp-info-cache
 *.~*#
 .history
 __pycache__
+sandbox.py
+*.old
+.coverage
 
 # Netlist files (exported from Eeschema)
 *.net
@@ -36,3 +39,6 @@ build
 
 # VSCode
 .vscode/launch.json
+
+# Python Virtual Env
+.venv
