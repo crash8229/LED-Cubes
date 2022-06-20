@@ -42,7 +42,7 @@ def test_animation_v1():
     check.equal(p.object.animation.secondary_header.time, 0x3E8, "time was not 0x3E8")
     check.equal(p.object.animation.secondary_header.tlc_count, 2, "tlc_count was not 2")
     check.equal(p.object.animation.secondary_header.frame_count, 3, "frame_count was not 3")
-    check.equal(p.object.animation.secondary_header.data_length, 0xA2, "data_length was not 0xA2")
+    check.equal(p.object.animation.secondary_header.data_length, 0xA6, "data_length was not 0xA6")
 
     ################################################################################################
 
@@ -92,7 +92,7 @@ def test_animation_v1():
     ################################################################################################
 
     # CRC
-    check.equal(p.object.crc, 0xAABBCCDD, "crc was not 0xAABBCCDD")
+    check.equal(p.object.crc, 0x39099D6E, "crc was not 0x39099D6E")
 
 
 def test_library_v1():
@@ -115,7 +115,7 @@ def test_library_v1():
     check.equal(p.object.library.secondary_header.data_length, 0x1B6, "data_length was not 0x1B6")
 
     # Library CRC
-    check.equal(p.object.library.crc, 0xFFFFFFFF, "crc was not 0xFFFFFFFF")
+    check.equal(p.object.library.crc, 0x27083e4c, "crc was not 0x27083e4c")
 
     ################################################################################################
 
