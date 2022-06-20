@@ -129,7 +129,7 @@ def test_library_v1():
     check.equal(p.object.library.animations[0].animation.secondary_header.time, 0x3E8, "animation 0 time was not 0x3E8")
     check.equal(p.object.library.animations[0].animation.secondary_header.tlc_count, 2, "animation 0 tlc_count was not 2")
     check.equal(p.object.library.animations[0].animation.secondary_header.frame_count, 3, "animation 0 frame_count was not 3")
-    check.equal(p.object.library.animations[0].animation.secondary_header.data_length, 0xA2, "animation 0 data_length was not 0xA2")
+    check.equal(p.object.library.animations[0].animation.secondary_header.data_length, 0xA6, "animation 0 data_length was not 0xA6")
 
     ##############################################
 
@@ -179,7 +179,7 @@ def test_library_v1():
     ##############################################
 
     # Animation 0 CRC
-    check.equal(p.object.library.animations[0].crc, 0xAABBCCDD, "animation 0 crc was not 0xAABBCCDD")
+    check.equal(p.object.library.animations[0].crc, 0x32AFA7F9, "animation 0 crc was not 0x32AFA7F9")
 
     ################################################################################################
 
@@ -193,7 +193,7 @@ def test_library_v1():
     check.equal(p.object.library.animations[1].animation.secondary_header.time, 0x3E8, "animation 1 time was not 0x3E8")
     check.equal(p.object.library.animations[1].animation.secondary_header.tlc_count, 2, "animation 1 tlc_count was not 2")
     check.equal(p.object.library.animations[1].animation.secondary_header.frame_count, 3, "animation 1 frame_count was not 3")
-    check.equal(p.object.library.animations[1].animation.secondary_header.data_length, 0xA2, "animation 1 data_length was not 0xA2")
+    check.equal(p.object.library.animations[1].animation.secondary_header.data_length, 0xA6, "animation 1 data_length was not 0xA6")
 
     ##############################################
 
@@ -243,7 +243,7 @@ def test_library_v1():
     ##############################################
 
     # Animation 1 CRC
-    check.equal(p.object.library.animations[1].crc, 0xAABBCCDD, "animation 1 crc was not 0xAABBCCDD")
+    check.equal(p.object.library.animations[1].crc, 0x39099D6E, "animation 1 crc was not 0x39099D6E")
 
     ################################################################################################
 
@@ -251,12 +251,12 @@ def test_library_v1():
 def test_cube_file_v1():
     p = ledcube.Parser.from_file("../doc/file_specification/objects/cube_file/cube_file_v1.bin")
 
-    # Library Primary Header in parser
+    # Cube File Primary Header in parser
     check.equal(p.primary_header.type.value, 3, "type was not 3")
     check.equal(p.primary_header.type.name, "file", "type was not \"file\"")
     check.equal(p.primary_header.version, 1, "version was not 1")
 
-    # Library Primary Header in object
+    # Cube File Primary Header in object
     check.equal(p.object.primary_header.type.value, p.primary_header.type.value, "Difference in Type value for parser primary header and object primary header")
     check.equal(p.object.primary_header.type.name, p.primary_header.type.name, "Difference in Type symbol for parser primary header and object primary header")
     check.equal(p.object.primary_header.version, p.primary_header.version, "Difference in Version for parser primary header and object primary header")
@@ -275,7 +275,7 @@ def test_cube_file_v1():
     check.equal(p.object.file.library.secondary_header.data_length, 0x1B6, "data_length was not 0x1B2")
 
     # Library CRC
-    check.equal(p.object.file.library.crc, 0xFFFFFFFF, "crc was not 0xFFFFFFFF")
+    check.equal(p.object.file.library.crc, 0x27083e4c, "crc was not 0x27083e4c")
 
     ##############################################
 
@@ -289,7 +289,7 @@ def test_cube_file_v1():
     check.equal(p.object.file.library.animations[0].animation.secondary_header.time, 0x3E8, "animation 0 time was not 0x3E8")
     check.equal(p.object.file.library.animations[0].animation.secondary_header.tlc_count, 2, "animation 0 tlc_count was not 2")
     check.equal(p.object.file.library.animations[0].animation.secondary_header.frame_count, 3, "animation 0 frame_count was not 3")
-    check.equal(p.object.file.library.animations[0].animation.secondary_header.data_length, 0xA2, "animation 0 data_length was not 0xA2")
+    check.equal(p.object.file.library.animations[0].animation.secondary_header.data_length, 0xA6, "animation 0 data_length was not 0xA6")
 
     #####################
 
@@ -339,7 +339,7 @@ def test_cube_file_v1():
     #####################
 
     # Animation 0 CRC
-    check.equal(p.object.file.library.animations[0].crc, 0xAABBCCDD, "animation 0 crc was not 0xAABBCCDD")
+    check.equal(p.object.file.library.animations[0].crc, 0x32AFA7F9, "animation 0 crc was not 0x32AFA7F9")
 
     ##############################################
 
@@ -353,7 +353,7 @@ def test_cube_file_v1():
     check.equal(p.object.file.library.animations[1].animation.secondary_header.time, 0x3E8, "animation 1 time was not 0x3E8")
     check.equal(p.object.file.library.animations[1].animation.secondary_header.tlc_count, 2, "animation 1 tlc_count was not 2")
     check.equal(p.object.file.library.animations[1].animation.secondary_header.frame_count, 3, "animation 1 frame_count was not 3")
-    check.equal(p.object.file.library.animations[1].animation.secondary_header.data_length, 0xA2, "animation 1 data_length was not 0xA2")
+    check.equal(p.object.file.library.animations[1].animation.secondary_header.data_length, 0xA6, "animation 1 data_length was not 0xA6")
 
     #####################
 
@@ -403,6 +403,6 @@ def test_cube_file_v1():
     #####################
 
     # Animation 1 CRC
-    check.equal(p.object.file.library.animations[1].crc, 0xAABBCCDD, "animation 1 crc was not 0xAABBCCDD")
+    check.equal(p.object.file.library.animations[1].crc, 0x39099D6E, "animation 1 crc was not 0x39099D6E")
 
     ################################################################################################
