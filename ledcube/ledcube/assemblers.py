@@ -85,6 +85,10 @@ class FrameV1(Frame):
 
 #### Animations ################################################################
 class Animation():
+    @property
+    def populated_data(self) -> Dict[str, Any]:
+        raise NotImplementedError
+
     def __len__(self) -> int:
         raise NotImplementedError
 
@@ -123,6 +127,9 @@ class AnimationV1(Animation):
         except KeyError:
             raise ValueError("Data was not populated!")
 
+    def __len__(self) -> int:
+        return serializer.primary_header_primary_header.sizeof() + serializer.animation_v1_secondary_header.sizeof() + self.__populated_data["animation"]["secondary_header"]["data_length"]
+
     @staticmethod
     def template() -> Dict[str, Any]:
         return {
@@ -143,6 +150,112 @@ class AnimationV1(Animation):
         "crc": None,
     }
 
+
+#### Libraries #################################################################
+class Library():
+    @property
+    def populated_data(self) -> Dict[str, Any]:
+        raise NotImplementedError
+
+    def __len__(self) -> int:
+        raise NotImplementedError
+
+class LibraryV1(Library):
+    def __init__(self, name: str, timestamp: int, animation_count: int, animations: Sequence[Animation]) -> None:
+        self.__populated_data: Dict[str, Any] = dict()
+        self.populate(name, timestamp, animation_count, animations)
+
+    @property
+    def populated_data(self) -> Dict[str, Any]:
+        return deepcopy(self.__populated_data)
+
+    def populate(self, name: str, timestamp: int, animation_count: int, animations: Sequence[Animation]) -> None:
+        data = LibraryV1.template()
+        data["library"]["secondary_header"]["name"] = name
+        data["library"]["secondary_header"]["time"] = timestamp
+        data["library"]["secondary_header"]["animation_count"] = animation_count
+
+        # Calculate data length
+        data_length = 4  # 4 bytes for CRC
+        data_length += sum((len(ani) for ani in animations))
+        data["library"]["secondary_header"]["data_length"] = data_length
+
+        # Generate CRC
+        data["library"]["crc"] = crc32(serializer.library_v1_secondary_header.build(data["library"]["secondary_header"]))
+
+        # Create frame data
+        data["library"]["animations"] = [ani.populated_data for ani in animations]
+
+        self.__populated_data = data
+
+    def generate(self) -> bytes:
+        try:
+            return serializer.library_library.build(self.__populated_data)
+        except KeyError:
+            raise ValueError("Data was not populated!")
+
+    def __len__(self) -> int:
+        return serializer.primary_header_primary_header.sizeof() + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["library"]["secondary_header"]["data_length"]
+
     @staticmethod
-    def __len__() -> int:
-        return serializer.animation_animation.sizeof()
+    def template() -> Dict[str, Any]:
+        return {
+        "primary_header": {
+            "type": 2,
+            "version": 1
+        },
+        "library": {
+            "secondary_header": {
+                "name": None,
+                "time": None,
+                "animation_count": None,
+                "data_length": None
+            },
+            "crc": None,
+            "animations": None
+        },
+    }
+
+
+#### Cube Files ################################################################
+class CubeFile():
+    @property
+    def populated_data(self) -> Dict[str, Any]:
+        raise NotImplementedError
+
+    def __len__(self) -> int:
+        raise NotImplementedError
+
+class CubeFileV1(Library):
+    def __init__(self, library: Library) -> None:
+        self.__populated_data: Dict[str, Any] = dict()
+        self.populate(library)
+
+    @property
+    def populated_data(self) -> Dict[str, Any]:
+        return deepcopy(self.__populated_data)
+
+    def populate(self, library: Library) -> None:
+        data = CubeFileV1.template()
+        data["file"] = library.populated_data
+
+        self.__populated_data = data
+
+    def generate(self) -> bytes:
+        try:
+            return serializer.cube_file_cube_file.build(self.__populated_data)
+        except KeyError:
+            raise ValueError("Data was not populated!")
+
+    def __len__(self) -> int:
+        return serializer.primary_header_primary_header.sizeof() * 2 + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["file"]["secondary_header"]["data_length"]
+
+    @staticmethod
+    def template() -> Dict[str, Any]:
+        return {
+        "primary_header": {
+            "type": 3,
+            "version": 1
+        },
+        "file": None,
+    }
