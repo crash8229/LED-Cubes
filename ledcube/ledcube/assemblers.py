@@ -6,28 +6,6 @@ from construct import SizeofError
 from ledcube import serializer
 
 
-class Template():
-    def __init__(self) -> None:
-        self.__populated_data: Dict[str, Any] = dict()
-
-    @property
-    def populated_data(self) -> Dict[str, Any]:
-        return deepcopy(self.__populated_data)
-
-    def generate(self) -> bytes:
-        try:
-            raise NotImplementedError
-        except KeyError:
-            raise ValueError("Data was not populated!")
-
-    def __len__(self) -> int:
-        raise NotImplementedError
-
-    @staticmethod
-    def template() -> Dict[str, Any]:
-        raise NotImplementedError
-
-
 #### Frames ####################################################################
 class Frame():
     @property
@@ -128,7 +106,10 @@ class AnimationV1(Animation):
             raise ValueError("Data was not populated!")
 
     def __len__(self) -> int:
-        return serializer.primary_header_primary_header.sizeof() + serializer.animation_v1_secondary_header.sizeof() + self.__populated_data["animation"]["secondary_header"]["data_length"]
+        try:
+            return serializer.primary_header_primary_header.sizeof() + serializer.animation_v1_secondary_header.sizeof() + self.__populated_data["animation"]["secondary_header"]["data_length"]
+        except (SizeofError, KeyError):
+            raise ValueError("Data was not populated!")
 
     @staticmethod
     def template() -> Dict[str, Any]:
@@ -195,7 +176,10 @@ class LibraryV1(Library):
             raise ValueError("Data was not populated!")
 
     def __len__(self) -> int:
-        return serializer.primary_header_primary_header.sizeof() + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["library"]["secondary_header"]["data_length"]
+        try:
+            return serializer.primary_header_primary_header.sizeof() + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["library"]["secondary_header"]["data_length"]
+        except (SizeofError, KeyError):
+            raise ValueError("Data was not populated!")
 
     @staticmethod
     def template() -> Dict[str, Any]:
@@ -248,7 +232,10 @@ class CubeFileV1(Library):
             raise ValueError("Data was not populated!")
 
     def __len__(self) -> int:
-        return serializer.primary_header_primary_header.sizeof() * 2 + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["file"]["secondary_header"]["data_length"]
+        try:
+            return serializer.primary_header_primary_header.sizeof() * 2 + serializer.library_v1_secondary_header.sizeof() + self.__populated_data["file"]["secondary_header"]["data_length"]
+        except (SizeofError, KeyError):
+            raise ValueError("Data was not populated!")
 
     @staticmethod
     def template() -> Dict[str, Any]:
