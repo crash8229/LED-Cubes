@@ -3,7 +3,7 @@ name = "ledcube"
 version = "0.1.0"
 description = "Parsers for my LED cube file format"
 authors = ["crash8229 <mu304007@gmail.com>"]
-license = "GPL-3.0-or-later"
+license = "GPL-3.0-only"
 repository = "https://github.com/crash8229/LED-Cubes"
 
 [tool.poetry.dependencies]
