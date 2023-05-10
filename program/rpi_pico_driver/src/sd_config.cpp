@@ -1,14 +1,14 @@
-/* hw_config.cpp
+/* hw_config.c
 Copyright 2021 Carl John Kugler III
 
-Licensed under the Apache License, Version 2.0 (the License); you may not use 
-this file except in compliance with the License. You may obtain a copy of the 
+Licensed under the Apache License, Version 2.0 (the License); you may not use
+this file except in compliance with the License. You may obtain a copy of the
 License at
 
-   http://www.apache.org/licenses/LICENSE-2.0 
-Unless required by applicable law or agreed to in writing, software distributed 
-under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR 
-CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+   http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 */
 /*
@@ -26,53 +26,44 @@ socket, which SPI it is driven by, and how it is wired.
 */
 
 #include <string.h>
+//
 #include "config.h"
+//
+#include "my_debug.h"
+//
 #include "hw_config.h"
+//
+#include "ff.h" /* Obtains integer types */
+//
 #include "diskio.h" /* Declarations of disk functions */
-
-// SD Card
-/* ********************************************************************** */
-void spi0_dma_isr();
 
 // Hardware Configuration of SPI "objects"
 // Note: multiple SD cards can be driven by one SPI if they use different slave
 // selects.
 static spi_t spis[] = {  // One for each SPI.
-    {
-        .hw_inst = SD_PORT,  // SPI component
-        .miso_gpio = SD_MISO, // GPIO number (not pin number)
-        .mosi_gpio = SD_MOSI,
-        .sck_gpio = SD_SCK,
-        /* The choice of SD card matters! SanDisk runs at the highest speed. PNY
-           can only mangage 5 MHz. Those are all I've tried. */
-        .baud_rate = SD_RATE,
-        //  .baud_rate = 12500 * 1000,  // The limitation here is SPI slew rate.
-        //.baud_rate = 25 * 1000 * 1000, // Actual frequency: 20833333. Has
-        // worked for me with SanDisk.
-
-        // Following attributes are dynamically assigned
-        .dma_isr = spi0_dma_isr,
-        .initialized = false,  // initialized flag
-    }
+        {
+                .hw_inst = SD_PORT,  // SPI component
+                .miso_gpio = SD_MISO, // GPIO number (not pin number)
+                .mosi_gpio = SD_MOSI,
+                .sck_gpio = SD_SCK,
+                .baud_rate = SD_RATE,
+                //.baud_rate = 25 * 1000 * 1000, // Actual frequency: 20833333.
+        }
 };
 
 // Hardware Configuration of the SD Card "objects"
 static sd_card_t sd_cards[] = {  // One for each SD card
-    {
-        .pcName = SD_DRIVE,           // Name used to mount device
-        .spi = &spis[0],          // Pointer to the SPI driving this card
-        .ss_gpio = SD_CS,            // The SPI slave select GPIO for this SD card
-        .use_card_detect = false,
-        // Following attributes are dynamically assigned
-        .m_Status = STA_NOINIT,
-        .sectors = 0,
-        .card_type = 0,
-    }
-};
+        {
+                .pcName = SD_DRIVE,   // Name used to mount device
+                .spi = &spis[0],  // Pointer to the SPI driving this card
+                .ss_gpio = SD_CS,    // The SPI slave select GPIO for this SD card
+                .use_card_detect = false,
+                .card_detect_gpio = 13,   // Card detect
+                .card_detected_true = 1  // What the GPIO read returns when a card is
+                // present. Use -1 if there is no card detect.
+        }};
 
-void spi0_dma_isr() { spi_irq_handler(&spis[0]); }
-
-
+/* ********************************************************************** */
 size_t sd_get_num() { return count_of(sd_cards); }
 sd_card_t *sd_get_by_num(size_t num) {
     if (num <= sd_get_num()) {
@@ -89,7 +80,5 @@ spi_t *spi_get_by_num(size_t num) {
         return NULL;
     }
 }
-/* ********************************************************************** */
-
 
 /* [] END OF FILE */

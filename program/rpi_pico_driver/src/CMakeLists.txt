@@ -16,6 +16,7 @@ target_sources(${executable_name} PRIVATE
         sd_config.cpp
         tlc5940.cpp
         ledcube.cpp
+        sdcard.cpp
         )
 
 # Configure PICO stdio
@@ -26,7 +27,10 @@ pico_enable_stdio_usb(${executable_name} 1)
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/spi_sd_fat/FatFs_SPI" build)
 
 # Link the standard library to the build
-target_link_libraries(${executable_name} pico_stdlib)
+target_link_libraries(${executable_name}
+        pico_multicore
+        pico_stdlib
+        )
 
 # Link any user requested libraries
 target_link_libraries(${executable_name}

@@ -26,41 +26,18 @@ LEDCube::LEDCube() {
         TLC_NUM
     );
 
-    /* Mount SD card and open the file */
-    // Initialize SD card
-    assert(sd_init_driver());
-    assert(sdMount());
-    assert(sdOpenFile());
-
 }
 
 LEDCube::~LEDCube() {
-    f_close(&file);
-    f_unmount(sdDrive);
+
 }
 
 // Private
 /* ****************************************************************************************************************** */
-bool LEDCube::sdMount() {
-    return f_mount(&fs, sdDrive, 1) == FR_OK;
-}
 
-bool LEDCube::sdUnmount() {
-    return f_mount(nullptr, sdDrive, 0) == FR_OK;
-}
-
-bool LEDCube::sdOpenFile() {
-    return f_open(&file, fileName, FA_READ) == FR_OK;
-}
-
-bool LEDCube::sdCloseFile() {
-    return f_close(&file) == FR_OK;
-}
 
 // Public
 /* ****************************************************************************************************************** */
-bool LEDCube::getBytes(uint8_t *buf, uint *read, uint len) {
-    return f_read(&file, buf, len, read) == FR_OK;
-}
+
 
 #pragma clang diagnostic pop
