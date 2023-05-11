@@ -25,7 +25,6 @@ std::string hexStr(uint8_t *data, uint32_t len)
 }
 
 void sdCardTest(SDCard card){
-    // SD Card Testing
     const uint numBytes = 10240;
     const uint numLoop = 2000;
     uint8_t buf[numBytes];
@@ -36,53 +35,12 @@ void sdCardTest(SDCard card){
     double resultSeconds = 0;
     const uint loopNumReport = 600;
     const uint triggerGPIO = 4;
+
     gpio_init(triggerGPIO);
     gpio_set_dir(triggerGPIO, GPIO_OUT);
 
     printf("\nReading from %s\n", SD_FILE);
-    printf("Performing read speed test (Clock=%dHz)\nReading %d bytes %d times\n\n", SD_RATE,numBytes, numLoop);
-    printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
-    gpio_put(triggerGPIO, 1);
-    for (int i = 1; i <= numLoop; i++) {
-        card.fileSeek(0);
-        startTime = get_absolute_time();
-        assert(card.fileRead(buf, numBytes, &bytesRead));
-        endTime = get_absolute_time();
-        sum += absolute_time_diff_us(startTime, endTime);
-        assert(numBytes == bytesRead);
-        if (i % loopNumReport == 0) {
-            resultSeconds = sum/(1e6 * i);
-            printf("Iteration %d: Average read rate %f KB/s\n", i, numBytes/(1024 * resultSeconds));
-        }
-    }
-    gpio_put(triggerGPIO, 0);
-
-//    printf("Bytes from file: 0x%s\n", hexStr(buf, len).c_str());
-    resultSeconds = sum/(1e6 * numLoop);
-    printf("\nTook on average %fs to read %d bytes\nFinal average read rate: %f KB/s\n", resultSeconds, numBytes, numBytes/(1024 * resultSeconds));
-}
-
-void core1_main(){
-    // SD Card Testing
-    const uint triggerGPIO = 4;
-    gpio_init(triggerGPIO);
-    gpio_set_dir(triggerGPIO, GPIO_OUT);
-
-    gpio_put(triggerGPIO, 1);
-    SDCard card;
-    gpio_put(triggerGPIO, 0);
-    const uint numBytes = 10240;
-    const uint numLoop = 2000;
-    uint8_t buf[numBytes];
-    UINT bytesRead = 0;
-    uint64_t sum = 0;
-    absolute_time_t startTime;
-    absolute_time_t endTime;
-    double resultSeconds = 0;
-    const uint loopNumReport = 600;
-
-    printf("\nReading from %s\n", SD_FILE);
-    printf("Performing read speed test (Clock=%dHz)\nReading %d bytes %d times\n\n", SD_RATE,numBytes, numLoop);
+    printf("Performing read speed test (Clock=%dHz)\nReading %d bytes %d times\n\n", SD_RATE, numBytes, numLoop);
     printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
     gpio_put(triggerGPIO, 1);
     for (int i = 1; i <= numLoop; i++) {
@@ -102,11 +60,11 @@ void core1_main(){
 //    printf("Bytes from file: 0x%s\n", hexStr(buf, len).c_str());
     resultSeconds = sum/(1e6 * numLoop);
     printf("\nTook on average %fs to read %d bytes\nFinal average read rate: %f KB/s", resultSeconds, numBytes, numBytes/(1024 * resultSeconds));
+}
 
-    // End infinite loop
-//    while (true) {
-//        sleep_ms(1000);
-//    }
+void core1_main(){
+    SDCard card;
+    sdCardTest(card);
 }
 
 int main() {
@@ -139,17 +97,9 @@ int main() {
 
     TLC5940 tlc(TLC_PORT, TLC_MISO, TLC_CS, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
     tlc.ledAllOff();
-//    printf("\nDriving TLC\n");
-//    const uint numLoops = 10;
-    const uint msWait = 500;
-//    for (int i = 0; i < numLoops;i++) {
-//        for (uint8_t *datum: data) {
-//            tlc.setGrayscale(datum);
-//            sleep_ms(msWait);
-//        }
-//    }
-//    tlc.ledAllOff();
 
+//    const uint msWait = 3;
+    const uint msWait = 250;
     // End infinite loop
     const uint infSleepMS = 1000;
     while (true) {
