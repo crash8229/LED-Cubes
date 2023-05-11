@@ -30,12 +30,16 @@ private:
     void init();
 
 public:
+    // Constructor & Destructor
     TLC5940();
     TLC5940(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk, uint8_t num);
     explicit TLC5940(TLC5940Config *tlc_config);
-
     ~TLC5940();
 
+    // Constants
+    const uint8_t GRAYSCALE_BIT_SIZE = 24;
+
+    // Functions
     void init(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk, uint8_t num);
     void init(TLC5940Config *tlc_config);
 

@@ -23,7 +23,7 @@ public:
 
     bool mount();
 
-    static bool unmount();
+    bool unmount();
 
     bool isFileOpen();
 
