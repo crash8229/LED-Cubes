@@ -42,3 +42,6 @@ build
 
 # Python Virtual Env
 .venv
+
+#KiCad
+*-backups
