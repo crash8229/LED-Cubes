@@ -25,15 +25,18 @@ std::string hexStr(uint8_t *data, uint32_t len)
 }
 
 void sdCardTest(SDCard card){
-    const uint numBytes = 10240;
-    const uint numLoop = 2000;
+//    const uint numBytes = 10240;
+//    const uint numLoop = 2000;
+//    const uint loopNumReport = 600;
+    const uint numBytes = 209715;
+    const uint numLoop = 100;
+    const uint loopNumReport = 30;
     uint8_t buf[numBytes];
     UINT bytesRead = 0;
     uint64_t sum = 0;
     absolute_time_t startTime;
     absolute_time_t endTime;
     double resultSeconds = 0;
-    const uint loopNumReport = 600;
     const uint triggerGPIO = 4;
 
     gpio_init(triggerGPIO);
