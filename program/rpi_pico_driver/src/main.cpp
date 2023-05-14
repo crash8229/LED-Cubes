@@ -70,13 +70,6 @@ void core1_main(){
     sdCardTest(card);
 }
 
-//FIXME
-// Get compile errors if I do not set these to 0
-// Git issue: https://github.com/raspberrypi/pico-sdk/issues/1368
-// Need to explore some more. Might try on a fresh system
-void* __dso_handle = 0;
-void* _fini = 0;
-
 int main() {
 #ifdef DEBUG
     sleep_ms(1000);

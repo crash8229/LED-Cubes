@@ -10,7 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
-set(PICO_CXX_ENABLE_EXCEPTIONS 0)
+#Workaround for issue: https://github.com/raspberrypi/pico-sdk/issues/1368
+set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 
 # Add cmake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
