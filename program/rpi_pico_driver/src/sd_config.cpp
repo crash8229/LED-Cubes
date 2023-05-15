@@ -36,20 +36,21 @@ socket, which SPI it is driven by, and how it is wired.
 // Note: multiple SD cards can be driven by one SPI if they use different slave
 // selects.
 static spi_t spis[] = {  // One for each SPI.
-        {
-                .hw_inst = SD_PORT,  // SPI component
-                .miso_gpio = SD_MISO,  // GPIO number (not Pico pin)
-                .mosi_gpio = SD_MOSI,
-                .sck_gpio = SD_SCK,
-                .baud_rate = SD_RATE,
-                .DMA_IRQ_num = DMA_IRQ_1,
-                .set_drive_strength = true,
-                .mosi_gpio_drive_strength = GPIO_DRIVE_STRENGTH_2MA,
-                .sck_gpio_drive_strength = GPIO_DRIVE_STRENGTH_2MA,
-        }
+
 };
 
 // Hardware Configuration of the SD Card "objects"
+/*
+    | GPIO  | Pico Pin | microSD | Function    |
+    | ----  | -------- | ------- | ----------- |
+    |  09   |    12    | DET     | Card Detect |
+    |  10   |    14    | CLK     | SDIO_CLK    |
+    |  11   |    15    | CMD     | SDIO_CMD    |
+    |  12   |    16    | DAT0    | SDIO_D0     |
+    |  13   |    17    | DAT1    | SDIO_D1     |
+    |  14   |    19    | DAT2    | SDIO_D2     |
+    |  15   |    20    | DAT3    | SDIO_D3     |
+*/
 static sd_card_t sd_cards[] = {  // One for each SD card
         {
                 .pcName = SD_DRIVE,   // Name used to mount device
@@ -66,14 +67,14 @@ static sd_card_t sd_cards[] = {  // One for each SD card
                     D3_gpio = D0_gpio + 3;
                 */
                 .sdio_if = {
-                        .CMD_gpio = 18,
-                        .D0_gpio = 19,
+                        .CMD_gpio = SD_CMD,
+                        .D0_gpio = SD_D0,
                         .SDIO_PIO = pio1,
                         .DMA_IRQ_num = DMA_IRQ_0
                 },
-                .use_card_detect = false,
-                .card_detect_gpio = 16,   // Card detect
-                .card_detected_true = 1   // What the GPIO read returns when a card is
+                .use_card_detect = SD_DET_EN,
+                .card_detect_gpio = SD_DET,          // Card detect
+                .card_detected_true = SD_DET_STATE   // What the GPIO read returns when a card is
                 // present.
         }
 };

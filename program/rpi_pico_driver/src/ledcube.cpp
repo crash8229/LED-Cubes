@@ -16,8 +16,6 @@ LEDCube::LEDCube() {
     /* Init TLC5940 */
     tlc.init(
         TLC_PORT,
-        TLC_MISO,
-        TLC_CS,
         TLC_SCLK,
         TLC_MOSI,
         TLC_XLAT,

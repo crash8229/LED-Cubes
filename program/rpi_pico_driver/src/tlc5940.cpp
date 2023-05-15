@@ -11,9 +11,9 @@
 
 TLC5940::TLC5940() = default;
 
-TLC5940::TLC5940(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
+TLC5940::TLC5940(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
                  uint8_t num) {
-    init(port, miso, cs, sclk, mosi, xlat, blank, gsclk, num);
+    init(port, sclk, mosi, xlat, blank, gsclk, num);
 }
 
 TLC5940::TLC5940(TLC5940Config *tlc_config) {
@@ -46,13 +46,8 @@ void TLC5940::init() {
 
     // Init SPI
     spi_init(cfg.spiPort, 1000 * 1000 * 30);  // 30MHz
-    gpio_set_function(cfg.spiMiso, GPIO_FUNC_SPI);
-    gpio_set_function(cfg.spiCs, GPIO_FUNC_SIO);
     gpio_set_function(cfg.spiSclk, GPIO_FUNC_SPI);
     gpio_set_function(cfg.spiMosi, GPIO_FUNC_SPI);
-    // Chip select is active-low, so we'll initialise it to a driven-high state
-    gpio_set_dir(cfg.spiCs, GPIO_OUT);
-    gpio_put(cfg.spiCs, 1);
 
     // Init all outputs to off
     ledAllOff();
@@ -60,13 +55,11 @@ void TLC5940::init() {
 
 // Public
 /* ****************************************************************************************************************** */
-void TLC5940::init(spi_inst_t *port, uint miso, uint cs, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
+void TLC5940::init(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
                    uint8_t num) {
     // Init class variables
     cfg = {
             port,
-            miso,
-            cs,
             sclk,
             mosi,
             num,
