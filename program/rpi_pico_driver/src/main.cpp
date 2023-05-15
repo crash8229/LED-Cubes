@@ -10,8 +10,8 @@
 
 #include "config.h"
 #include "tlc5940.h"
-#include "ledcube.h"
 #include "sdcard.h"
+#include "ledcube.h"
 
 std::string hexStr(uint8_t *data, uint32_t len)
 {
@@ -25,49 +25,75 @@ std::string hexStr(uint8_t *data, uint32_t len)
 }
 
 void sdCardTest(SDCard card){
+    assert(card.isFileOpen());
+
 //    const uint numBytes = 10240;
-//    const uint numLoop = 2000;
-//    const uint loopNumReport = 600;
+//    const uint numLoop = 40000;
+//    const uint loopNumReport = 9000;
     const uint numBytes = 209715;
-    const uint numLoop = 100;
-    const uint loopNumReport = 30;
+    const uint numLoop = 2000;
+    const uint loopNumReport = 600;
+
     uint8_t buf[numBytes];
-    UINT bytesRead = 0;
+    uint bytesRead = 0;
     uint64_t sum = 0;
     absolute_time_t startTime;
     absolute_time_t endTime;
     double resultSeconds = 0;
+    const uint16_t bytesInKB = 1024;
+    const uint32_t usecInSec = 1e6;
     const uint triggerGPIO = 4;
+    uint loopCnt = 0;
 
     gpio_init(triggerGPIO);
     gpio_set_dir(triggerGPIO, GPIO_OUT);
 
     printf("\nReading from %s\n", SD_FILE);
-    printf("Performing read speed test (Clock=%dHz)\nReading %d bytes %d times\n\n", SD_RATE, numBytes, numLoop);
+    printf("Performing read speed test\n");
+#ifdef SD_CARD_TEST_INF
+    printf("Reading %d bytes indefinitely\n\n", numBytes, numLoop);
+#else
+    printf("Reading %d bytes %d times\n\n", numBytes, numLoop);
+#endif
     printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
     gpio_put(triggerGPIO, 1);
-    for (int i = 1; i <= numLoop; i++) {
+#ifdef SD_CARD_TEST_INF
+    while (true) {
+#else
+    while (loopCnt < numLoop) {
+#endif
+        loopCnt++;
         card.fileSeek(0);
         startTime = get_absolute_time();
-        assert(card.fileRead(buf, numBytes, &bytesRead));
+        assert(card.fileRead(buf, numBytes, &bytesRead));  // Assert if something happens while reading
         endTime = get_absolute_time();
         sum += absolute_time_diff_us(startTime, endTime);
-        assert(numBytes == bytesRead);
-        if (i % loopNumReport == 0) {
-            resultSeconds = sum/(1e6 * i);
-            printf("Iteration %d: Average read rate %f KB/s\n", i, numBytes/(1024 * resultSeconds));
+        assert(numBytes == bytesRead);  // Assert if the bytes read != bytes requested
+        if (loopCnt % loopNumReport == 0) {
+            resultSeconds = (double)sum/(usecInSec * loopCnt);
+            printf("Iteration %06d: Average read rate %8.1f KB/s\n", loopCnt, numBytes/(bytesInKB * resultSeconds));
         }
     }
     gpio_put(triggerGPIO, 0);
 
-//    printf("Bytes from file: 0x%s\n", hexStr(buf, len).c_str());
-    resultSeconds = sum/(1e6 * numLoop);
-    printf("\nTook on average %fs to read %d bytes\nFinal average read rate: %f KB/s", resultSeconds, numBytes, numBytes/(1024 * resultSeconds));
+    resultSeconds = (double)sum/(usecInSec * numLoop);
+    printf("\nTook on average %fs to read %06d bytes (total read = %010d bytes)\nFinal average read rate: %8.1f KB/s", resultSeconds, numBytes, numBytes * numLoop, numBytes/(bytesInKB * resultSeconds));
 }
 
-void core1_main(){
+void core1_main() {
     SDCard card;
+
+#ifdef SD_CARD_TEST
     sdCardTest(card);
+    return;
+#endif
+    assert(card.isFileOpen());
+
+    const uint numBytes = 4;
+    uint8_t buf[numBytes];
+    uint bytesRead = 0;
+    card.fileRead(buf, numBytes, &bytesRead);
+    printf("Bytes from file: 0x%s\n", hexStr(buf, numBytes).c_str());
 }
 
 int main() {
@@ -98,7 +124,7 @@ int main() {
 //                           {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 //                           {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-    TLC5940 tlc(TLC_PORT, TLC_MISO, TLC_CS, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
+    TLC5940 tlc(TLC_PORT, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
     tlc.ledAllOff();
 
 //    const uint msWait = 3;

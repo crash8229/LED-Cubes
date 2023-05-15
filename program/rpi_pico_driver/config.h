@@ -7,6 +7,7 @@
 
 #include "hardware/spi.h"
 
+// Toggles
 #define DEBUG
 #define SD_CARD_TEST
 //#define SD_CARD_TEST_INF
