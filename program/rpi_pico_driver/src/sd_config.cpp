@@ -29,39 +29,55 @@ socket, which SPI it is driven by, and how it is wired.
 //
 #include "config.h"
 //
-#include "my_debug.h"
-//
 #include "hw_config.h"
-//
-#include "ff.h" /* Obtains integer types */
-//
-#include "diskio.h" /* Declarations of disk functions */
+
 
 // Hardware Configuration of SPI "objects"
 // Note: multiple SD cards can be driven by one SPI if they use different slave
 // selects.
 static spi_t spis[] = {  // One for each SPI.
-        {
-                .hw_inst = SD_PORT,  // SPI component
-                .miso_gpio = SD_MISO, // GPIO number (not pin number)
-                .mosi_gpio = SD_MOSI,
-                .sck_gpio = SD_SCK,
-                .baud_rate = SD_RATE,
-                //.baud_rate = 25 * 1000 * 1000, // Actual frequency: 20833333.
-        }
+
 };
 
 // Hardware Configuration of the SD Card "objects"
+/*
+    | GPIO  | Pico Pin | microSD | Function    |
+    | ----  | -------- | ------- | ----------- |
+    |  09   |    12    | DET     | Card Detect |
+    |  10   |    14    | CLK     | SDIO_CLK    |
+    |  11   |    15    | CMD     | SDIO_CMD    |
+    |  12   |    16    | DAT0    | SDIO_D0     |
+    |  13   |    17    | DAT1    | SDIO_D1     |
+    |  14   |    19    | DAT2    | SDIO_D2     |
+    |  15   |    20    | DAT3    | SDIO_D3     |
+*/
 static sd_card_t sd_cards[] = {  // One for each SD card
         {
                 .pcName = SD_DRIVE,   // Name used to mount device
-                .spi = &spis[0],  // Pointer to the SPI driving this card
-                .ss_gpio = SD_CS,    // The SPI slave select GPIO for this SD card
-                .use_card_detect = false,
-                .card_detect_gpio = 13,   // Card detect
-                .card_detected_true = 1  // What the GPIO read returns when a card is
-                // present. Use -1 if there is no card detect.
-        }};
+                .type = SD_IF_SDIO,
+                /*
+                Pins CLK_gpio, D1_gpio, D2_gpio, and D3_gpio are at offsets from pin D0_gpio.
+                The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
+                    CLK_gpio = (D0_gpio + SDIO_CLK_PIN_D0_OFFSET) % 32;
+                    As of this writing, SDIO_CLK_PIN_D0_OFFSET is 30,
+                      which is -2 in mod32 arithmetic, so:
+                    CLK_gpio = D0_gpio -2.
+                    D1_gpio = D0_gpio + 1;
+                    D2_gpio = D0_gpio + 2;
+                    D3_gpio = D0_gpio + 3;
+                */
+                .sdio_if = {
+                        .CMD_gpio = SD_CMD,
+                        .D0_gpio = SD_D0,
+                        .SDIO_PIO = pio1,
+                        .DMA_IRQ_num = DMA_IRQ_0
+                },
+                .use_card_detect = SD_DET_EN,
+                .card_detect_gpio = SD_DET,          // Card detect
+                .card_detected_true = SD_DET_STATE   // What the GPIO read returns when a card is
+                // present.
+        }
+};
 
 /* ********************************************************************** */
 size_t sd_get_num() { return count_of(sd_cards); }
@@ -74,7 +90,7 @@ sd_card_t *sd_get_by_num(size_t num) {
 }
 size_t spi_get_num() { return count_of(spis); }
 spi_t *spi_get_by_num(size_t num) {
-    if (num <= sd_get_num()) {
+    if (num <= spi_get_num()) {
         return &spis[num];
     } else {
         return NULL;

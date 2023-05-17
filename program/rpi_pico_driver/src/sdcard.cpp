@@ -33,8 +33,7 @@ bool SDCard::unmount() {
 }
 
 bool SDCard::isFileOpen() {
-
-    return false;
+    return file.obj.fs != nullptr;
 }
 
 bool SDCard::openFile() {

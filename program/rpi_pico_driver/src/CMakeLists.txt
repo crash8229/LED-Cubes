@@ -24,7 +24,7 @@ pico_enable_stdio_uart(${executable_name} 1)
 pico_enable_stdio_usb(${executable_name} 1)
 
 # Add library for SD card
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/spi_sd_fat/FatFs_SPI" build)
+add_subdirectory("${PROJECT_SOURCE_DIR}/extern/spi_sd_fat/src" build)
 
 # Link the standard library to the build
 target_link_libraries(${executable_name}
