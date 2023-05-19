@@ -40,17 +40,6 @@ static spi_t spis[] = {  // One for each SPI.
 };
 
 // Hardware Configuration of the SD Card "objects"
-/*
-    | GPIO  | Pico Pin | microSD | Function    |
-    | ----  | -------- | ------- | ----------- |
-    |  09   |    12    | DET     | Card Detect |
-    |  10   |    14    | CLK     | SDIO_CLK    |
-    |  11   |    15    | CMD     | SDIO_CMD    |
-    |  12   |    16    | DAT0    | SDIO_D0     |
-    |  13   |    17    | DAT1    | SDIO_D1     |
-    |  14   |    19    | DAT2    | SDIO_D2     |
-    |  15   |    20    | DAT3    | SDIO_D3     |
-*/
 static sd_card_t sd_cards[] = {  // One for each SD card
         {
                 .pcName = SD_DRIVE,   // Name used to mount device

@@ -22,6 +22,27 @@
 #define TLC_GSCLK 20
 
 //#### SD Card Config ####
+/*
+    | GPIO  | Pico Pin | microSD | Function    |
+    | ----  | -------- | ------- | ----------- |
+    |  09   |    12    | DET     | Card Detect |
+    |  10   |    14    | CLK     | SDIO_CLK    |
+    |  11   |    15    | CMD     | SDIO_CMD    |
+    |  12   |    16    | DAT0    | SDIO_D0     |
+    |  13   |    17    | DAT1    | SDIO_D1     |
+    |  14   |    19    | DAT2    | SDIO_D2     |
+    |  15   |    20    | DAT3    | SDIO_D3     |
+
+Pins CLK_gpio, D1_gpio, D2_gpio, and D3_gpio are at offsets from pin D0_gpio.
+The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
+    CLK_gpio = (D0_gpio + SDIO_CLK_PIN_D0_OFFSET) % 32;
+    As of this writing, SDIO_CLK_PIN_D0_OFFSET is 30,
+      which is -2 in mod32 arithmetic, so:
+    CLK_gpio = D0_gpio -2.
+    D1_gpio = D0_gpio + 1;
+    D2_gpio = D0_gpio + 2;
+    D3_gpio = D0_gpio + 3;
+*/
 #define SD_DET_EN true
 #define SD_DET_STATE 1
 #define SD_DET 9
