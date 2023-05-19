@@ -25,10 +25,16 @@ TLC5940::~TLC5940() {
     ledAllOff();
 
     gpio_put(cfg.tlcXlat, 0);
-    gpio_put(cfg.tlcBlank, 0);
+    gpio_put(cfg.tlcBlank, 1);
     gpio_put(cfg.tlcGsclk, 0);
 
+    gpio_deinit(cfg.tlcXlat);
+    gpio_deinit(cfg.tlcBlank);
+    gpio_deinit(cfg.tlcGsclk);
+
     spi_deinit(cfg.spiPort);
+    gpio_deinit(cfg.spiSclk);
+    gpio_deinit(cfg.spiMosi);
 }
 
 // Private
