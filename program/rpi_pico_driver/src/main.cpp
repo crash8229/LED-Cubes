@@ -24,6 +24,7 @@ std::string hexStr(uint8_t *data, uint32_t len)
     return ss.str();
 }
 
+#ifdef SD_CARD_TEST
 void sdCardTest(SDCard card){
     assert(card.isFileOpen());
 
@@ -36,27 +37,24 @@ void sdCardTest(SDCard card){
 
     uint8_t buf[numBytes];
     uint bytesRead = 0;
-    uint64_t sum = 0;
+    double sum = 0;
     absolute_time_t startTime;
     absolute_time_t endTime;
-    double resultSeconds = 0;
     const uint16_t bytesInKB = 1024;
     const uint32_t usecInSec = 1e6;
-    const uint triggerGPIO = 4;
     uint loopCnt = 0;
-
-    gpio_init(triggerGPIO);
-    gpio_set_dir(triggerGPIO, GPIO_OUT);
+#ifndef SD_CARD_TEST_INF
+    double resultSeconds = 0;
+#endif
 
     printf("\nReading from %s\n", SD_FILE);
     printf("Performing read speed test\n");
 #ifdef SD_CARD_TEST_INF
-    printf("Reading %d bytes indefinitely\n\n", numBytes, numLoop);
+    printf("Reading %d bytes indefinitely\n\n", numBytes);
 #else
     printf("Reading %d bytes %d times\n\n", numBytes, numLoop);
 #endif
     printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
-    gpio_put(triggerGPIO, 1);
 #ifdef SD_CARD_TEST_INF
     while (true) {
 #else
@@ -67,18 +65,19 @@ void sdCardTest(SDCard card){
         startTime = get_absolute_time();
         assert(card.fileRead(buf, numBytes, &bytesRead));  // Assert if something happens while reading
         endTime = get_absolute_time();
-        sum += absolute_time_diff_us(startTime, endTime);
+        sum += (double)absolute_time_diff_us(startTime, endTime)/usecInSec;
         assert(numBytes == bytesRead);  // Assert if the bytes read != bytes requested
         if (loopCnt % loopNumReport == 0) {
-            resultSeconds = (double)sum/(usecInSec * loopCnt);
-            printf("Iteration %06d: Average read rate %8.1f KB/s\n", loopCnt, numBytes/(bytesInKB * resultSeconds));
+            printf("Iteration %6d: Average read rate %8.1f KB/s\n", loopCnt, numBytes/(bytesInKB * sum / loopCnt));
         }
     }
-    gpio_put(triggerGPIO, 0);
 
-    resultSeconds = (double)sum/(usecInSec * numLoop);
+#ifndef SD_CARD_TEST_INF
+    resultSeconds = sum/(usecInSec * numLoop);
     printf("\nTook on average %fs to read %06d bytes (total read = %010d bytes)\nFinal average read rate: %8.1f KB/s", resultSeconds, numBytes, numBytes * numLoop, numBytes/(bytesInKB * resultSeconds));
+#endif
 }
+#endif
 
 void core1_main() {
     SDCard card;
