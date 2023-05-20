@@ -2,6 +2,7 @@
 #pragma ide diagnostic ignored "EndlessLoop"
 #pragma ide diagnostic ignored "modernize-use-bool-literals"
 #pragma ide diagnostic ignored "modernize-deprecated-headers"
+#pragma ide diagnostic ignored "cppcoreguidelines-pro-bounds-pointer-arithmetic"
 
 #include <iomanip>
 #include "pico/stdlib.h"

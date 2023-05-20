@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cppcoreguidelines-avoid-non-const-global-variables"
 //
 // Created by mike on 5/5/23.
 //
@@ -13,8 +15,8 @@ class SDCard {
 private:
     FATFS fs;
     FIL file;
-    static constexpr TCHAR sdDrive[] = SD_DRIVE;
-    static constexpr TCHAR fileName[] = SD_FILE;
+    static inline const char *sdDrive = SD_DRIVE;
+    static inline const char *fileName = SD_FILE;
 
 public:
     SDCard();
@@ -40,3 +42,5 @@ public:
 
 
 #endif //RPI_PICO_DRIVER_SDCARD_H
+
+#pragma clang diagnostic pop

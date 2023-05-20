@@ -1,6 +1,7 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "modernize-use-bool-literals"
 #pragma ide diagnostic ignored "modernize-deprecated-headers"
+#pragma ide diagnostic ignored "cppcoreguidelines-pro-bounds-pointer-arithmetic"
 //
 // Created by mike on 11/28/21.
 //
@@ -11,7 +12,7 @@
 
 TLC5940::TLC5940() = default;
 
-TLC5940::TLC5940(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
+TLC5940::TLC5940(const spi_inst_t *port, uint8_t sclk, uint8_t mosi, uint8_t xlat, uint8_t blank, uint8_t gsclk,
                  uint8_t num) {
     init(port, sclk, mosi, xlat, blank, gsclk, num);
 }
@@ -32,7 +33,7 @@ TLC5940::~TLC5940() {
     gpio_deinit(cfg.tlcBlank);
     gpio_deinit(cfg.tlcGsclk);
 
-    spi_deinit(cfg.spiPort);
+    spi_deinit((spi_inst_t *)cfg.spiPort);
     gpio_deinit(cfg.spiSclk);
     gpio_deinit(cfg.spiMosi);
 }
@@ -51,7 +52,7 @@ void TLC5940::init() {
     gpio_set_dir(cfg.tlcGsclk, GPIO_OUT);
 
     // Init SPI
-    spi_init(cfg.spiPort, 1000 * 1000 * 30);  // 30MHz
+    spi_init((spi_inst_t *)cfg.spiPort, 1000 * 1000 * 30);  // 30MHz
     gpio_set_function(cfg.spiSclk, GPIO_FUNC_SPI);
     gpio_set_function(cfg.spiMosi, GPIO_FUNC_SPI);
 
@@ -61,7 +62,7 @@ void TLC5940::init() {
 
 // Public
 /* ****************************************************************************************************************** */
-void TLC5940::init(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk,
+void TLC5940::init(const spi_inst_t *port, uint8_t sclk, uint8_t mosi, uint8_t xlat, uint8_t blank, uint8_t gsclk,
                    uint8_t num) {
     // Init class variables
     cfg = {
@@ -90,7 +91,7 @@ const TLC5940Config *TLC5940::getConfig() {
 
 void TLC5940::setRawGrayscale(uint8_t *outData) const {
     // Set Grayscale
-    spi_write_blocking(cfg.spiPort, outData, GRAYSCALE_BIT_SIZE * cfg.tlcNum);
+    spi_write_blocking((spi_inst_t *)cfg.spiPort, outData, GRAYSCALE_BIT_SIZE * cfg.tlcNum);
 
     gpio_put(cfg.tlcBlank, 1);
 
@@ -105,7 +106,7 @@ void TLC5940::setRawGrayscale(uint8_t *outData) const {
 
 uint8_t *TLC5940::getRawGrayscale(const uint16_t *values) const {
     // Construct spi data
-    int idx;
+    int idx = 0;
     for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b111111110000) >> 4;
@@ -122,7 +123,7 @@ void TLC5940::setGrayscale(const uint16_t *values) const {
 
 uint8_t *TLC5940::getRawGrayscale(const uint8_t *values) const {
     // Construct spi data
-    int idx;
+    int idx = 0;
     for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b11110000) >> 4;

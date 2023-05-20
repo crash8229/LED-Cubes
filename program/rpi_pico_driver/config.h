@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cppcoreguidelines-avoid-non-const-global-variables"
 //
 // Created by mike on 3/21/22.
 //
@@ -5,23 +7,29 @@
 #ifndef RPI_PICO_DRIVER_CONFIG_H
 #define RPI_PICO_DRIVER_CONFIG_H
 
+#include "hardware//uart.h"
 #include "hardware/spi.h"
 
 // Toggles
+#define UART_ENABLE
 #define DEBUG
 #define SD_CARD_TEST
-//#define SD_CARD_TEST_INF
+#define SD_CARD_TEST_INF
 
-//#### TLC5940 Defines ####
-#define TLC_PORT spi0
-#define TLC_NUM 2  // Number of ICs chained together
-#define TLC_XLAT 16
-#define TLC_BLANK 17
-#define TLC_SCLK  18
-#define TLC_MOSI 19
-#define TLC_GSCLK 20
+// #### UART ####
+static const uart_inst_t *UART_PORT = uart0;
+const uint UART_BAUD_RATE           = 115200;
 
-//#### SD Card Config ####
+//#### TLC5940 ####
+static const spi_inst_t *TLC_PORT = spi0;
+const uint8_t TLC_NUM             = 2;  // Number of ICs chained together
+const uint8_t TLC_XLAT            = 16;
+const uint8_t TLC_BLANK           = 17;
+const uint8_t TLC_SCLK            = 18;
+const uint8_t TLC_MOSI            = 19;
+const uint8_t TLC_GSCLK           = 20;
+
+//#### SD Card ####
 /*
     | GPIO  | Pico Pin | microSD | Function    |
     | ----  | -------- | ------- | ----------- |
@@ -43,17 +51,17 @@ The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
     D2_gpio = D0_gpio + 2;
     D3_gpio = D0_gpio + 3;
 */
-#define SD_DET_EN true
-#define SD_DET_STATE 1
-#define SD_DET 9
-#define SD_CMD 11
-#define SD_D0 12
-#define SD_DRIVE "0:" // Logical Drive Number
+const bool SD_DET_EN        = true;
+const uint8_t SD_DET_STATE  = 1;
+const uint8_t SD_DET        = 9;
+const uint8_t SD_CMD        = 11;
+const uint8_t SD_D0         = 12;
+static const char *SD_DRIVE = "0:"; // Logical Drive Number
 
 #ifdef SD_CARD_TEST
-#define SD_FILE "test.bin"  // Name of binary to use for SD Card test
+static const char *SD_FILE  = "test.bin";  // Name of binary to use for SD Card test
 #else
-#define SD_FILE "LEDCUBE.bin"
+static const char *SD_FILE  = "LEDCUBE.bin";
 #endif
 
 #endif //RPI_PICO_DRIVER_CONFIG_H
@@ -90,3 +98,4 @@ The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
 // | Cheap 8GB SD card | PNY 32GB SD Card | SAMSUNG 32GB SD Card |
 // | 10622.0 KB/s      | 12893.1 KB/s     | 11424.8 KB/s         |
 //
+#pragma clang diagnostic push

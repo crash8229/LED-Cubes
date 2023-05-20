@@ -10,15 +10,15 @@
 
 typedef struct TLC5940Config {
     // SPI
-    spi_inst_t *spiPort;
-    uint spiSclk;
-    uint spiMosi;
+    const spi_inst_t *spiPort;
+    uint8_t spiSclk;
+    uint8_t spiMosi;
 
     // TLC5940 specific
     uint8_t tlcNum;
-    uint tlcXlat;
-    uint tlcBlank;
-    uint tlcGsclk;
+    uint8_t tlcXlat;
+    uint8_t tlcBlank;
+    uint8_t tlcGsclk;
 } TLC5940Config;
 
 class TLC5940 {
@@ -30,15 +30,15 @@ private:
 public:
     // Constructor & Destructor
     TLC5940();
-    TLC5940(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk, uint8_t num);
+    TLC5940(const spi_inst_t *port, uint8_t sclk, uint8_t mosi, uint8_t xlat, uint8_t blank, uint8_t gsclk, uint8_t num);
     explicit TLC5940(TLC5940Config *tlc_config);
     ~TLC5940();
 
     // Constants
-    const uint8_t GRAYSCALE_BIT_SIZE = 24;
+    static const uint8_t GRAYSCALE_BIT_SIZE = 24;
 
     // Functions
-    void init(spi_inst_t *port, uint sclk, uint mosi, uint xlat, uint blank, uint gsclk, uint8_t num);
+    void init(const spi_inst_t *port, uint8_t sclk, uint8_t mosi, uint8_t xlat, uint8_t blank, uint8_t gsclk, uint8_t num);
     void init(TLC5940Config *tlc_config);
 
     const TLC5940Config *getConfig();
