@@ -100,7 +100,8 @@ int main() {
 #ifdef DEBUG
     sleep_ms(1000);
 #endif
-    stdio_init_all();
+    stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
+    stdio_usb_init();
 
     // Start second core
     multicore_launch_core1(core1_main);
