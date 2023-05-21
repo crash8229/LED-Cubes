@@ -10,11 +10,12 @@
 
 class LEDCube {
 private:
+    // Variables
     TLC5940 tlc;
 
 public:
+    // Constructor & Destructor
     LEDCube();
-
     ~LEDCube();
 };
 
