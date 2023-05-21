@@ -162,4 +162,9 @@ void TLC5940::ledAllOff() {
     setRawGrayscale(&gsOutData[0]);
 }
 
+void TLC5940::ledAllOn() {
+    gsOutData.assign(GRAYSCALE_BIT_SIZE * cfg.tlcNum, 1);
+    setRawGrayscale(&gsOutData[0]);
+}
+
 #pragma clang diagnostic pop

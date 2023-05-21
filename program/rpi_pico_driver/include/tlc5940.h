@@ -62,6 +62,8 @@ public:
     void gsclkPulse() const;
 
     void ledAllOff();
+
+    void ledAllOn();
 };
 
 #endif //RPIPICODRIVER_TLC5940_H
