@@ -18,15 +18,13 @@ This file should be tailored to match the hardware design.
 There should be one element of the spi[] array for each hardware SPI used.
 
 There should be one element of the sd_cards[] array for each SD card slot.
-The name is should correspond to the FatFs "logical drive" identifier.
+The name should correspond to the FatFs "logical drive" identifier.
 (See http://elm-chan.org/fsw/ff/doc/filename.html#vol)
 The rest of the constants will depend on the type of
 socket, which SPI it is driven by, and how it is wired.
 
 */
 
-#include <string.h>
-//
 #include "config.h"
 //
 #include "hw_config.h"
@@ -74,7 +72,7 @@ sd_card_t *sd_get_by_num(size_t num) {
     if (num <= sd_get_num()) {
         return &sd_cards[num];
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 size_t spi_get_num() { return count_of(spis); }
@@ -82,7 +80,7 @@ spi_t *spi_get_by_num(size_t num) {
     if (num <= spi_get_num()) {
         return &spis[num];
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 

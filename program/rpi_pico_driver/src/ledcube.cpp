@@ -1,14 +1,9 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
-
 //
 // Created by mike on 3/27/22.
 //
 
 #include "ledcube.h"
 #include "config.h"
-#include "sd_card.h"
-#include "ff.h"
 
 LEDCube::LEDCube() {
 
@@ -26,9 +21,7 @@ LEDCube::LEDCube() {
 
 }
 
-LEDCube::~LEDCube() {
-
-}
+LEDCube::~LEDCube() = default;
 
 // Private
 /* ****************************************************************************************************************** */
@@ -36,6 +29,3 @@ LEDCube::~LEDCube() {
 
 // Public
 /* ****************************************************************************************************************** */
-
-
-#pragma clang diagnostic pop

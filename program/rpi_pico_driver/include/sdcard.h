@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cppcoreguidelines-avoid-non-const-global-variables"
 //
 // Created by mike on 5/5/23.
 //
@@ -40,7 +38,4 @@ public:
     bool fileRead(uint8_t *buf, uint len, UINT *read);
 };
 
-
 #endif //RPI_PICO_DRIVER_SDCARD_H
-
-#pragma clang diagnostic pop

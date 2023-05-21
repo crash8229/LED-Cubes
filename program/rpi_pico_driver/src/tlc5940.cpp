@@ -1,11 +1,6 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "modernize-use-bool-literals"
-#pragma ide diagnostic ignored "modernize-deprecated-headers"
-#pragma ide diagnostic ignored "cppcoreguidelines-pro-bounds-pointer-arithmetic"
 //
 // Created by mike on 11/28/21.
 //
-
 
 #include "tlc5940.h"
 #include "pico/stdlib.h"
@@ -25,9 +20,9 @@ TLC5940::~TLC5940() {
     // Cleanup
     ledAllOff();
 
-    gpio_put(cfg.tlcXlat, 0);
-    gpio_put(cfg.tlcBlank, 1);
-    gpio_put(cfg.tlcGsclk, 0);
+    gpio_put(cfg.tlcXlat, false);
+    gpio_put(cfg.tlcBlank, true);
+    gpio_put(cfg.tlcGsclk, false);
 
     gpio_deinit(cfg.tlcXlat);
     gpio_deinit(cfg.tlcBlank);
@@ -93,20 +88,20 @@ void TLC5940::setRawGrayscale(uint8_t *outData) const {
     // Set Grayscale
     spi_write_blocking((spi_inst_t *)cfg.spiPort, outData, GRAYSCALE_BIT_SIZE * cfg.tlcNum);
 
-    gpio_put(cfg.tlcBlank, 1);
+    gpio_put(cfg.tlcBlank, true);
 
-    gpio_put(cfg.tlcXlat, 1);
-    gpio_put(cfg.tlcXlat, 0);
+    gpio_put(cfg.tlcXlat, true);
+    gpio_put(cfg.tlcXlat, false);
 
-    gpio_put(cfg.tlcBlank, 0);
+    gpio_put(cfg.tlcBlank, false);
 
-    gpio_put(cfg.tlcGsclk, 1);
-    gpio_put(cfg.tlcGsclk, 0);
+    gpio_put(cfg.tlcGsclk, true);
+    gpio_put(cfg.tlcGsclk, false);
 }
 
 uint8_t *TLC5940::getRawGrayscale(const uint16_t *values) const {
     // Construct spi data
-    int idx = 0;
+    int idx;
     for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b111111110000) >> 4;
@@ -123,7 +118,7 @@ void TLC5940::setGrayscale(const uint16_t *values) const {
 
 uint8_t *TLC5940::getRawGrayscale(const uint8_t *values) const {
     // Construct spi data
-    int idx = 0;
+    int idx;
     for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b11110000) >> 4;
@@ -139,8 +134,8 @@ void TLC5940::setGrayscale(const uint8_t *values) const {
 }
 
 void TLC5940::blankPulse() const {
-    gpio_put(cfg.tlcBlank, 1);
-    gpio_put(cfg.tlcBlank, 0);
+    gpio_put(cfg.tlcBlank, true);
+    gpio_put(cfg.tlcBlank, false);
 }
 
 void TLC5940::setBlank(bool state) const {
@@ -148,13 +143,13 @@ void TLC5940::setBlank(bool state) const {
 }
 
 void TLC5940::xlatPulse() const {
-    gpio_put(cfg.tlcXlat, 1);
-    gpio_put(cfg.tlcXlat, 0);
+    gpio_put(cfg.tlcXlat, true);
+    gpio_put(cfg.tlcXlat, false);
 }
 
 void TLC5940::gsclkPulse() const {
-    gpio_put(cfg.tlcGsclk, 1);
-    gpio_put(cfg.tlcGsclk, 0);
+    gpio_put(cfg.tlcGsclk, true);
+    gpio_put(cfg.tlcGsclk, false);
 }
 
 void TLC5940::ledAllOff() {
@@ -166,5 +161,3 @@ void TLC5940::ledAllOn() {
     gsOutData.assign(GRAYSCALE_BIT_SIZE * cfg.tlcNum, 1);
     setRawGrayscale(&gsOutData[0]);
 }
-
-#pragma clang diagnostic pop

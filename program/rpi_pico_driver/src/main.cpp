@@ -1,8 +1,5 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
-#pragma ide diagnostic ignored "modernize-use-bool-literals"
-#pragma ide diagnostic ignored "modernize-deprecated-headers"
-#pragma ide diagnostic ignored "cppcoreguidelines-pro-bounds-pointer-arithmetic"
 
 #include <iomanip>
 #include "pico/stdlib.h"
@@ -29,12 +26,12 @@ std::string hexStr(uint8_t *data, uint32_t len)
 void sdCardTest(SDCard card){
     assert(card.isFileOpen());
 
-//    const uint numBytes = 10240;
-//    const uint numLoop = 40000;
-//    const uint loopNumReport = 9000;
     const uint numBytes = 209715;
-    const uint numLoop = 2000;
     const uint loopNumReport = 600;
+#ifndef SD_CARD_TEST_INF
+    const uint numLoop = 2000;
+    double resultSeconds = 0;
+#endif
 
     uint8_t buf[numBytes];
     uint bytesRead = 0;
@@ -44,9 +41,6 @@ void sdCardTest(SDCard card){
     const uint16_t bytesInKB = 1024;
     const uint32_t usecInSec = 1e6;
     uint loopCnt = 0;
-#ifndef SD_CARD_TEST_INF
-    double resultSeconds = 0;
-#endif
 
     printf("\nReading from %s\n", SD_FILE);
     printf("Performing read speed test\n");
@@ -85,6 +79,8 @@ void core1_main() {
 
 #ifdef SD_CARD_TEST
     sdCardTest(card);
+    card.closeFile();
+    card.unmount();
     return;
 #endif
     assert(card.isFileOpen());
@@ -94,12 +90,16 @@ void core1_main() {
     uint bytesRead = 0;
     card.fileRead(buf, numBytes, &bytesRead);
     printf("Bytes from file: 0x%s\n", hexStr(buf, numBytes).c_str());
+
+    card.closeFile();
+    card.unmount();
 }
 
 int main() {
 #ifdef DEBUG
     sleep_ms(1000);
 #endif
+    // Start STDIO UART and USB
     stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
     stdio_usb_init();
 
