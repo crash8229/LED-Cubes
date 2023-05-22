@@ -13,7 +13,6 @@ target_include_directories(${executable_name}
 
 # Add source files
 target_sources(${executable_name} PRIVATE
-        sd_config.cpp
         tlc5940.cpp
         ledcube.cpp
         sdcard.cpp

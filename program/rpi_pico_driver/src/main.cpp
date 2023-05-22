@@ -42,7 +42,7 @@ void sdCardTest(SDCard card){
     const uint32_t usecInSec = 1e6;
     uint loopCnt = 0;
 
-    printf("\nReading from %s\n", SD_FILE);
+    printf("\nReading from %s\n", SD_DEFAULT_FILE);
     printf("Performing read speed test\n");
 #ifdef SD_CARD_TEST_INF
     printf("Reading %d bytes indefinitely\n\n", numBytes);
@@ -76,6 +76,10 @@ void sdCardTest(SDCard card){
 
 void core1_main() {
     SDCard card;
+    card.configureSDCard(SD_DRIVE, SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
+    SDCard::init();
+    card.mount();
+    card.openFile();
 
 #ifdef SD_CARD_TEST
     sdCardTest(card);
@@ -100,11 +104,19 @@ int main() {
     sleep_ms(1000);
 #endif
     // Start STDIO UART and USB
+#ifdef STDIO_UART_ENABLE
     stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
+#endif
+#ifdef STDIO_USB_ENABLE
     stdio_usb_init();
+#endif
+    printf("\n");
 
     // Start second core
     multicore_launch_core1(core1_main);
+
+    // Turn on all LEDs in the cube
+//    uint8_t data[1][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
     // Turn on all LEDs in the cube
 //    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -114,20 +126,27 @@ int main() {
 //                                 {1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
     // Make a 3x3 cube inside the 5x5 cube
-    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+//    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//                           {1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+//                           {1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+//                           {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+//                           {1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+    // Make a 3x3 cube with pillars
+    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+                           {1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+                           {1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+                           {1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+                           {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1}};
 
     TLC5940 tlc(TLC_PORT, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
     tlc.ledAllOff();
 
-    const uint msWait = 3;
+    const uint waitPerLayer = 3;
     while (true) {
         for (uint8_t *datum: data) {
             tlc.setGrayscale(datum);
-            sleep_ms(msWait);
+            sleep_ms(waitPerLayer);
         }
     }
 

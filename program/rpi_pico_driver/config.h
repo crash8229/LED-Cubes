@@ -9,12 +9,14 @@
 
 #include "hardware//uart.h"
 #include "hardware/spi.h"
+#include "hardware/pio.h"
 
 // Toggles
-#define UART_ENABLE
 #define DEBUG
-#define SD_CARD_TEST
-#define SD_CARD_TEST_INF
+#define STDIO_UART_ENABLE
+//#define STDIO_USB_ENABLE
+//#define SD_CARD_TEST
+//#define SD_CARD_TEST_INF
 
 // #### UART ####
 static const uart_inst_t* UART_PORT      = uart0;
@@ -53,17 +55,28 @@ The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
     D2_gpio = D0_gpio + 2;
     D3_gpio = D0_gpio + 3;
 */
-const bool         SD_DET_EN    = true;
-const uint8_t      SD_DET_STATE = 1;
-const uint8_t      SD_DET       = 9;
-const uint8_t      SD_CMD       = 11;
-const uint8_t      SD_D0        = 12;
-static const char* SD_DRIVE     = "0:"; // Logical Drive Number
+const bool         SD_DET_EN       = true;
+const uint8_t      SD_DET_STATE    = 1;
+const uint8_t      SD_DET          = 9;
+const uint8_t      SD_CMD          = 11;
+const uint8_t      SD_D0           = 12;
+static const char *SD_DRIVE        = "0:"; // Logical Drive Number
+static pio_hw_t   *SD_SDIO_PIO     = pio1;
+const uint         SD_DMA_IRQ      = DMA_IRQ_0;
+
 #ifdef SD_CARD_TEST
-static const char* SD_FILE      = "test.bin";  // Name of binary to use for SD Card test
+static const char* SD_DEFAULT_FILE = "test.bin";  // Name of binary to use for SD Card test
 #else
-static const char* SD_FILE      = "LEDCUBE.bin";
+static const char* SD_DEFAULT_FILE = "0:/LEDCUBE.bin";  // Default filepath to use as boot
 #endif
+
+// #### FatFS ####
+// These options are described here: http://elm-chan.org/fsw/ff/doc/config.html#use_lfn
+#define FF_USE_LFN		3
+#define FF_MAX_LFN		255
+#define FF_LFN_UNICODE	2
+#define FF_LFN_BUF		255
+#define FF_FS_RPATH		2
 
 #endif //RPI_PICO_DRIVER_CONFIG_H
 
