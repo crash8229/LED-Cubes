@@ -27,10 +27,11 @@ void sdCardTest(SDCard card){
     assert(card.isFileOpen());
 
     const uint numBytes = 209715;
-    const uint loopNumReport = 600;
+//    const uint loopNumReport = 600;
+    const uint loopNumReport = 100;
 #ifndef SD_CARD_TEST_INF
-    const uint numLoop = 2000;
-    double resultSeconds = 0;
+//    const uint numLoop = 2000;
+    const uint numLoop = 500;
 #endif
 
     uint8_t buf[numBytes];
@@ -41,6 +42,7 @@ void sdCardTest(SDCard card){
     const uint16_t bytesInKB = 1024;
     const uint32_t usecInSec = 1e6;
     uint loopCnt = 0;
+    FSIZE_t maxSeek = card.fileSize() - card.fileSize() % numBytes;
 
     printf("\nReading from %s\n", SD_DEFAULT_FILE);
     printf("Performing read speed test\n");
@@ -50,13 +52,16 @@ void sdCardTest(SDCard card){
     printf("Reading %d bytes %d times\n\n", numBytes, numLoop);
 #endif
     printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
+    card.fileSeek(2000000);
 #ifdef SD_CARD_TEST_INF
     while (true) {
 #else
     while (loopCnt < numLoop) {
 #endif
         loopCnt++;
-        card.fileSeek(0);
+        if (card.fileTell() >= maxSeek) {
+            card.fileSeek(0);
+        }
         startTime = get_absolute_time();
         assert(card.fileRead(buf, numBytes, &bytesRead));  // Assert if something happens while reading
         endTime = get_absolute_time();
@@ -68,25 +73,26 @@ void sdCardTest(SDCard card){
     }
 
 #ifndef SD_CARD_TEST_INF
-    resultSeconds = sum/(usecInSec * numLoop);
-    printf("\nTook on average %fs to read %06d bytes (total read = %010d bytes)\nFinal average read rate: %8.1f KB/s", resultSeconds, numBytes, numBytes * numLoop, numBytes/(bytesInKB * resultSeconds));
+    printf("\nTook on average %fs to read %06d bytes (total read = %010d bytes)\nFinal average read rate: %8.1f KB/s\n", sum / loopCnt, numBytes, numBytes * loopCnt, numBytes/(bytesInKB * sum / loopCnt));
 #endif
 }
 #endif
 
 void core1_main() {
     SDCard card;
-    card.configureSDCard(SD_DRIVE, SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
+    card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
     SDCard::init();
+    assert(card.isCardInserted());
     card.mount();
-    card.openFile();
+    card.openFile(SD_DEFAULT_FILE);
 
 #ifdef SD_CARD_TEST
     sdCardTest(card);
     card.closeFile();
-    card.unmount();
+    assert(card.unmount());
     return;
 #endif
+    printf("Is Card mounted?: %s\n", std::to_string(card.isMounted()).c_str());
     assert(card.isFileOpen());
 
     const uint numBytes = 4;
@@ -96,7 +102,7 @@ void core1_main() {
     printf("Bytes from file: 0x%s\n", hexStr(buf, numBytes).c_str());
 
     card.closeFile();
-    card.unmount();
+    assert(card.unmount());
 }
 
 int main() {

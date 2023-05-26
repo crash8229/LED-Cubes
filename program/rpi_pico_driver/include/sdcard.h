@@ -9,16 +9,21 @@
 #include <unordered_set>
 #include "config.h"
 #include "sd_card.h"
+#include <string>
 
 class SDCard {
 private:
     // Variables
-    static std::unordered_set<const TCHAR *> drivesInUse;
+    static std::vector<spi_t> spis;
     static std::vector<sd_card_t *> sdCards;
-    FATFS fs{};
     FIL file{};
+    std::string sdDrive;
     sd_card_t sdCard{};
-    const TCHAR *fileName = SD_DEFAULT_FILE;
+    bool configured = false;
+
+    // Functions
+    void addSDCard();
+    static spi_t *addSPIConfig(spi_inst_t* port, uint misoGPIO, uint mosiGPIO, uint sckGPIO, uint baudRate, uint dmaIRQNum);
 
 public:
     // Constructor & Destructor
@@ -26,17 +31,21 @@ public:
     ~SDCard();
 
     // Functions
+    static size_t getSPIConfigSize();
+    static spi_t *getSPIConfig(size_t idx);
     static std::vector<sd_card_t*> getAllSDCardInfo();
     static bool init();
-    bool configureSDCard(const TCHAR *driveNum, uint cmd_gpio, uint d0_gpio, pio_hw_t *sdio_pio, uint dma_irq_num, bool use_card_detect, uint card_detect_gpio, uint card_detected_true);
-    sd_card_t getSDCardInfo();
+    bool configureForSDIO(uint cmdGPIO, uint d0GPIO, pio_hw_t *sdioPIO, uint dmaIRQNum, bool useCardDetect, uint cardDetectGPIO, uint cardDetectedTrue);
+    bool configureForSPI(spi_inst_t* port, uint misoGPIO, uint mosiGPIO, uint sckGPIO, uint baudRate, uint ssGPIO, uint dmaIRQNum, bool useCardDetect, uint cardDetectGPIO, uint cardDetectedTrue);
+    [[nodiscard]] bool isMounted() const;
     bool mount();
-    bool unmount();
+    [[nodiscard]] bool unmount() const;
     [[nodiscard]] bool isFileOpen() const;
-    bool openFile();
+    bool openFile(const std::string &path);
     bool closeFile();
     bool fileSeek(FSIZE_t pos);
     FSIZE_t fileTell();
+    FSIZE_t fileSize();
     bool fileRead(uint8_t *buf, uint len, UINT *read);
     bool isCardInserted();
 };
