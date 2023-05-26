@@ -4,3 +4,6 @@
 [submodule "program/rpi_pico_driver/extern/kaitai_struct_cpp_runtime"]
 	path = program/rpi_pico_driver/extern/kaitai_struct_cpp_runtime
 	url = git@github.com:kaitai-io/kaitai_struct_cpp_stl_runtime.git
+[submodule "program/rpi_pico_driver/extern/led-cube-data"]
+	path = program/rpi_pico_driver/extern/led-cube-data
+	url = git@github.com:crash8229/led-cube-data.git
