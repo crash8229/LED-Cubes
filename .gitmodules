@@ -11,3 +11,6 @@
 	path = schematic/kicad_libraries/KiCad-RP-Pico
 	url = git@github.com:crash8229/KiCad-RP-Pico.git
 	branch = crash8229/myconfig
+[submodule "schematic/kicad_libraries/KiCad-My-Library"]
+	path = schematic/kicad_libraries/KiCad-My-Library
+	url = git@github.com:crash8229/KiCad-My-Library.git
