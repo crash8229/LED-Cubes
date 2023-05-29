@@ -20,6 +20,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 # (note this can come from environment, CMake cache etc)
 set(PICO_SDK_PATH "$ENV{PICO_SDK_PATH}")
 
+# Set GCC compiler
+set(ENV{PICO_GCC_TRIPLE} arm-none-eabi)  # Default
+
 # Modules --------------------------------------------------------------------------------------------------------------
 
 # Pull in Raspberry Pi Pico SDK (must be before project)

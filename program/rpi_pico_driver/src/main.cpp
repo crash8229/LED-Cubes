@@ -105,6 +105,9 @@ void core1_main() {
     assert(card.unmount());
 }
 
+// TODO: Add button debouncer
+// I just use a timer interrupt to check the buttons every 10-20 ms. Fast enough for good user experience, and slow enough that bouncing contacts are not a problem.
+
 int main() {
 #ifdef DEBUG
     sleep_ms(1000);

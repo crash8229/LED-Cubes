@@ -34,7 +34,7 @@ sandbox.py
 *.csv
 
 # CMAKE
-cmake-build-debug*
+cmake-build-*
 build
 
 # VSCode
