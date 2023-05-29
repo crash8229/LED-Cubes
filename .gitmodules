@@ -7,3 +7,7 @@
 [submodule "program/rpi_pico_driver/extern/led-cube-data"]
 	path = program/rpi_pico_driver/extern/led-cube-data
 	url = git@github.com:crash8229/led-cube-data.git
+[submodule "schematic/kicad_libraries/KiCad-RP-Pico"]
+	path = schematic/kicad_libraries/KiCad-RP-Pico
+	url = git@github.com:crash8229/KiCad-RP-Pico.git
+	branch = crash8229/myconfig
