@@ -1,3 +1,5 @@
 (sym_lib_table
   (version 7)
+  (lib (name "My_Library")(type "KiCad")(uri "/mnt/data_share/KiCad/My Library/My_Library.kicad_sym")(options "")(descr ""))
+  (lib (name "MCU_RaspberryPi_and_Boards")(type "KiCad")(uri "/mnt/data_share/KiCad/KiCad-RP-Pico/RP-Pico Libraries/MCU_RaspberryPi_and_Boards.kicad_sym")(options "")(descr ""))
 )
