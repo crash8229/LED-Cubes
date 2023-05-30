@@ -2,7 +2,7 @@
 
 # Generate parsers for C++
 mkdir -p ./src/parsers
-kaitai-struct-compiler --target cpp_stl --cpp-standard 98 --outdir ./src/parsers  --cpp-namespace led_cube_file ./extern/led-cube-data/doc/file_specification/parser.ksy
+kaitai-struct-compiler --target cpp_stl --cpp-standard 98 --outdir ./src/parsers ./extern/led-cube-data/doc/file_specification/parser.ksy
 
 # Generate CMakeLists.txt
 echo -e "# Add source files\ntarget_sources(\${executable_name} PRIVATE" > ./src/parsers/CMakeLists.txt
