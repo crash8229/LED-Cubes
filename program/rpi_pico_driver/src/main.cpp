@@ -11,11 +11,6 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
-#include <fstream>
-#include <kaitai/kaitaistream.h>
-#include <sstream>
-#include "parsers/primary_header.h"
-
 std::string hexStr(uint8_t *data, uint32_t len)
 {
     std::stringstream ss;
@@ -128,13 +123,6 @@ int main() {
 
     // Start second core
     multicore_launch_core1(core1_main);
-
-    // Try parsing a primary header fragment
-    std::string header = "\x03\x01";
-    std::istringstream is(header);
-    kaitai::kstream ks(&is);
-    primary_header_t parser_data(&ks);
-    printf("Type: %02d   Version: %02d\n", parser_data.type(), parser_data.version());
 
     // Turn on all LEDs in the cube
 //    uint8_t data[1][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};

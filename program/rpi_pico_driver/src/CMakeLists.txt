@@ -9,7 +9,6 @@ target_include_directories(${executable_name}
         PUBLIC
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
-        "${PROJECT_SOURCE_DIR}/extern/kaitai_struct_cpp_runtime"
         )
 
 # Add source files
@@ -26,12 +25,6 @@ pico_enable_stdio_usb(${executable_name} 1)
 # Add library for SD card
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/spi_sd_fat/src" build/sdcard)
 
-## Add Kaitai Struct runtime
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/kaitai_struct_cpp_runtime" build/kaittai)
-
-# Add parsers
-add_subdirectory(parsers)
-
 # Link the standard library to the build
 target_link_libraries(${executable_name}
         pico_stdlib
@@ -43,7 +36,6 @@ target_link_libraries(${executable_name}
         hardware_spi
         hardware_i2c
         FatFs_SPI
-        kaitai_struct_cpp_stl_runtime
         )
 
 #create files beyond the executable (.uf2, .hex, .bin, .map, .dis) using an SDK provided function
