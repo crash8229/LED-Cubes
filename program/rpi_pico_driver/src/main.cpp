@@ -11,6 +11,8 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
+#include "parser/primaryheader.h"
+
 std::string hexStr(uint8_t *data, uint32_t len)
 {
     std::stringstream ss;
@@ -95,11 +97,8 @@ void core1_main() {
     printf("Is Card mounted?: %s\n", std::to_string(card.isMounted()).c_str());
     assert(card.isFileOpen());
 
-    const uint numBytes = 4;
-    uint8_t buf[numBytes];
-    uint bytesRead = 0;
-    card.fileRead(buf, numBytes, &bytesRead);
-    printf("Bytes from file: 0x%s\n", hexStr(buf, numBytes).c_str());
+    parser::PrimaryHeader header = parser::PrimaryHeader(&card, 0);
+    printf("Primary Header: Type=%02d   Version=%02d\n", header.type(), header.version());
 
     card.closeFile();
     assert(card.unmount());
