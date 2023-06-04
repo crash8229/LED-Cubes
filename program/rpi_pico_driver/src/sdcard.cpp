@@ -140,12 +140,12 @@ bool SDCard::isMounted() const {
     return sdCard.fatfs.fs_type != 0;
 }
 
-bool SDCard::mount() {
-    return f_mount(&sdCard.fatfs, sdCard.pcName, 1) == FR_OK;
+void SDCard::mount() {
+    f_mount(&sdCard.fatfs, sdCard.pcName, 1);
 }
 
-bool SDCard::unmount() const {
-    return f_unmount(sdCard.pcName) == FR_OK;
+void SDCard::unmount() const {
+    f_unmount(sdCard.pcName);
 }
 
 bool SDCard::isFileOpen() const {
@@ -172,7 +172,7 @@ FSIZE_t SDCard::fileSize(){
     return f_size(&file);
 }
 
-bool SDCard::fileRead(uint8_t *buf, uint len, UINT *read) {
+bool SDCard::fileRead(uint8_t *buf, uint len, uint *read) {
     return f_read(&file, buf, len, read) == FR_OK;
 }
 

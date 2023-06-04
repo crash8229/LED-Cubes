@@ -8,4 +8,5 @@ target_include_directories(${executable_name}
 target_sources(${executable_name} PRIVATE
         parserbase.cpp
         primaryheader.cpp
+        frame.cpp
         )

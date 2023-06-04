@@ -66,8 +66,7 @@ const uint         SD_DMA_IRQ      = DMA_IRQ_0;
 #ifdef SD_CARD_TEST
 static const char* SD_DEFAULT_FILE = "test.bin";  // Name of binary to use for SD Card test
 #else
-//static const char* SD_DEFAULT_FILE = "/LEDCUBE.bin";  // Default filepath to use as boot
-static const char* SD_DEFAULT_FILE = "/cube_file_v1.bin";
+static const char* SD_DEFAULT_FILE = "/LEDCUBE.bin";  // Default filepath to use as boot
 #endif
 
 // #### FatFS ####

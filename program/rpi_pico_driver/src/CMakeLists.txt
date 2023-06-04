@@ -9,6 +9,7 @@ target_include_directories(${executable_name}
         PUBLIC
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
+        "${PROJECT_SOURCE_DIR}/include/parser"
         )
 
 # Add source files

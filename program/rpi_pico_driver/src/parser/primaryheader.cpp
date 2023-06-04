@@ -9,11 +9,11 @@ namespace parser {
     void PrimaryHeader::readData() {
         _card->fileSeek(_offset);
 
-        uint8_t buf[1];
-        if (_card->fileRead(buf, 1, nullptr))
+        uint8_t buf[2];
+        if (_card->fileRead(buf, 2, nullptr)) {
             _type = buf[0];
-        if (_card->fileRead(buf, 1, nullptr))
-            _version = buf[0];
+            _version = buf[1];
+        }
     }
 
     // #### Public ####
@@ -22,9 +22,6 @@ namespace parser {
         _offset = offset;
         _card = card;
         _size = 2;
-
-        _type = 0;
-        _version = 0;
 
         readData();
     }
@@ -38,6 +35,9 @@ namespace parser {
     }
 
     // Functions
+    uint PrimaryHeader::payloadSize(uint index) const {
+        return 0;
+    }
     bool PrimaryHeader::getPayload(uint index, uint8_t *buf) {
         return false;
     }

@@ -11,7 +11,7 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
-#include "parser/primaryheader.h"
+#include "parser/frame.h"
 
 std::string hexStr(uint8_t *data, uint32_t len)
 {
@@ -95,13 +95,31 @@ void core1_main() {
     return;
 #endif
     printf("Is Card mounted?: %s\n", std::to_string(card.isMounted()).c_str());
-    assert(card.isFileOpen());
 
-    parser::PrimaryHeader header = parser::PrimaryHeader(&card, 0);
-    printf("Primary Header: Type=%02d   Version=%02d\n", header.type(), header.version());
-
+    // #### Test Parsers ####
     card.closeFile();
-    assert(card.unmount());
+
+    uint payloadSize;
+    uint8_t *buffer;
+
+    // Testing Frame V1 parser
+    card.openFile("/frame_v1.bin");
+    assert(card.isFileOpen());
+    parser::Frame frameTest = parser::Frame(&card, 0, 1, 2);
+    printf("Frame Primary Header  : Type=%02d   Version=%02d\n", frameTest.type(), frameTest.version());
+    printf("Frame Secondary Header: Duration=%05d   DataLength=%05d   PayloadCount=%05d\n", frameTest.duration(), frameTest.dataLength(), frameTest.payloadCount());
+    payloadSize = frameTest.payloadSize(0);
+    buffer = new uint8_t[payloadSize];
+    for (uint i = 0; i < frameTest.payloadCount(); i++) {
+        frameTest.getPayload(i, buffer);
+        printf("Frame Payload %02d      : %s\n", i, hexStr(buffer, payloadSize).c_str());
+    }
+    delete[] buffer;
+    card.closeFile();
+
+    // Testing Animation V1 parser
+
+    card.unmount();
 }
 
 // TODO: Add button debouncer
@@ -134,18 +152,18 @@ int main() {
 //                                 {1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
     // Make a 3x3 cube inside the 5x5 cube
-//    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//                           {1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-//                           {1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-//                           {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-//                           {1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                           {1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+                           {1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+                           {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+                           {1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     // Make a 3x3 cube with pillars
-    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-                           {1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-                           {1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-                           {1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-                           {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1}};
+//    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+//                           {1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+//                           {1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+//                           {1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
+//                           {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1}};
 
     TLC5940 tlc(TLC_PORT, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
     tlc.ledAllOff();

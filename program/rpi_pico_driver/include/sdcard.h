@@ -38,15 +38,15 @@ public:
     bool configureForSDIO(uint cmdGPIO, uint d0GPIO, pio_hw_t *sdioPIO, uint dmaIRQNum, bool useCardDetect, uint cardDetectGPIO, uint cardDetectedTrue);
     bool configureForSPI(spi_inst_t* port, uint misoGPIO, uint mosiGPIO, uint sckGPIO, uint baudRate, uint ssGPIO, uint dmaIRQNum, bool useCardDetect, uint cardDetectGPIO, uint cardDetectedTrue);
     [[nodiscard]] bool isMounted() const;
-    bool mount();
-    [[nodiscard]] bool unmount() const;
+    void mount();
+    void unmount() const;
     [[nodiscard]] bool isFileOpen() const;
     bool openFile(const std::string &path);
     bool closeFile();
     bool fileSeek(FSIZE_t pos);
     FSIZE_t fileTell();
     FSIZE_t fileSize();
-    bool fileRead(uint8_t *buf, uint len, UINT *read);
+    bool fileRead(uint8_t *buf, uint len, uint *read);
     bool isCardInserted();
 };
 
