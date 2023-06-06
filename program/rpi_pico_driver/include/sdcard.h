@@ -20,6 +20,7 @@ private:
     std::string sdDrive;
     sd_card_t sdCard{};
     bool configured = false;
+    std::string openedFile;
 
     // Functions
     void addSDCard();
@@ -48,6 +49,8 @@ public:
     FSIZE_t fileSize();
     bool fileRead(uint8_t *buf, uint len, uint *read);
     bool isCardInserted();
+    std::string filePath();
+
 };
 
 #endif //RPI_PICO_DRIVER_SDCARD_H

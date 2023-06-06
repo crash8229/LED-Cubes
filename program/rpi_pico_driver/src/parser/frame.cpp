@@ -17,24 +17,32 @@ namespace parser {
         uint8_t buf[4];
         uint bytesRead = 0;
         if (_card->fileRead(buf, 4, &bytesRead)) {
-            _duration = buf[0] << 8 | buf[1];
-            _dataLength = buf[2] << 8 | buf[3];
+            _duration = getUINT16(buf, 0);
+            _dataLength = getUINT16(buf, 2);
         }
 
         _payloadOffset = _card->fileTell();
-        _payloadSize = _numTLCs * _numLayers * bytesPerTLC;
+        _payloadSize = _numTLCs * bytesPerTLC;
         _payloadCount = _dataLength / _payloadSize;
+    }
+    bool Frame::getPayload(uint index, void *obj) {
+        auto *buf = (uint8_t *) obj;
+
+        if (index >= _payloadCount)
+            throw std::out_of_range("");
+        if (_payloadCurrentIndex != index)
+            _card->fileSeek(_payloadOffset + _payloadSize * index);
+        _payloadCurrentIndex = index + 1;
+        uint bytesRead = 0;
+        bool result = _card->fileRead(buf, _payloadSize, &bytesRead);
+        return bytesRead == bytesPerTLC && result;
     }
 
     // #### Public ####
     // Constructor & Destructor
-    Frame::Frame(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers) {
-        _offset = offset;
-        _card = card;
-        _numTLCs = numTLCs;
-        _numLayers = numLayers;
-        readData();
-        _size = _primaryHeader.size() + 4 + _dataLength;
+    Frame::Frame() = default;
+    Frame::Frame(SDCard *card, uint offset, uint8_t numTLCs) {
+        init(card, offset, numTLCs);
     }
 
     // Attributes
@@ -52,17 +60,18 @@ namespace parser {
     }
 
     // Functions
+    void Frame::init(SDCard *card, uint offset, uint8_t numTLCs) {
+        _offset = offset;
+        _card = card;
+        _numTLCs = numTLCs;
+        readData();
+        _size = _primaryHeader.size() + 4 + _dataLength;
+    }
     uint Frame::payloadSize(uint index) const {
         return _payloadSize;
     }
-    bool Frame::getPayload(uint index, uint8_t *buf) {
-        if (_payloadCurrentIndex != index) {
-            _card->fileSeek(_payloadOffset + bytesPerTLC * index);
-        }
-        _payloadCurrentIndex = index + 1;
-        uint bytesRead = 0;
-        bool result = _card->fileRead(buf, _payloadSize, &bytesRead);
-        return bytesRead == bytesPerTLC && result;
+    bool Frame::getPayload(uint index, uint8_t *tlcStates) {
+        return getPayload(index, (void *)tlcStates);
     }
 
 } // parser

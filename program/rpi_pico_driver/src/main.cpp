@@ -1,7 +1,6 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 
-#include <iomanip>
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "pico/multicore.h"
@@ -11,18 +10,10 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
+#include "parser/test.h"
 #include "parser/frame.h"
+#include "parser/animation.h"
 
-std::string hexStr(uint8_t *data, uint32_t len)
-{
-    std::stringstream ss;
-    ss << std::hex;
-
-    for( int i(0) ; i < len; ++i )
-        ss << std::setw(2) << std::setfill('0') << (int)data[i];
-
-    return ss.str();
-}
 
 #ifdef SD_CARD_TEST
 void sdCardTest(SDCard card){
@@ -98,26 +89,30 @@ void core1_main() {
 
     // #### Test Parsers ####
     card.closeFile();
+    printf("\n");
 
     uint payloadSize;
     uint8_t *buffer;
 
     // Testing Frame V1 parser
-    card.openFile("/frame_v1.bin");
-    assert(card.isFileOpen());
-    parser::Frame frameTest = parser::Frame(&card, 0, 1, 2);
-    printf("Frame Primary Header  : Type=%02d   Version=%02d\n", frameTest.type(), frameTest.version());
-    printf("Frame Secondary Header: Duration=%05d   DataLength=%05d   PayloadCount=%05d\n", frameTest.duration(), frameTest.dataLength(), frameTest.payloadCount());
-    payloadSize = frameTest.payloadSize(0);
-    buffer = new uint8_t[payloadSize];
-    for (uint i = 0; i < frameTest.payloadCount(); i++) {
-        frameTest.getPayload(i, buffer);
-        printf("Frame Payload %02d      : %s\n", i, hexStr(buffer, payloadSize).c_str());
-    }
-    delete[] buffer;
-    card.closeFile();
+//    card.openFile("/frame_v1.bin");
+//    assert(card.isFileOpen());
+//    printf("Testing Frame parser\n");
+//    printf("Test file                  : %s\n", card.filePath().c_str());
+//    parser::Frame frameTest = parser::Frame(&card, 0, 1);
+//    parser::printFrameInfo(&frameTest);
+//    card.closeFile();
+//    printf("\n");
 
     // Testing Animation V1 parser
+    card.openFile("/animation_v1.bin");
+    assert(card.isFileOpen());
+    printf("Testing Animation parser\n");
+    printf("Test file                  : %s\n", card.filePath().c_str());
+    parser::Animation animationTest = parser::Animation(&card, 0, 1, 4);
+    parser::printAnimationInfo(&animationTest);
+    card.closeFile();
+    printf("\n");
 
     card.unmount();
 }

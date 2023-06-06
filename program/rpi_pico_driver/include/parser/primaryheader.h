@@ -17,10 +17,13 @@ class PrimaryHeader: public ParserBase{
 
         // Functions
         void readData() override;
+        [[nodiscard]] uint payloadSize(uint index) const override;
+        bool getPayload(uint index, void *obj) override;
 
     public:
         // Constructor & Destructor
-        PrimaryHeader(SDCard *sdcard, uint offset);
+        PrimaryHeader();
+        PrimaryHeader(SDCard *card, uint offset);
 
         // Enums
         enum type {
@@ -35,8 +38,7 @@ class PrimaryHeader: public ParserBase{
         [[nodiscard]] uint8_t version() const;
 
         // Functions
-        [[nodiscard]] uint payloadSize(uint index) const override;
-        bool getPayload(uint index, uint8_t *buf) override;
+        void init(SDCard *card, uint offset);
 };
 
 } // parser

@@ -15,15 +15,18 @@ namespace parser {
             _version = buf[1];
         }
     }
+    uint PrimaryHeader::payloadSize(uint index) const {
+        return 0;
+    }
+    bool PrimaryHeader::getPayload(uint index, void *obj) {
+        return false;
+    }
 
     // #### Public ####
     // Constructor & Destructor
+    PrimaryHeader::PrimaryHeader() = default;
     PrimaryHeader::PrimaryHeader(SDCard *card, uint offset) {
-        _offset = offset;
-        _card = card;
-        _size = 2;
-
-        readData();
+        init(card, offset);
     }
 
     // Attributes
@@ -35,11 +38,11 @@ namespace parser {
     }
 
     // Functions
-    uint PrimaryHeader::payloadSize(uint index) const {
-        return 0;
-    }
-    bool PrimaryHeader::getPayload(uint index, uint8_t *buf) {
-        return false;
+    void PrimaryHeader::init(SDCard *card, uint offset) {
+        _offset = offset;
+        _card = card;
+        _size = 2;
+        readData();
     }
 
 } // parser

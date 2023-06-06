@@ -153,11 +153,21 @@ bool SDCard::isFileOpen() const {
 }
 
 bool SDCard::openFile(const std::string &path) {
-    return f_open(&file, (sdDrive + path).c_str(), FA_READ) == FR_OK;
+    if (isFileOpen())
+        closeFile();
+    bool res = f_open(&file, (sdDrive + path).c_str(), FA_READ) == FR_OK;
+    if (res)
+        openedFile = path;
+    return res;
 }
 
 bool SDCard::closeFile() {
-    return f_close(&file) == FR_OK;
+    if (!isFileOpen())
+        return true;
+    bool res = f_close(&file) == FR_OK;
+    if (res)
+        openedFile = "";
+    return res;
 }
 
 bool SDCard::fileSeek(FSIZE_t pos) {
@@ -178,6 +188,10 @@ bool SDCard::fileRead(uint8_t *buf, uint len, uint *read) {
 
 bool SDCard::isCardInserted() {
     return sd_card_detect(&sdCard);
+}
+
+std::string SDCard::filePath() {
+    return openedFile;
 }
 
 /* ****************************************************************************************************************** */

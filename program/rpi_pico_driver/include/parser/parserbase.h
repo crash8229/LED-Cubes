@@ -27,13 +27,16 @@ namespace parser {
         // Constructor & Destructor
 
         // Functions
+        static uint16_t getUINT16(const uint8_t *arr, uint offset);
+        static uint32_t getUINT32(const uint8_t *arr, uint offset);
+        static uint64_t getUINT64(const uint8_t *arr, uint offset);
         SDCard *card();
         [[nodiscard]] uint size() const;
         [[nodiscard]] uint offset() const;
         [[nodiscard]] uint payloadOffset() const;
         [[nodiscard]] uint payloadCount() const;
         [[nodiscard]] virtual uint payloadSize(uint index) const = 0;
-        virtual bool getPayload(uint index, uint8_t *buf) = 0;
+        virtual bool getPayload(uint index, void *obj) = 0;
 
     };
 
