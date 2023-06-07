@@ -17,6 +17,8 @@
 //#define STDIO_USB_ENABLE
 //#define SD_CARD_TEST
 //#define SD_CARD_TEST_INF
+//#define PARSER_TEST
+
 
 // #### UART ####
 static const uart_inst_t* UART_PORT      = uart0;
@@ -63,11 +65,7 @@ const uint8_t      SD_D0           = 12;
 static pio_hw_t   *SD_SDIO_PIO     = pio1;
 const uint         SD_DMA_IRQ      = DMA_IRQ_0;
 
-#ifdef SD_CARD_TEST
-static const char* SD_DEFAULT_FILE = "test.bin";  // Name of binary to use for SD Card test
-#else
 static const char* SD_DEFAULT_FILE = "/LEDCUBE.bin";  // Default filepath to use as boot
-#endif
 
 // #### FatFS ####
 // These options are described here: http://elm-chan.org/fsw/ff/doc/config.html#use_lfn

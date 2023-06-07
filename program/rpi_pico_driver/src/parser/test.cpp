@@ -55,7 +55,6 @@ namespace parser {
         }
     }
 
-    // Finish the library info printer
     void printLibraryInfo(Library *library, const std::string& prefix) {
         printf("%sLibrary Info               : Size=%05d   Offset=%07d\n", prefix.c_str(), library->size(), library->offset());
         printf("%sLibrary Primary Header     : Type=%02d   Version=%02d\n", prefix.c_str(), library->type(), library->version());
@@ -76,5 +75,16 @@ namespace parser {
             library->getPayload(i, &animation);
             printAnimationInfo(&animation, prefix + "                           : ");
         }
+    }
+
+    void printFileInfo(File *file, const std::string& prefix) {
+        printf("%sFile Info                  : Size=%05d   Offset=%07d\n", prefix.c_str(), file->size(), file->offset());
+        printf("%sFile Primary Header        : Type=%02d   Version=%02d\n", prefix.c_str(), file->type(), file->version());
+        printf("%sFile Payload Info          : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), file->payloadOffset(), file->payloadCount(), file->payloadSize(0));
+
+        Library library = Library();
+        file->getPayload(&library);
+        printf("%sFile Payload %02d            :\n", prefix.c_str(), 0);
+        printLibraryInfo(&library, prefix + "                           : ");
     }
 } // parsers

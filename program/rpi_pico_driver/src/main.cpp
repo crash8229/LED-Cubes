@@ -10,14 +10,20 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
+#ifdef PARSER_TEST
 #include "parser/test.h"
-#include "parser/frame.h"
-#include "parser/animation.h"
+#endif
 
 
 #ifdef SD_CARD_TEST
-void sdCardTest(SDCard card){
-    assert(card.isFileOpen());
+void sdCardTest(SDCard *card) {
+    assert(card->isCardInserted());
+    assert(card->isMounted());
+    if (card->isFileOpen())
+        card->closeFile();
+
+    card->openFile("/read.bin");
+    assert(card->isFileOpen());
 
     const uint numBytes = 209715;
 //    const uint loopNumReport = 600;
@@ -35,9 +41,9 @@ void sdCardTest(SDCard card){
     const uint16_t bytesInKB = 1024;
     const uint32_t usecInSec = 1e6;
     uint loopCnt = 0;
-    FSIZE_t maxSeek = card.fileSize() - card.fileSize() % numBytes;
+    FSIZE_t maxSeek = card->fileSize() - card->fileSize() % numBytes;
 
-    printf("\nReading from %s\n", SD_DEFAULT_FILE);
+    printf("\nReading from %s\n", card->filePath().c_str());
     printf("Performing read speed test\n");
 #ifdef SD_CARD_TEST_INF
     printf("Reading %d bytes indefinitely\n\n", numBytes);
@@ -45,18 +51,17 @@ void sdCardTest(SDCard card){
     printf("Reading %d bytes %d times\n\n", numBytes, numLoop);
 #endif
     printf("Reporting running average of calculated read rate every %d iterations\n", loopNumReport);
-    card.fileSeek(2000000);
 #ifdef SD_CARD_TEST_INF
     while (true) {
 #else
     while (loopCnt < numLoop) {
 #endif
         loopCnt++;
-        if (card.fileTell() >= maxSeek) {
-            card.fileSeek(0);
+        if (card->fileTell() >= maxSeek) {
+            card->fileSeek(0);
         }
         startTime = get_absolute_time();
-        assert(card.fileRead(buf, numBytes, &bytesRead));  // Assert if something happens while reading
+        assert(card->fileRead(buf, numBytes, &bytesRead));  // Assert if something happens while reading
         endTime = get_absolute_time();
         sum += (double)absolute_time_diff_us(startTime, endTime)/usecInSec;
         assert(numBytes == bytesRead);  // Assert if the bytes read != bytes requested
@@ -71,60 +76,87 @@ void sdCardTest(SDCard card){
 }
 #endif
 
-void core1_main() {
-    SDCard card;
-    card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
-    SDCard::init();
-    assert(card.isCardInserted());
-    card.mount();
-    card.openFile(SD_DEFAULT_FILE);
-
-#ifdef SD_CARD_TEST
-    sdCardTest(card);
-    card.closeFile();
-    assert(card.unmount());
-    return;
-#endif
-    printf("Is Card mounted?: %s\n", std::to_string(card.isMounted()).c_str());
-
+#ifdef PARSER_TEST
+void parserTest(SDCard *card) {
     // #### Test Parsers ####
-    card.closeFile();
+    assert(card->isCardInserted());
+    assert(card->isMounted());
+    if (card->isFileOpen())
+        card->closeFile();
     printf("\n");
 
     uint payloadSize;
     uint8_t *buffer;
 
     // Testing Frame V1 parser
-    card.openFile("/frame_v1.bin");
-    assert(card.isFileOpen());
+    card->openFile("/frame_v1.bin");
+    assert(card->isFileOpen());
     printf("Testing Frame parser\n");
-    printf("Test file                  : %s\n", card.filePath().c_str());
-    parser::Frame frameTest = parser::Frame(&card, 0, 2);
+    printf("Test file                  : %s\n", card->filePath().c_str());
+    parser::Frame frameTest = parser::Frame(card, 0, 2);
     parser::printFrameInfo(&frameTest);
-    card.closeFile();
+    card->closeFile();
     printf("\n");
 
     // Testing Animation V1 parser
-    card.openFile("/animation_v1.bin");
-    assert(card.isFileOpen());
+    card->openFile("/animation_v1.bin");
+    assert(card->isFileOpen());
     printf("Testing Animation parser\n");
-    printf("Test file                  : %s\n", card.filePath().c_str());
-    parser::Animation animationTest = parser::Animation(&card, 0, 2, 2);
+    printf("Test file                  : %s\n", card->filePath().c_str());
+    parser::Animation animationTest = parser::Animation(card, 0, 2, 2);
     parser::printAnimationInfo(&animationTest);
-    card.closeFile();
+    card->closeFile();
     printf("\n");
 
     // Testing Library V1 parser
-    card.openFile("/library_v1.bin");
-    assert(card.isFileOpen());
+    card->openFile("/library_v1.bin");
+    assert(card->isFileOpen());
     printf("Testing Library parser\n");
-    printf("Test file                  : %s\n", card.filePath().c_str());
-    parser::Library libraryTest = parser::Library(&card, 0);
+    printf("Test file                  : %s\n", card->filePath().c_str());
+    parser::Library libraryTest = parser::Library(card, 0);
     parser::printLibraryInfo(&libraryTest);
-    card.closeFile();
+    card->closeFile();
     printf("\n");
 
+    // Testing File V1 parser
+    card->openFile("/cube_file_v1.bin");
+    assert(card->isFileOpen());
+    printf("Testing File parser\n");
+    printf("Test file                  : %s\n", card->filePath().c_str());
+    parser::File fileTest = parser::File(card, 0);
+    parser::printFileInfo(&fileTest);
+    card->closeFile();
+    printf("\n");
+}
+#endif
+
+void core1_main() {
+    SDCard card;
+    card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
+    SDCard::init();
+    assert(card.isCardInserted());
+    card.mount();
+    assert(card.isMounted());
+    card.openFile(SD_DEFAULT_FILE);
+
+#ifdef SD_CARD_TEST
+    sdCardTest(&card);
+    card.closeFile();
     card.unmount();
+    assert(!card.isMounted());
+    return;
+#endif
+
+#ifdef PARSER_TEST
+    parserTest(&card);
+    card.closeFile();
+    card.unmount();
+    assert(!card.isMounted());
+    return;
+#endif
+
+    card.unmount();
+    assert(!card.isMounted());
 }
 
 // TODO: Add button debouncer

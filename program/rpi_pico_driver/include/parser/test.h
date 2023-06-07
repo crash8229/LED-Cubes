@@ -9,6 +9,7 @@
 #include "frame.h"
 #include "animation.h"
 #include "library.h"
+#include "file.h"
 
 namespace parser {
 
@@ -17,6 +18,7 @@ namespace parser {
     void printFrameInfo(Frame *frame, const std::string& prefix = "") ;
     void printAnimationInfo(Animation *animation, const std::string& prefix = "");
     void printLibraryInfo(Library *library, const std::string& prefix = "");
+    void printFileInfo(File *file, const std::string& prefix = "");
 
 } // parser
 

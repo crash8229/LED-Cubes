@@ -12,4 +12,5 @@ target_sources(${executable_name} PRIVATE
         frame.cpp
         animation.cpp
         library.cpp
+        file.cpp
         )
