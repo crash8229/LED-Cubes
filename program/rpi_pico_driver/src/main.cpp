@@ -22,7 +22,7 @@ void sdCardTest(SDCard *card) {
     if (card->isFileOpen())
         card->closeFile();
 
-    card->openFile("/read.bin");
+    card->openFile("/test/read.bin");
     assert(card->isFileOpen());
 
     const uint numBytes = 209715;
@@ -89,7 +89,7 @@ void parserTest(SDCard *card) {
     uint8_t *buffer;
 
     // Testing Frame V1 parser
-    card->openFile("/frame_v1.bin");
+    card->openFile("/test/frame_v1.bin");
     assert(card->isFileOpen());
     printf("Testing Frame parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());
@@ -99,7 +99,7 @@ void parserTest(SDCard *card) {
     printf("\n");
 
     // Testing Animation V1 parser
-    card->openFile("/animation_v1.bin");
+    card->openFile("/test/animation_v1.bin");
     assert(card->isFileOpen());
     printf("Testing Animation parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());
@@ -109,7 +109,7 @@ void parserTest(SDCard *card) {
     printf("\n");
 
     // Testing Library V1 parser
-    card->openFile("/library_v1.bin");
+    card->openFile("/test/library_v1.bin");
     assert(card->isFileOpen());
     printf("Testing Library parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());
@@ -119,7 +119,7 @@ void parserTest(SDCard *card) {
     printf("\n");
 
     // Testing File V1 parser
-    card->openFile("/cube_file_v1.bin");
+    card->openFile("/test/cube_file_v1.bin");
     assert(card->isFileOpen());
     printf("Testing File parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());

@@ -19,6 +19,19 @@
 //#define SD_CARD_TEST_INF
 //#define PARSER_TEST
 
+// If SD_CARD_TEST is defined, then the read.bin file is needed in the /test folder.
+// This is just a binary file of random data of at least ~105MB (100MiB) in size.
+
+// If PARSER_TEST is defined, then the following test binaries are needed in the /test folder:
+// frame_v1.bin
+// animation_v1.bin
+// library_v1.bin
+// cube_file_v1.bin
+//
+// These files are the test binaries from the led-cube-data repository
+// that houses the file specification for my LED cube projects.
+// Link to repository at the location of test files:
+// https://github.com/crash8229/led-cube-data/tree/main/doc/file_specification/objects
 
 // #### UART ####
 static const uart_inst_t* UART_PORT      = uart0;
