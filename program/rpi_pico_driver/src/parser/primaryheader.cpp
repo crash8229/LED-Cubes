@@ -9,13 +9,13 @@ namespace parser {
     void PrimaryHeader::readData() {
         _card->fileSeek(_offset);
 
-        uint8_t buf[2];
-        if (_card->fileRead(buf, 2, nullptr)) {
+        uint8_t buf[_size];
+        if (_card->fileRead(buf, _size, nullptr)) {
             _type = buf[0];
             _version = buf[1];
         }
     }
-    uint PrimaryHeader::payloadSize(uint index) const {
+    uint PrimaryHeader::payloadSize(uint index) {
         return 0;
     }
     bool PrimaryHeader::getPayload(uint index, void *obj) {

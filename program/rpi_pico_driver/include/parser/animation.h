@@ -7,6 +7,7 @@
 
 #include <string>
 #include "primaryheader.h"
+#include "frame.h"
 
 namespace parser {
 
@@ -17,7 +18,7 @@ namespace parser {
         uint8_t _numLayers = 0;
 
         // Attribute
-        PrimaryHeader _primaryHeader = PrimaryHeader(nullptr, 0);
+        PrimaryHeader _primaryHeader = PrimaryHeader();
         std::string _sha256;
         std::string _name;
         uint64_t _time = 0;
@@ -33,6 +34,9 @@ namespace parser {
         Animation();
         Animation(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers);
 
+        // Variables
+        static const uint8_t animationV1HeaderSize = 78;
+
         // Attributes
         [[nodiscard]] uint8_t type() const;
         [[nodiscard]] uint8_t version() const;
@@ -44,7 +48,7 @@ namespace parser {
 
         // Functions
         void init(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers);
-        [[nodiscard]] uint payloadSize(uint index) const override;
+        [[nodiscard]] uint payloadSize(uint index) override;
         void getPayload(uint index, Frame *frame);
     };
 

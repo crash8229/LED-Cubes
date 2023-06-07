@@ -17,7 +17,7 @@ class PrimaryHeader: public ParserBase{
 
         // Functions
         void readData() override;
-        [[nodiscard]] uint payloadSize(uint index) const override;
+        [[nodiscard]] uint payloadSize(uint index) override;
         bool getPayload(uint index, void *obj) override;
 
     public:

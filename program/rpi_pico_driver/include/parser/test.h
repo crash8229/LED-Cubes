@@ -8,6 +8,7 @@
 #include <iomanip>
 #include "frame.h"
 #include "animation.h"
+#include "library.h"
 
 namespace parser {
 
@@ -15,6 +16,7 @@ namespace parser {
     std::string hexStr(uint8_t *data, uint32_t len);
     void printFrameInfo(Frame *frame, const std::string& prefix = "") ;
     void printAnimationInfo(Animation *animation, const std::string& prefix = "");
+    void printLibraryInfo(Library *library, const std::string& prefix = "");
 
 } // parser
 

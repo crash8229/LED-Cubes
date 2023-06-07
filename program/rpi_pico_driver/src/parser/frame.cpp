@@ -10,13 +10,12 @@ namespace parser {
     void Frame::readData() {
         _card->fileSeek(_offset);
 
-        _primaryHeader = PrimaryHeader(_card, _card->fileTell());
+        _primaryHeader.init(_card, _card->fileTell());
         if (_primaryHeader.type() != PrimaryHeader::type::FRAME)
             throw std::invalid_argument("Primary header did not match expected type of: FRAME");
 
-        uint8_t buf[4];
-        uint bytesRead = 0;
-        if (_card->fileRead(buf, 4, &bytesRead)) {
+        uint8_t buf[frameV1HeaderSize];
+        if (_card->fileRead(buf, frameV1HeaderSize, nullptr)) {
             _duration = getUINT16(buf, 0);
             _dataLength = getUINT16(buf, 2);
         }
@@ -65,9 +64,9 @@ namespace parser {
         _card = card;
         _numTLCs = numTLCs;
         readData();
-        _size = _primaryHeader.size() + 4 + _dataLength;
+        _size = _primaryHeader.size() + frameV1HeaderSize + _dataLength;
     }
-    uint Frame::payloadSize(uint index) const {
+    uint Frame::payloadSize(uint index) {
         return _payloadSize;
     }
     bool Frame::getPayload(uint index, uint8_t *tlcStates) {

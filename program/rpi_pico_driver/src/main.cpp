@@ -95,22 +95,32 @@ void core1_main() {
     uint8_t *buffer;
 
     // Testing Frame V1 parser
-//    card.openFile("/frame_v1.bin");
-//    assert(card.isFileOpen());
-//    printf("Testing Frame parser\n");
-//    printf("Test file                  : %s\n", card.filePath().c_str());
-//    parser::Frame frameTest = parser::Frame(&card, 0, 1);
-//    parser::printFrameInfo(&frameTest);
-//    card.closeFile();
-//    printf("\n");
+    card.openFile("/frame_v1.bin");
+    assert(card.isFileOpen());
+    printf("Testing Frame parser\n");
+    printf("Test file                  : %s\n", card.filePath().c_str());
+    parser::Frame frameTest = parser::Frame(&card, 0, 2);
+    parser::printFrameInfo(&frameTest);
+    card.closeFile();
+    printf("\n");
 
     // Testing Animation V1 parser
     card.openFile("/animation_v1.bin");
     assert(card.isFileOpen());
     printf("Testing Animation parser\n");
     printf("Test file                  : %s\n", card.filePath().c_str());
-    parser::Animation animationTest = parser::Animation(&card, 0, 1, 4);
+    parser::Animation animationTest = parser::Animation(&card, 0, 2, 2);
     parser::printAnimationInfo(&animationTest);
+    card.closeFile();
+    printf("\n");
+
+    // Testing Library V1 parser
+    card.openFile("/library_v1.bin");
+    assert(card.isFileOpen());
+    printf("Testing Library parser\n");
+    printf("Test file                  : %s\n", card.filePath().c_str());
+    parser::Library libraryTest = parser::Library(&card, 0);
+    parser::printLibraryInfo(&libraryTest);
     card.closeFile();
     printf("\n");
 

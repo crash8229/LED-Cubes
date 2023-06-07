@@ -16,7 +16,7 @@ namespace parser {
         uint8_t _numLayers = 0;
 
         // Attribute
-        PrimaryHeader _primaryHeader = PrimaryHeader(nullptr, 0);
+        PrimaryHeader _primaryHeader = PrimaryHeader();
         uint16_t _duration = 0;
         uint16_t _dataLength = 0;
 
@@ -31,6 +31,7 @@ namespace parser {
 
         // Variables
         static const uint8_t bytesPerTLC = 24;
+        static const uint8_t frameV1HeaderSize = 4;
 
         // Attributes
         [[nodiscard]] uint8_t type() const;
@@ -40,7 +41,7 @@ namespace parser {
 
         // Functions
         void init(SDCard *card, uint offset, uint8_t numTLCs);
-        [[nodiscard]] uint payloadSize(uint index) const override;
+        [[nodiscard]] uint payloadSize(uint index) override;
         bool getPayload(uint index, uint8_t *tlcStates);
     };
 

@@ -3,7 +3,6 @@
 //
 
 #include <stdexcept>
-#include "frame.h"
 #include "animation.h"
 
 namespace parser {
@@ -11,13 +10,12 @@ namespace parser {
     void Animation::readData() {
         _card->fileSeek(_offset);
 
-        _primaryHeader = PrimaryHeader(_card, _card->fileTell());
+        _primaryHeader.init(_card, _card->fileTell());
         if (_primaryHeader.type() != PrimaryHeader::type::ANIMATION)
             throw std::invalid_argument("Primary header did not match expected type of: ANIMATION");
 
-        uint8_t buf[78];
-        uint bytesRead = 0;
-        if (_card->fileRead(buf, 78, &bytesRead)) {
+        uint8_t buf[animationV1HeaderSize];
+        if (_card->fileRead(buf, animationV1HeaderSize, nullptr)) {
             _sha256 = std::string((char *)buf).substr(0, 32);
             _name = std::string((char *)buf).substr(32, 32);
             _time = getUINT64(buf, 64);
@@ -26,8 +24,8 @@ namespace parser {
         }
 
         _payloadOffset = _card->fileTell();
-        _payloadSize = _primaryHeader.size() + 4 + _numTLCs * parser::Frame::bytesPerTLC * _numLayers;
-        _payloadCount = _dataLength / _payloadSize;
+        _payloadSize = _primaryHeader.size() + Frame::frameV1HeaderSize + _numTLCs * parser::Frame::bytesPerTLC * _numLayers;
+        _payloadCount = _frameCount;
     }
     bool Animation::getPayload(uint index, void *obj) {
         auto *frame = (Frame *)obj;
@@ -78,9 +76,9 @@ namespace parser {
         _numTLCs = numTLCs;
         _numLayers = numLayers;
         readData();
-        _size = _primaryHeader.size() + 78 + _dataLength;
+        _size = _primaryHeader.size() + animationV1HeaderSize + _dataLength;
     }
-    uint Animation::payloadSize(uint index) const {
+    uint Animation::payloadSize(uint index) {
         return _payloadSize;
     }
     void Animation::getPayload(uint index, Frame *frame) {

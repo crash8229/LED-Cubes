@@ -35,7 +35,7 @@ namespace parser {
         [[nodiscard]] uint offset() const;
         [[nodiscard]] uint payloadOffset() const;
         [[nodiscard]] uint payloadCount() const;
-        [[nodiscard]] virtual uint payloadSize(uint index) const = 0;
+        [[nodiscard]] virtual uint payloadSize(uint index) = 0;
         virtual bool getPayload(uint index, void *obj) = 0;
 
     };

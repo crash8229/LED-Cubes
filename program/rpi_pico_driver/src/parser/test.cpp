@@ -54,4 +54,27 @@ namespace parser {
             printFrameInfo(&frame, prefix + "                           : ");
         }
     }
+
+    // Finish the library info printer
+    void printLibraryInfo(Library *library, const std::string& prefix) {
+        printf("%sLibrary Info               : Size=%05d   Offset=%07d\n", prefix.c_str(), library->size(), library->offset());
+        printf("%sLibrary Primary Header     : Type=%02d   Version=%02d\n", prefix.c_str(), library->type(), library->version());
+        printf("%sLibrary SHA256             : %s\n", prefix.c_str(), hexStr(library->sha256(), 32).c_str());
+        printf("%sLibrary Secondary Header   : Name       = %s\n", prefix.c_str(), library->name().c_str());
+        printf("%s                           : Time       = %llu\n", prefix.c_str(), library->time());
+        printf("%s                           : XSize = %d\n", prefix.c_str(), library->xSize());
+        printf("%s                           : YSize = %d\n", prefix.c_str(), library->ySize());
+        printf("%s                           : ZSize = %d\n", prefix.c_str(), library->zSize());
+        printf("%s                           : TLCCount = %d\n", prefix.c_str(), library->tlcCount());
+        printf("%s                           : AnimationCount = %d\n", prefix.c_str(), library->animationCount());
+        printf("%s                           : DataLength = %llu\n", prefix.c_str(), library->dataLength());
+        printf("%sLibrary Payload Info       : PayloadOffset=%05d   PayloadCount=%05d\n", prefix.c_str(), library->payloadOffset(), library->payloadCount());
+
+        Animation animation = Animation();
+        for (uint i = 0; i < library->payloadCount(); i++) {
+            printf("%sLibrary Payload %02d         : PayloadSize=%05d\n", prefix.c_str(), i, library->payloadSize(i));
+            library->getPayload(i, &animation);
+            printAnimationInfo(&animation, prefix + "                           : ");
+        }
+    }
 } // parsers

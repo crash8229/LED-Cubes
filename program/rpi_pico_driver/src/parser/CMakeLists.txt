@@ -11,4 +11,5 @@ target_sources(${executable_name} PRIVATE
         primaryheader.cpp
         frame.cpp
         animation.cpp
+        library.cpp
         )
