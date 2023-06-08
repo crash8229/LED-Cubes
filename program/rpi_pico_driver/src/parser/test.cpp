@@ -19,7 +19,7 @@ namespace parser {
         buffer = new uint8_t[payloadSize];
         for (uint i = 0; i < frame->payloadCount(); i++) {
             frame->getPayload(i, buffer);
-            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::hexStr(buffer, payloadSize).c_str());
+            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::getHexString(buffer, 0, payloadSize).c_str());
         }
         delete[] buffer;
     }

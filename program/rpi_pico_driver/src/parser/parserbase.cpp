@@ -30,11 +30,11 @@ namespace parser {
 
         return ss.str();
     }
-    std::string ParserBase::hexStr(uint8_t *data, uint32_t len, uint offset) {
+    std::string ParserBase::getHexString(const uint8_t *data, uint offset, uint length) {
         std::stringstream ss;
         ss << std::hex;
 
-        for( uint i = offset ; i < len + offset; ++i )
+        for(uint i = offset ; i < length + offset; ++i )
             ss << std::setw(2) << std::setfill('0') << (int)data[i];
 
         return ss.str();

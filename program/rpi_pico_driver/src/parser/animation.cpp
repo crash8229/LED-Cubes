@@ -16,7 +16,7 @@ namespace parser {
 
         uint8_t buf[animationV1HeaderSize];
         if (_card->fileRead(buf, animationV1HeaderSize, nullptr)) {
-            _sha256 = hexStr(buf, 32, 0);
+            _sha256 = getHexString(buf, 0, 32);
             _name = getString(buf, 32, 32);
             _time = getUINT64(buf, 64);
             _frameCount = getUINT16(buf, 72);
