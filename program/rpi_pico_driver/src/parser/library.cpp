@@ -16,8 +16,8 @@ namespace parser {
 
         uint8_t buf[libraryV1HeaderSize];
         if (_card->fileRead(buf, libraryV1HeaderSize, nullptr)) {
-            _sha256 = std::string((char *)buf).substr(0, 32);
-            _name = std::string((char *)buf).substr(32, 32);
+            _sha256 = hexStr(buf, 32, 0);
+            _name = getString(buf, 32, 32);
             _time = getUINT64(buf, 64);
             _xSize = buf[72];
             _ySize = buf[73];

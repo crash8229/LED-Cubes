@@ -30,6 +30,8 @@ namespace parser {
         static uint16_t getUINT16(const uint8_t *arr, uint offset);
         static uint32_t getUINT32(const uint8_t *arr, uint offset);
         static uint64_t getUINT64(const uint8_t *arr, uint offset);
+        static std::string getString(const uint8_t *arr, uint offset, uint length);
+        static std::string hexStr(uint8_t *data, uint32_t len, uint offset = 0);
         SDCard *card();
         [[nodiscard]] uint size() const;
         [[nodiscard]] uint offset() const;

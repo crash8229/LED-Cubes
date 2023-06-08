@@ -5,19 +5,6 @@
 #include "test.h"
 
 namespace parser {
-    std::string hexStr(uint8_t *data, uint32_t len) {
-        std::stringstream ss;
-        ss << std::hex;
-
-        for( int i(0) ; i < len; ++i )
-            ss << std::setw(2) << std::setfill('0') << (int)data[i];
-
-        return ss.str();
-    }
-
-    std::string hexStr(const std::string& data, uint32_t len) {
-        return hexStr((uint8_t *)data.c_str(), len);
-    }
 
     void printFrameInfo(Frame *frame, const std::string& prefix) {
         uint payloadSize;
@@ -32,7 +19,7 @@ namespace parser {
         buffer = new uint8_t[payloadSize];
         for (uint i = 0; i < frame->payloadCount(); i++) {
             frame->getPayload(i, buffer);
-            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, hexStr(buffer, payloadSize).c_str());
+            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::hexStr(buffer, payloadSize).c_str());
         }
         delete[] buffer;
     }
@@ -40,7 +27,7 @@ namespace parser {
     void printAnimationInfo(Animation *animation, const std::string& prefix) {
         printf("%sAnimation Info             : Size=%05d   Offset=%07d\n", prefix.c_str(), animation->size(), animation->offset());
         printf("%sAnimation Primary Header   : Type=%02d   Version=%02d\n", prefix.c_str(), animation->type(), animation->version());
-        printf("%sAnimation SHA256           : %s\n", prefix.c_str(), hexStr(animation->sha256(), 32).c_str());
+        printf("%sAnimation SHA256           : %s\n", prefix.c_str(), animation->sha256().c_str());
         printf("%sAnimation Secondary Header : Name       = %s\n", prefix.c_str(), animation->name().c_str());
         printf("%s                           : Time       = %llu\n", prefix.c_str(), animation->time());
         printf("%s                           : FrameCount = %d\n", prefix.c_str(), animation->frameCount());
@@ -58,7 +45,7 @@ namespace parser {
     void printLibraryInfo(Library *library, const std::string& prefix) {
         printf("%sLibrary Info               : Size=%05d   Offset=%07d\n", prefix.c_str(), library->size(), library->offset());
         printf("%sLibrary Primary Header     : Type=%02d   Version=%02d\n", prefix.c_str(), library->type(), library->version());
-        printf("%sLibrary SHA256             : %s\n", prefix.c_str(), hexStr(library->sha256(), 32).c_str());
+        printf("%sLibrary SHA256             : %s\n", prefix.c_str(), library->sha256().c_str());
         printf("%sLibrary Secondary Header   : Name       = %s\n", prefix.c_str(), library->name().c_str());
         printf("%s                           : Time       = %llu\n", prefix.c_str(), library->time());
         printf("%s                           : XSize = %d\n", prefix.c_str(), library->xSize());
