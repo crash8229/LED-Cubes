@@ -135,60 +135,6 @@ void parserTest(SDCard *card) {
 #endif
 
 void core1_main() {
-    SDCard card;
-    card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
-    SDCard::init();
-    assert(card.isCardInserted());
-    card.mount();
-    assert(card.isMounted());
-    card.openFile(SD_DEFAULT_FILE);
-
-#ifdef SD_CARD_TEST
-    sdCardTest(&card);
-    card.closeFile();
-    card.unmount();
-    assert(!card.isMounted());
-    return;
-#endif
-
-#ifdef PARSER_TEST
-    parserTest(&card);
-    card.closeFile();
-    card.unmount();
-    assert(!card.isMounted());
-    return;
-#endif
-
-    card.openFile(SD_DEFAULT_FILE);
-    assert(card.isFileOpen());
-    printf("File                       : %s\n", card.filePath().c_str());
-    parser::File fileParser = parser::File(&card, 0);
-    parser::printFileInfo(&fileParser);
-    card.closeFile();
-    printf("\n");
-
-    card.unmount();
-    assert(!card.isMounted());
-}
-
-// TODO: Add button debouncer
-// I just use a timer interrupt to check the buttons every 10-20 ms. Fast enough for good user experience, and slow enough that bouncing contacts are not a problem.
-
-int main() {
-#ifdef DEBUG
-    sleep_ms(1000);
-#endif
-    // Start STDIO UART and USB
-#ifdef STDIO_UART_ENABLE
-    stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
-#endif
-#ifdef STDIO_USB_ENABLE
-    stdio_usb_init();
-#endif
-    printf("\n");
-
-    // Start second core
-    multicore_launch_core1(core1_main);
 
     // Turn on all LEDs in the cube
 //    uint8_t data[1][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
@@ -223,6 +169,65 @@ int main() {
             tlc.setGrayscale(datum);
             sleep_ms(waitPerLayer);
         }
+    }
+}
+
+// TODO: Add button debouncer
+// I just use a timer interrupt to check the buttons every 10-20 ms. Fast enough for good user experience, and slow enough that bouncing contacts are not a problem.
+
+int main() {
+#ifdef DEBUG
+    sleep_ms(1000);
+#endif
+    // Start STDIO UART and USB
+#ifdef STDIO_UART_ENABLE
+    stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
+#endif
+#ifdef STDIO_USB_ENABLE
+    stdio_usb_init();
+#endif
+    printf("\n");
+
+    // Start second core
+    multicore_launch_core1(core1_main);
+
+    SDCard card;
+    card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
+    SDCard::init();
+    assert(card.isCardInserted());
+    card.mount();
+    assert(card.isMounted());
+    card.openFile(SD_DEFAULT_FILE);
+
+#ifdef SD_CARD_TEST
+    sdCardTest(&card);
+    card.closeFile();
+    card.unmount();
+    assert(!card.isMounted());
+    return 0;
+#endif
+
+#ifdef PARSER_TEST
+    parserTest(&card);
+    card.closeFile();
+    card.unmount();
+    assert(!card.isMounted());
+    return 0;
+#endif
+
+    card.openFile(SD_DEFAULT_FILE);
+    assert(card.isFileOpen());
+    printf("File                       : %s\n", card.filePath().c_str());
+    parser::File fileParser = parser::File(&card, 0);
+    parser::printFileInfo(&fileParser);
+    card.closeFile();
+    printf("\n");
+
+    card.unmount();
+    assert(!card.isMounted());
+
+    while (true) {
+        sleep_ms(1000);
     }
 
 }
