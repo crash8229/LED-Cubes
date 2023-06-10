@@ -10,8 +10,11 @@
 #include "sdcard.h"
 #include "ledcube.h"
 
+#include "file.h"
+#include "test.h"
+
 #ifdef PARSER_TEST
-#include "parser/test.h"
+#include "test.h"
 #endif
 
 
@@ -120,6 +123,7 @@ void parserTest(SDCard *card) {
 
     // Testing File V1 parser
     card->openFile("/test/cube_file_v1.bin");
+//    card->openFile(SD_DEFAULT_FILE);
     assert(card->isFileOpen());
     printf("Testing File parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());
@@ -154,6 +158,14 @@ void core1_main() {
     assert(!card.isMounted());
     return;
 #endif
+
+    card.openFile(SD_DEFAULT_FILE);
+    assert(card.isFileOpen());
+    printf("File                       : %s\n", card.filePath().c_str());
+    parser::File fileParser = parser::File(&card, 0);
+    parser::printFileInfo(&fileParser);
+    card.closeFile();
+    printf("\n");
 
     card.unmount();
     assert(!card.isMounted());

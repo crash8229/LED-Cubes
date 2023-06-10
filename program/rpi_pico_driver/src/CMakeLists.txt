@@ -9,14 +9,11 @@ target_include_directories(${executable_name}
         PUBLIC
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/include"
-        "${PROJECT_SOURCE_DIR}/include/parser"
         )
 
 # Add source files
 target_sources(${executable_name} PRIVATE
-        tlc5940.cpp
         ledcube.cpp
-        sdcard.cpp
         )
 
 # Configure PICO stdio
@@ -25,6 +22,9 @@ pico_enable_stdio_usb(${executable_name} 1)
 
 # Add library for SD card
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/spi_sd_fat/src" build/sdcard)
+
+# Add hardware
+add_subdirectory("hardware")
 
 # Add parsers
 add_subdirectory("parser")
