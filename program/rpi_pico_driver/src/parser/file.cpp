@@ -49,8 +49,10 @@ namespace parser {
     uint File::payloadSize(uint index) {
         return _payloadSize;
     }
-    void File::getPayload(Library *library) {
-        getPayload(0, (void *)library);
+    Library File::getPayload() {
+        auto library = Library();
+        getPayload(0, (void *)&library);
+        return library;
     }
 
 } // parser

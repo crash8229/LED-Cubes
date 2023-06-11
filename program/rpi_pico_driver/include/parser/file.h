@@ -35,7 +35,7 @@ namespace parser {
         // Functions
         void init(SDCard *card, uint offset);
         [[nodiscard]] uint payloadSize(uint index) override;
-        void getPayload(Library *library);
+        Library getPayload();
 
     };
 

@@ -81,8 +81,10 @@ namespace parser {
     uint Animation::payloadSize(uint index) {
         return _payloadSize;
     }
-    void Animation::getPayload(uint index, Frame *frame) {
-        getPayload(index, (void *)frame);
+    Frame Animation::getPayload(uint index) {
+        auto frame = Frame();
+        getPayload(index, (void *)&frame);
+        return frame;
     }
 
 } // parser

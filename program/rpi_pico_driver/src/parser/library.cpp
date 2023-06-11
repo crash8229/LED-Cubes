@@ -118,8 +118,10 @@ namespace parser {
         }
         return _payloadSize;
     }
-    void Library::getPayload(uint index, Animation *animation) {
-        getPayload(index, (void *)animation);
+    Animation Library::getPayload(uint index) {
+        auto animation = Animation();
+        getPayload(index, (void *)&animation);
+        return animation;
     }
 
 } // parser

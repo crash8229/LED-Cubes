@@ -5,6 +5,7 @@
 #ifndef RPI_PICO_DRIVER_FRAME_H
 #define RPI_PICO_DRIVER_FRAME_H
 
+#include <vector>
 #include "primaryheader.h"
 
 namespace parser {
@@ -13,7 +14,6 @@ namespace parser {
     private:
         // Variables
         uint8_t _numTLCs = 0;
-        uint8_t _numLayers = 0;
 
         // Attribute
         PrimaryHeader _primaryHeader = PrimaryHeader();
@@ -33,6 +33,12 @@ namespace parser {
         static const uint8_t bytesPerTLC = 24;
         static const uint8_t frameV1HeaderSize = 4;
 
+        // Structs
+        typedef struct {
+            uint16_t duration;
+            std::vector<uint8_t> tlcStates;
+        } FrameData;
+
         // Attributes
         [[nodiscard]] uint8_t type() const;
         [[nodiscard]] uint8_t version() const;
@@ -42,7 +48,8 @@ namespace parser {
         // Functions
         void init(SDCard *card, uint offset, uint8_t numTLCs);
         [[nodiscard]] uint payloadSize(uint index) override;
-        bool getPayload(uint index, uint8_t *tlcStates);
+        std::vector<uint8_t> getPayload(uint index);
+        FrameData getFrameData(uint index);
     };
 
 } // parser

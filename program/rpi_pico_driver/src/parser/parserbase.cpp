@@ -39,13 +39,6 @@ namespace parser {
 
         return ss.str();
     }
-//    std::string ParserBase::uint8ToString(const uint8_t *arr, uint offset, uint length) {
-//        std::stringstream ss;
-//        for ( uint i = offset; i < offset + length; i++) {
-//            ss << arr[i];
-//        }
-//        return ss.str();
-//    }
     SDCard *ParserBase::card() {
         return _card;
     }

@@ -69,8 +69,14 @@ namespace parser {
     uint Frame::payloadSize(uint index) {
         return _payloadSize;
     }
-    bool Frame::getPayload(uint index, uint8_t *tlcStates) {
-        return getPayload(index, (void *)tlcStates);
+    std::vector<uint8_t> Frame::getPayload(uint index) {
+        std::vector<uint8_t> buf(_payloadSize);
+        getPayload(index, (void *)&buf[0]);
+        return buf;
+    }
+
+    Frame::FrameData Frame::getFrameData(uint index) {
+        return {_duration, getPayload(index)};
     }
 
 } // parser
