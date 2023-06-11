@@ -27,6 +27,9 @@ namespace parser {
         _payloadSize = _primaryHeader.size() + Frame::frameV1HeaderSize + _numTLCs * parser::Frame::bytesPerTLC * _numLayers;
         _payloadCount = _frameCount;
     }
+    uint Animation::payloadSize(uint index) {
+        return _payloadSize;
+    }
     bool Animation::getPayload(uint index, void *obj) {
         auto *frame = (Frame *)obj;
 
@@ -78,8 +81,8 @@ namespace parser {
         readData();
         _size = _primaryHeader.size() + animationV1HeaderSize + _dataLength;
     }
-    uint Animation::payloadSize(uint index) {
-        return _payloadSize;
+    uint Animation::payloadSize() {
+        return payloadSize(0);
     }
     Frame Animation::getPayload(uint index) {
         auto frame = Frame();

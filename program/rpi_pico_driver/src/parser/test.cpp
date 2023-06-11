@@ -7,18 +7,15 @@
 namespace parser {
 
     void printFrameInfo(Frame *frame, const std::string& prefix) {
-        uint payloadSize;
-
         printf("%sFrame Info                 : Size=%05d   Offset=%07d\n", prefix.c_str(), frame->size(), frame->offset());
         printf("%sFrame Primary Header       : Type=%02d   Version=%02d\n", prefix.c_str(), frame->type(), frame->version());
         printf("%sFrame Secondary Header     : Duration=%05d   DataLength=%05d\n", prefix.c_str(), frame->duration(), frame->dataLength());
-        printf("%sFrame Payload Info         : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), frame->payloadOffset(), frame->payloadCount(), frame->payloadSize(0));
+        printf("%sFrame Payload Info         : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), frame->payloadOffset(), frame->payloadCount(), frame->payloadSize());
 
-        payloadSize = frame->payloadSize(0);
         Frame::FrameData data;
         for (uint i = 0; i < frame->payloadCount(); i++) {
             data = frame->getFrameData(i);
-            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::getHexString(&(data.tlcStates[0]), 0, payloadSize).c_str());
+            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::getHexString(&(data.tlcStates[0]), 0, frame->payloadSize()).c_str());
         }
     }
 
@@ -30,7 +27,7 @@ namespace parser {
         printf("%s                           : Time       = %llu\n", prefix.c_str(), animation->time());
         printf("%s                           : FrameCount = %d\n", prefix.c_str(), animation->frameCount());
         printf("%s                           : DataLength = %lu\n", prefix.c_str(), animation->dataLength());
-        printf("%sAnimation Payload Info     : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), animation->payloadOffset(), animation->payloadCount(), animation->payloadSize(0));
+        printf("%sAnimation Payload Info     : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), animation->payloadOffset(), animation->payloadCount(), animation->payloadSize());
 
         Frame frame;
         for (uint i = 0; i < animation->payloadCount(); i++) {
@@ -65,7 +62,7 @@ namespace parser {
     void printFileInfo(File *file, const std::string& prefix) {
         printf("%sFile Info                  : Size=%05d   Offset=%07d\n", prefix.c_str(), file->size(), file->offset());
         printf("%sFile Primary Header        : Type=%02d   Version=%02d\n", prefix.c_str(), file->type(), file->version());
-        printf("%sFile Payload Info          : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), file->payloadOffset(), file->payloadCount(), file->payloadSize(0));
+        printf("%sFile Payload Info          : PayloadOffset=%05d   PayloadCount=%05d   PayloadSize=%05d\n", prefix.c_str(), file->payloadOffset(), file->payloadCount(), file->payloadSize());
 
         Library library;
         library = file->getPayload();

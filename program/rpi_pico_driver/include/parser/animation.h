@@ -27,6 +27,7 @@ namespace parser {
 
         // Functions
         void readData() override;
+        [[nodiscard]] uint payloadSize(uint index) override;
         bool getPayload(uint index, void *obj) override;
 
     public:
@@ -48,7 +49,7 @@ namespace parser {
 
         // Functions
         void init(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers);
-        [[nodiscard]] uint payloadSize(uint index) override;
+        [[nodiscard]] uint payloadSize();
         Frame getPayload(uint index);
     };
 

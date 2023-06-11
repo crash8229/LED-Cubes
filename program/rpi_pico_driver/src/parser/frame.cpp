@@ -24,6 +24,9 @@ namespace parser {
         _payloadSize = _numTLCs * bytesPerTLC;
         _payloadCount = _dataLength / _payloadSize;
     }
+    uint Frame::payloadSize(uint index) {
+        return _payloadSize;
+    }
     bool Frame::getPayload(uint index, void *obj) {
         auto *buf = (uint8_t *) obj;
 
@@ -66,8 +69,8 @@ namespace parser {
         readData();
         _size = _primaryHeader.size() + frameV1HeaderSize + _dataLength;
     }
-    uint Frame::payloadSize(uint index) {
-        return _payloadSize;
+    uint Frame::payloadSize() {
+        return payloadSize(0);
     }
     std::vector<uint8_t> Frame::getPayload(uint index) {
         std::vector<uint8_t> buf(_payloadSize);

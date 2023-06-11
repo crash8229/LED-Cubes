@@ -18,6 +18,9 @@ namespace parser {
         _payloadCount = 1;
         _payloadSize = _card->fileSize() - _primaryHeader.size();
     }
+    uint File::payloadSize(uint index) {
+        return _payloadSize;
+    }
     bool File::getPayload(uint index, void *obj) {
         auto *library = (Library *)obj;
         library->init(_card, _payloadOffset);
@@ -46,8 +49,8 @@ namespace parser {
         readData();
         _size = _primaryHeader.size() + _payloadSize;
     }
-    uint File::payloadSize(uint index) {
-        return _payloadSize;
+    uint File::payloadSize() {
+        return payloadSize(0);
     }
     Library File::getPayload() {
         auto library = Library();
