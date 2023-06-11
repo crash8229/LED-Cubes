@@ -43,7 +43,7 @@ SDCard::~SDCard() {
     if (isFileOpen()) {
         closeFile();
     }
-    f_unmount(sdCard.pcName);
+    unmount();
 }
 
 // Private
