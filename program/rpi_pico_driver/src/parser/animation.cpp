@@ -27,10 +27,10 @@ namespace parser {
         _payloadSize = _primaryHeader.size() + Frame::frameV1HeaderSize + _numTLCs * parser::Frame::bytesPerTLC * _numLayers;
         _payloadCount = _frameCount;
     }
-    uint Animation::payloadSize(uint index) {
+    uint64_t Animation::payloadSize(uint32_t index) {
         return _payloadSize;
     }
-    bool Animation::getPayload(uint index, void *obj) {
+    bool Animation::getPayload(uint32_t index, void *obj) {
         auto *frame = (Frame *)obj;
 
         if (index >= _payloadCount)
@@ -45,7 +45,7 @@ namespace parser {
     // #### Public ####
     // Constructor & Destructor
     Animation::Animation() = default;
-    Animation::Animation(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers) {
+    Animation::Animation(SDCard *card, uint64_t offset, uint8_t numTLCs, uint8_t numLayers) {
         init(card, offset, numTLCs, numLayers);
     }
 
@@ -73,7 +73,7 @@ namespace parser {
     }
 
     // Functions
-    void Animation::init(SDCard *card, uint offset, uint8_t numTLCs, uint8_t numLayers) {
+    void Animation::init(SDCard *card, uint64_t offset, uint8_t numTLCs, uint8_t numLayers) {
         _offset = offset;
         _card = card;
         _numTLCs = numTLCs;
@@ -81,10 +81,10 @@ namespace parser {
         readData();
         _size = _primaryHeader.size() + animationV1HeaderSize + _dataLength;
     }
-    uint Animation::payloadSize() {
+    uint64_t Animation::payloadSize() {
         return payloadSize(0);
     }
-    Frame Animation::getPayload(uint index) {
+    Frame Animation::getPayload(uint32_t index) {
         auto frame = Frame();
         getPayload(index, (void *)&frame);
         return frame;

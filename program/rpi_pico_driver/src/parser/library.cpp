@@ -32,7 +32,7 @@ namespace parser {
         _payloadCurrentIndex = 1;
         _payloadSize = payloadSize(0);
     }
-    bool Library::getPayload(uint index, void *obj) {
+    bool Library::getPayload(uint32_t index, void *obj) {
         auto *animation = (Animation *)obj;
 
         if (index >= _payloadCount)
@@ -54,7 +54,7 @@ namespace parser {
     // #### Public ####
     // Constructor & Destructor
     Library::Library() = default;
-    Library::Library(SDCard *card, uint offset) {
+    Library::Library(SDCard *card, uint64_t offset) {
         init(card, offset);
     }
 
@@ -94,13 +94,13 @@ namespace parser {
     }
 
     // Functions
-    void Library::init(SDCard *card, uint offset) {
+    void Library::init(SDCard *card, uint64_t offset) {
         _offset = offset;
         _card = card;
         readData();
         _size = _primaryHeader.size() + libraryV1HeaderSize + _dataLength;
     }
-    uint Library::payloadSize(uint index) {
+    uint64_t Library::payloadSize(uint32_t index) {
         Animation animation = Animation();
         if (index >= _payloadCount)
             throw std::out_of_range("");
@@ -118,7 +118,7 @@ namespace parser {
         }
         return _payloadSize;
     }
-    Animation Library::getPayload(uint index) {
+    Animation Library::getPayload(uint32_t index) {
         auto animation = Animation();
         getPayload(index, (void *)&animation);
         return animation;

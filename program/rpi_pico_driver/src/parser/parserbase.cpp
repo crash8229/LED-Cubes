@@ -42,16 +42,16 @@ namespace parser {
     SDCard *ParserBase::card() {
         return _card;
     }
-    uint ParserBase::size() const {
+    uint64_t ParserBase::size() const {
         return _size;
     }
-    uint ParserBase::offset() const {
+    uint64_t ParserBase::offset() const {
         return _offset;
     }
-    uint ParserBase::payloadOffset() const {
+    uint64_t ParserBase::payloadOffset() const {
         return _payloadOffset;
     }
-    uint ParserBase::payloadCount() const {
+    uint32_t ParserBase::payloadCount() const {
         return _payloadCount;
     }
 

@@ -29,12 +29,12 @@ namespace parser {
 
         // Functions
         void readData() override;
-        bool getPayload(uint index, void *obj) override;
+        bool getPayload(uint32_t index, void *obj) override;
 
     public:
         // Constructor & Destructor
         Library();
-        Library(SDCard *card, uint offset);
+        Library(SDCard *card, uint64_t offset);
 
         // Variables
         static const uint8_t libraryV1HeaderSize = 85;
@@ -53,9 +53,9 @@ namespace parser {
         [[nodiscard]] uint64_t dataLength() const;
 
         // Functions
-        void init(SDCard *card, uint offset);
-        [[nodiscard]] uint payloadSize(uint index) override;
-        Animation getPayload(uint index);
+        void init(SDCard *card, uint64_t offset);
+        [[nodiscard]] uint64_t payloadSize(uint32_t index) override;
+        Animation getPayload(uint32_t index);
     };
 
 } // parser

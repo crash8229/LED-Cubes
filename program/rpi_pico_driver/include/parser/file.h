@@ -19,13 +19,13 @@ namespace parser {
 
         // Functions
         void readData() override;
-        [[nodiscard]] uint payloadSize(uint index) override;
-        bool getPayload(uint index, void *obj) override;
+        [[nodiscard]] uint64_t payloadSize(uint32_t index) override;
+        bool getPayload(uint32_t index, void *obj) override;
 
     public:
         // Constructor & Destructor
         File();
-        File(SDCard *card, uint offset);
+        File(SDCard *card, uint64_t offset);
 
         // Variables
 
@@ -34,8 +34,8 @@ namespace parser {
         [[nodiscard]] uint8_t version() const;
 
         // Functions
-        void init(SDCard *card, uint offset);
-        [[nodiscard]] uint payloadSize();
+        void init(SDCard *card, uint64_t offset);
+        [[nodiscard]] uint64_t payloadSize();
         Library getPayload();
 
     };

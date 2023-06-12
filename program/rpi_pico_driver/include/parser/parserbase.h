@@ -13,12 +13,12 @@ namespace parser {
     protected:
         // Variables
         SDCard *_card = nullptr;
-        uint _offset = 0;
-        uint _size = 0;
-        uint _payloadOffset = 0;
-        uint _payloadCount = 0;
-        uint _payloadSize = 0;
-        uint _payloadCurrentIndex = 0;
+        uint64_t _offset = 0;
+        uint64_t _size = 0;
+        uint64_t _payloadOffset = 0;
+        uint32_t _payloadCount = 0;
+        uint64_t _payloadSize = 0;
+        uint32_t _payloadCurrentIndex = 0;
 
         // Functions
         virtual void readData() = 0;
@@ -33,12 +33,12 @@ namespace parser {
         static std::string getString(const uint8_t *arr, uint offset, uint length);
         static std::string getHexString(const uint8_t *data, uint offset, uint length);
         SDCard *card();
-        [[nodiscard]] uint size() const;
-        [[nodiscard]] uint offset() const;
-        [[nodiscard]] uint payloadOffset() const;
-        [[nodiscard]] uint payloadCount() const;
-        [[nodiscard]] virtual uint payloadSize(uint index) = 0;
-        virtual bool getPayload(uint index, void *obj) = 0;
+        [[nodiscard]] uint64_t size() const;
+        [[nodiscard]] uint64_t offset() const;
+        [[nodiscard]] uint64_t payloadOffset() const;
+        [[nodiscard]] uint32_t payloadCount() const;
+        [[nodiscard]] virtual uint64_t payloadSize(uint32_t index) = 0;
+        virtual bool getPayload(uint32_t index, void *obj) = 0;
 
     };
 

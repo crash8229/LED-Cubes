@@ -24,10 +24,10 @@ namespace parser {
         _payloadSize = _numTLCs * bytesPerTLC;
         _payloadCount = _dataLength / _payloadSize;
     }
-    uint Frame::payloadSize(uint index) {
+    uint64_t Frame::payloadSize(uint32_t index) {
         return _payloadSize;
     }
-    bool Frame::getPayload(uint index, void *obj) {
+    bool Frame::getPayload(uint32_t index, void *obj) {
         auto *buf = (uint8_t *) obj;
 
         if (index >= _payloadCount)
@@ -43,7 +43,7 @@ namespace parser {
     // #### Public ####
     // Constructor & Destructor
     Frame::Frame() = default;
-    Frame::Frame(SDCard *card, uint offset, uint8_t numTLCs) {
+    Frame::Frame(SDCard *card, uint64_t offset, uint8_t numTLCs) {
         init(card, offset, numTLCs);
     }
 
@@ -62,23 +62,23 @@ namespace parser {
     }
 
     // Functions
-    void Frame::init(SDCard *card, uint offset, uint8_t numTLCs) {
+    void Frame::init(SDCard *card, uint64_t offset, uint8_t numTLCs) {
         _offset = offset;
         _card = card;
         _numTLCs = numTLCs;
         readData();
         _size = _primaryHeader.size() + frameV1HeaderSize + _dataLength;
     }
-    uint Frame::payloadSize() {
+    uint64_t Frame::payloadSize() {
         return payloadSize(0);
     }
-    std::vector<uint8_t> Frame::getPayload(uint index) {
+    std::vector<uint8_t> Frame::getPayload(uint32_t index) {
         std::vector<uint8_t> buf(_payloadSize);
         getPayload(index, (void *)&buf[0]);
         return buf;
     }
 
-    Frame::FrameData Frame::getFrameData(uint index) {
+    Frame::FrameData Frame::getFrameData(uint32_t index) {
         return {_duration, getPayload(index)};
     }
 
