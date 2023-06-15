@@ -19,8 +19,8 @@ namespace parser {
 
         // Attribute
         PrimaryHeader _primaryHeader = PrimaryHeader();
-        std::string _sha256;
-        std::string _name;
+        char _sha256[33]{};
+        char _name[33]{};
         uint64_t _time = 0;
         uint16_t _frameCount = 0;
         uint32_t _dataLength = 0;

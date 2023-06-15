@@ -32,6 +32,7 @@ namespace parser {
         static uint64_t getUINT64(const uint8_t *arr, uint offset);
         static std::string getString(const uint8_t *arr, uint offset, uint length);
         static std::string getHexString(const uint8_t *data, uint offset, uint length);
+        static void getString(const uint8_t *arr, uint offset, uint length, char *result);
         SDCard *card();
         [[nodiscard]] uint64_t size() const;
         [[nodiscard]] uint64_t offset() const;

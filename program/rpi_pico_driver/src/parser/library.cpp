@@ -16,8 +16,10 @@ namespace parser {
 
         uint8_t buf[libraryV1HeaderSize];
         if (_card->fileRead(buf, libraryV1HeaderSize, nullptr)) {
-            _sha256 = getHexString(buf, 0, 32);
-            _name = getString(buf, 32, 32);
+            getString(buf, 0, 32, _sha256);
+            _sha256[32] = 0;
+            getString(buf, 32, 32, _name);
+            _name[32] = 0;
             _time = getUINT64(buf, 64);
             _xSize = buf[72];
             _ySize = buf[73];
@@ -66,10 +68,10 @@ namespace parser {
         return _primaryHeader.version();
     }
     std::string Library::sha256() const {
-        return _sha256;
+        return getHexString((uint8_t *)_sha256, 0, 32);
     }
     std::string Library::name() const {
-        return _name;
+        return {_name};
     }
     uint64_t Library::time() const {
         return  _time;

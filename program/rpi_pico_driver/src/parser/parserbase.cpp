@@ -39,6 +39,11 @@ namespace parser {
 
         return ss.str();
     }
+    void ParserBase::getString(const uint8_t *arr, uint offset, uint length, char *result) {
+        for (int i = 0; i < length; i++) {
+            result[i] = arr[offset + i];
+        }
+    }
     SDCard *ParserBase::card() {
         return _card;
     }
