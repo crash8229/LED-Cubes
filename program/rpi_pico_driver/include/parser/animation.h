@@ -38,8 +38,16 @@ namespace parser {
         // Variables
         static const uint8_t animationV1HeaderSize = 78;
 
+        // Structs
+        typedef struct {
+            char name[sizeof(_name)];
+            uint64_t time;
+            uint16_t frameCount;
+            uint64_t size;
+        } AnimationInfo;
+
         // Attributes
-        [[nodiscard]] uint8_t type() const;
+        [[nodiscard]] PrimaryHeader::Type type() const;
         [[nodiscard]] uint8_t version() const;
         [[nodiscard]] std::string sha256() const;
         [[nodiscard]] std::string name() const;
@@ -51,6 +59,8 @@ namespace parser {
         void init(SDCard *card, uint64_t offset, uint8_t numTLCs, uint8_t numLayers);
         [[nodiscard]] uint64_t payloadSize();
         Frame getPayload(uint32_t index);
+        void setPayloadIndex(uint32_t index) override;
+        AnimationInfo getInfo();
     };
 
 } // parser

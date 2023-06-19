@@ -3,6 +3,7 @@
 //
 
 #include <stdexcept>
+#include <cstring>
 #include "animation.h"
 
 namespace parser {
@@ -11,7 +12,7 @@ namespace parser {
         _card->fileSeek(_offset);
 
         _primaryHeader.init(_card, _card->fileTell());
-        if (_primaryHeader.type() != PrimaryHeader::type::ANIMATION)
+        if (_primaryHeader.type() != PrimaryHeader::Type::ANIMATION)
             throw std::invalid_argument("Primary header did not match expected type of: ANIMATION");
 
         uint8_t buf[animationV1HeaderSize];
@@ -38,7 +39,7 @@ namespace parser {
         if (index >= _payloadCount)
             throw std::out_of_range("");
         if (_payloadCurrentIndex != index)
-            _card->fileSeek(_payloadOffset + _payloadSize * index);
+            setPayloadIndex(index);
         _payloadCurrentIndex = index + 1;
         frame->init(_card, _card->fileTell(), _numTLCs);
         return true;
@@ -52,7 +53,7 @@ namespace parser {
     }
 
     // Attributes
-    uint8_t Animation::type() const {
+    PrimaryHeader::Type Animation::type() const {
         return _primaryHeader.type();
     }
     uint8_t Animation::version() const {
@@ -91,5 +92,18 @@ namespace parser {
         getPayload(index, (void *)&frame);
         return frame;
     }
-
+    void Animation::setPayloadIndex(uint32_t index) {
+        _card->fileSeek(_payloadOffset + _payloadSize * index);
+        _payloadCurrentIndex = index;
+    }
+    Animation::AnimationInfo Animation::getInfo() {
+        AnimationInfo animationData = {
+                "",
+                _time,
+                _frameCount,
+                _size
+        };
+        strcpy(animationData.name, _name);
+        return animationData;
+    }
 } // parser

@@ -11,7 +11,7 @@ namespace parser {
 
         uint8_t buf[_size];
         if (_card->fileRead(buf, _size, nullptr)) {
-            _type = buf[0];
+            _type = static_cast<enum Type>(buf[0]);
             _version = buf[1];
         }
     }
@@ -21,6 +21,7 @@ namespace parser {
     bool PrimaryHeader::getPayload(uint32_t index, void *obj) {
         return false;
     }
+    void PrimaryHeader::setPayloadIndex(uint32_t index) {}
 
     // #### Public ####
     // Constructor & Destructor
@@ -30,7 +31,7 @@ namespace parser {
     }
 
     // Attributes
-    uint8_t PrimaryHeader::type() const {
+    PrimaryHeader::Type PrimaryHeader::type() const {
         return _type;
     }
     uint8_t PrimaryHeader::version() const {
@@ -44,5 +45,4 @@ namespace parser {
         _size = 2;
         readData();
     }
-
 } // parser

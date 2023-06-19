@@ -8,20 +8,19 @@ namespace parser {
 
     void printFrameInfo(Frame *frame, const std::string& prefix) {
         printf("%sFrame Info                 : Size=%05llu   Offset=%07llu\n", prefix.c_str(), frame->size(), frame->offset());
-        printf("%sFrame Primary Header       : Type=%02d   Version=%02d\n", prefix.c_str(), frame->type(), frame->version());
+        printf("%sFrame Primary Header       : Type=%02hhu   Version=%02d\n", prefix.c_str(), frame->type(), frame->version());
         printf("%sFrame Secondary Header     : Duration=%05d   DataLength=%05d\n", prefix.c_str(), frame->duration(), frame->dataLength());
         printf("%sFrame Payload Info         : PayloadOffset=%05llu   PayloadCount=%05lu   PayloadSize=%05llu\n", prefix.c_str(), frame->payloadOffset(), frame->payloadCount(), frame->payloadSize());
 
-        Frame::FrameData data;
+        Frame::FrameData data = frame->getFrameData();
         for (uint i = 0; i < frame->payloadCount(); i++) {
-            data = frame->getFrameData(i);
-            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::getHexString(&(data.tlcStates[0]), 0, frame->payloadSize()).c_str());
+            printf("%sFrame Payload %02d           : %s\n", prefix.c_str(), i, ParserBase::getHexString(&(data.tlcStates[0]), i * frame->payloadSize(), frame->payloadSize()).c_str());
         }
     }
 
     void printAnimationInfo(Animation *animation, const std::string& prefix) {
         printf("%sAnimation Info             : Size=%05llu   Offset=%07llu\n", prefix.c_str(), animation->size(), animation->offset());
-        printf("%sAnimation Primary Header   : Type=%02d   Version=%02d\n", prefix.c_str(), animation->type(), animation->version());
+        printf("%sAnimation Primary Header   : Type=%02hhu   Version=%02d\n", prefix.c_str(), animation->type(), animation->version());
         printf("%sAnimation SHA256           : %s\n", prefix.c_str(), animation->sha256().c_str());
         printf("%sAnimation Secondary Header : Name       = %s\n", prefix.c_str(), animation->name().c_str());
         printf("%s                           : Time       = %llu\n", prefix.c_str(), animation->time());
@@ -39,7 +38,7 @@ namespace parser {
 
     void printLibraryInfo(Library *library, const std::string& prefix) {
         printf("%sLibrary Info               : Size=%05llu   Offset=%07llu\n", prefix.c_str(), library->size(), library->offset());
-        printf("%sLibrary Primary Header     : Type=%02d   Version=%02d\n", prefix.c_str(), library->type(), library->version());
+        printf("%sLibrary Primary Header     : Type=%02hhu   Version=%02d\n", prefix.c_str(), library->type(), library->version());
         printf("%sLibrary SHA256             : %s\n", prefix.c_str(), library->sha256().c_str());
         printf("%sLibrary Secondary Header   : Name           = %s\n", prefix.c_str(), library->name().c_str());
         printf("%s                           : Time           = %llu\n", prefix.c_str(), library->time());
@@ -61,7 +60,7 @@ namespace parser {
 
     void printFileInfo(File *file, const std::string& prefix) {
         printf("%sFile Info                  : Size=%05llu   Offset=%07llu\n", prefix.c_str(), file->size(), file->offset());
-        printf("%sFile Primary Header        : Type=%02d   Version=%02d\n", prefix.c_str(), file->type(), file->version());
+        printf("%sFile Primary Header        : Type=%02hhu   Version=%02d\n", prefix.c_str(), file->type(), file->version());
         printf("%sFile Payload Info          : PayloadOffset=%05llu   PayloadCount=%05lu   PayloadSize=%05llu\n", prefix.c_str(), file->payloadOffset(), file->payloadCount(), file->payloadSize());
 
         Library library;

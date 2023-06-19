@@ -9,37 +9,38 @@
 
 namespace parser {
 
-class PrimaryHeader: public ParserBase{
+    class PrimaryHeader: public ParserBase{
+    public:
+        // Enums
+        enum class Type: uint8_t {
+            FRAME,
+            ANIMATION,
+            LIBRARY,
+            FILE
+        };
     private:
         // Attributes
-        uint8_t _type = 0;
+        Type _type{};
         uint8_t _version = 0;
 
         // Functions
         void readData() override;
         [[nodiscard]] uint64_t payloadSize(uint32_t index) override;
         bool getPayload(uint32_t index, void *obj) override;
+        void setPayloadIndex(uint32_t index) override;
 
     public:
         // Constructor & Destructor
         PrimaryHeader();
         PrimaryHeader(SDCard *card, uint64_t offset);
 
-        // Enums
-        enum type {
-            FRAME,
-            ANIMATION,
-            LIBRARY,
-            FILE
-        };
-
         // Attributes
-        [[nodiscard]] uint8_t type() const;
+        [[nodiscard]] Type type() const;
         [[nodiscard]] uint8_t version() const;
 
         // Functions
         void init(SDCard *card, uint64_t offset);
-};
+    };
 
 } // parser
 

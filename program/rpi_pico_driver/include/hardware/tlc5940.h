@@ -38,7 +38,7 @@ public:
     ~TLC5940();
 
     // Constants
-    static const uint8_t GRAYSCALE_BIT_SIZE = 24;
+    static const uint8_t GRAYSCALE_BYTE_SIZE = 24;
 
     // Functions
     void init(const spi_inst_t *port, uint8_t sclk, uint8_t mosi, uint8_t xlat, uint8_t blank, uint8_t gsclk, uint8_t num);

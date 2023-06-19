@@ -11,7 +11,7 @@ namespace parser {
         _card->fileSeek(_offset);
 
         _primaryHeader.init(_card, _card->fileTell());
-        if (_primaryHeader.type() != PrimaryHeader::type::LIBRARY)
+        if (_primaryHeader.type() != PrimaryHeader::Type::LIBRARY)
             throw std::invalid_argument("Primary header did not match expected type of: LIBRARY");
 
         uint8_t buf[libraryV1HeaderSize];
@@ -40,15 +40,9 @@ namespace parser {
         if (index >= _payloadCount)
             throw std::out_of_range("");
         if (_payloadCurrentIndex != index) {
-            _card->fileSeek(_payloadOffset);
-            for (uint i = 0; i <= index; i++) {
-                animation->init(_card, _card->fileTell(), _tlcCount, _zSize);
-                if (i != index)
-                    _card->fileSeek(_card->fileTell() + animation->dataLength());
-            }
+            setPayloadIndex(index);
         }
-        else
-            animation->init(_card, _card->fileTell(), _tlcCount, _zSize);
+        animation->init(_card, _card->fileTell(), _tlcCount, _zSize);
         _payloadCurrentIndex = index + 1;
         return true;
     }
@@ -61,7 +55,7 @@ namespace parser {
     }
 
     // Attributes
-    uint8_t Library::type() const {
+    PrimaryHeader::Type Library::type() const {
         return _primaryHeader.type();
     }
     uint8_t Library::version() const {
@@ -125,5 +119,15 @@ namespace parser {
         getPayload(index, (void *)&animation);
         return animation;
     }
+    void Library::setPayloadIndex(uint32_t index) {
+        Animation animation = Animation();
 
+        _card->fileSeek(_payloadOffset);
+        for (uint i = 0; i < index; i++) {
+            animation.init(_card, _card->fileTell(), _tlcCount, _zSize);
+            if (i != index)
+                _card->fileSeek(_card->fileTell() + animation.dataLength());
+        }
+        _payloadCurrentIndex = index;
+    }
 } // parser

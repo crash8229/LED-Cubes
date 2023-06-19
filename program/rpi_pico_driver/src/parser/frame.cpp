@@ -11,7 +11,7 @@ namespace parser {
         _card->fileSeek(_offset);
 
         _primaryHeader.init(_card, _card->fileTell());
-        if (_primaryHeader.type() != PrimaryHeader::type::FRAME)
+        if (_primaryHeader.type() != PrimaryHeader::Type::FRAME)
             throw std::invalid_argument("Primary header did not match expected type of: FRAME");
 
         uint8_t buf[frameV1HeaderSize];
@@ -29,13 +29,13 @@ namespace parser {
     }
     bool Frame::getPayload(uint32_t index, void *obj) {
         auto *buf = (uint8_t *) obj;
+        uint bytesRead = 0;
 
         if (index >= _payloadCount)
             throw std::out_of_range("");
         if (_payloadCurrentIndex != index)
-            _card->fileSeek(_payloadOffset + _payloadSize * index);
+            setPayloadIndex(index);
         _payloadCurrentIndex = index + 1;
-        uint bytesRead = 0;
         bool result = _card->fileRead(buf, _payloadSize, &bytesRead);
         return bytesRead == bytesPerTLC && result;
     }
@@ -48,7 +48,7 @@ namespace parser {
     }
 
     // Attributes
-    uint8_t Frame::type() const {
+    PrimaryHeader::Type Frame::type() const {
         return _primaryHeader.type();
     }
     uint8_t Frame::version() const {
@@ -78,8 +78,18 @@ namespace parser {
         return buf;
     }
 
-    Frame::FrameData Frame::getFrameData(uint32_t index) {
-        return {_duration, getPayload(index)};
+    void Frame::setPayloadIndex(uint32_t index) {
+        _card->fileSeek(_payloadOffset + _payloadSize * index);
+        _payloadCurrentIndex = index;
     }
+    Frame::FrameData Frame::getFrameData() {
+        FrameData frame;
 
+        frame.duration = _duration;
+        frame.tlcStates.reserve(_dataLength);
+        setPayloadIndex(0);
+        if (!_card->fileRead((uint8_t *)&(frame.tlcStates[0]), _dataLength, nullptr))
+            throw std::runtime_error("Could not get frame data");
+        return frame;
+    }
 } // parser

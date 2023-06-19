@@ -40,7 +40,7 @@ namespace parser {
         static const uint8_t libraryV1HeaderSize = 85;
 
         // Attributes
-        [[nodiscard]] uint8_t type() const;
+        [[nodiscard]] PrimaryHeader::Type type() const;
         [[nodiscard]] uint8_t version() const;
         [[nodiscard]] std::string sha256() const;
         [[nodiscard]] std::string name() const;
@@ -56,6 +56,7 @@ namespace parser {
         void init(SDCard *card, uint64_t offset);
         [[nodiscard]] uint64_t payloadSize(uint32_t index) override;
         Animation getPayload(uint32_t index);
+        void setPayloadIndex(uint32_t index) override;
     };
 
 } // parser

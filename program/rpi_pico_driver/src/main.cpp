@@ -4,13 +4,13 @@
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "pico/multicore.h"
+#include "pico/util/queue.h"
 
 #include "config.h"
 #include "tlc5940.h"
 #include "sdcard.h"
 #include "ledcube.h"
 
-#include "file.h"
 #include "test.h"
 
 #ifdef PARSER_TEST
@@ -20,7 +20,9 @@
 
 #ifdef SD_CARD_TEST
 void sdCardTest(SDCard *card) {
+    SDCard::init();
     assert(card->isCardInserted());
+    card->mount();
     assert(card->isMounted());
     if (card->isFileOpen())
         card->closeFile();
@@ -75,6 +77,9 @@ void sdCardTest(SDCard *card) {
 
 #ifndef SD_CARD_TEST_INF
     printf("\nTook on average %fs to read %06d bytes (total read = %010d bytes)\nFinal average read rate: %8.1f KB/s\n", sum / loopCnt, numBytes, numBytes * loopCnt, numBytes/(bytesInKB * sum / loopCnt));
+    card->closeFile();
+    card->unmount();
+    assert(!card->isMounted());
 #endif
 }
 #endif
@@ -82,11 +87,12 @@ void sdCardTest(SDCard *card) {
 #ifdef PARSER_TEST
 void parserTest(SDCard *card) {
     // #### Test Parsers ####
+    SDCard::init();
     assert(card->isCardInserted());
+    card->mount();
     assert(card->isMounted());
     if (card->isFileOpen())
         card->closeFile();
-    printf("\n");
 
     uint payloadSize;
     uint8_t *buffer;
@@ -123,7 +129,6 @@ void parserTest(SDCard *card) {
 
     // Testing File V1 parser
     card->openFile("/test/cube_file_v1.bin");
-//    card->openFile(SD_DEFAULT_FILE);
     assert(card->isFileOpen());
     printf("Testing File parser\n");
     printf("Test file                  : %s\n", card->filePath().c_str());
@@ -131,54 +136,28 @@ void parserTest(SDCard *card) {
     parser::printFileInfo(&fileTest);
     card->closeFile();
     printf("\n");
+
+    card->closeFile();
+    card->unmount();
+    assert(!card->isMounted());
 }
 #endif
 
-void core1_main() {
 
-    // Turn on all LEDs in the cube
-//    uint8_t data[1][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
-
-    // Turn on all LEDs in the cube
-//    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-//                                 {1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-//                                 {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-//                                 {1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-//                                 {1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
-
-    // Make a 3x3 cube inside the 5x5 cube
-    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                           {1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-
-    // Make a 3x3 cube with pillars
-//    uint8_t data[5][32] = {{1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-//                           {1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-//                           {1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-//                           {1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1},
-//                           {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1}};
-
-    TLC5940 tlc(TLC_PORT, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
-    tlc.ledAllOff();
-
-    const uint waitPerLayer = 3;
-    while (true) {
-        for (uint8_t *datum: data) {
-            tlc.setGrayscale(datum);
-            sleep_ms(waitPerLayer);
-        }
-    }
-}
+queue_t queue;
 
 // TODO: Add button debouncer
 // I just use a timer interrupt to check the buttons every 10-20 ms. Fast enough for good user experience, and slow enough that bouncing contacts are not a problem.
 
+int64_t alarm_callback(alarm_id_t id, void *user_data) {
+    auto *cube = (LEDCube *) user_data;
+    printf("Stopping the cube\n");
+    cube->stop();
+    printf("Stopped the cube\n");
+    return 0;
+}
+
 int main() {
-#ifdef DEBUG
-    sleep_ms(1000);
-#endif
     // Start STDIO UART and USB
 #ifdef STDIO_UART_ENABLE
     stdio_uart_init_full((uart_inst_t *)UART_PORT, UART_BAUD_RATE, UART_TX, UART_RX);
@@ -186,45 +165,53 @@ int main() {
 #ifdef STDIO_USB_ENABLE
     stdio_usb_init();
 #endif
+#ifdef DEBUG
+    sleep_ms(1000);
     printf("\n");
+#endif
 
-    // Start second core
-    multicore_launch_core1(core1_main);
-
+    // Initialize SD card
     SDCard card;
     card.configureForSDIO(SD_CMD, SD_D0, SD_SDIO_PIO, SD_DMA_IRQ, SD_DET_EN, SD_DET, SD_DET_STATE);
-    SDCard::init();
-    assert(card.isCardInserted());
-    card.mount();
-    assert(card.isMounted());
-    card.openFile(SD_DEFAULT_FILE);
 
 #ifdef SD_CARD_TEST
     sdCardTest(&card);
-    card.closeFile();
-    card.unmount();
-    assert(!card.isMounted());
     return 0;
 #endif
 
 #ifdef PARSER_TEST
     parserTest(&card);
-    card.closeFile();
-    card.unmount();
-    assert(!card.isMounted());
     return 0;
 #endif
 
-    card.openFile(SD_DEFAULT_FILE);
-    assert(card.isFileOpen());
-    printf("File                       : %s\n", card.filePath().c_str());
-    parser::File fileParser = parser::File(&card, 0);
-    parser::printFileInfo(&fileParser);
-    card.closeFile();
-    printf("\n");
+//    SDCard::init();
+//    card.mount();
+//    assert(card.isMounted());
+//    card.openFile(SD_DEFAULT_FILE);
+//    assert(card.isFileOpen());
+//    printf("File                       : %s\n", card.filePath().c_str());
+//    parser::File fileParser = parser::File(&card, 0);
+//    parser::printFileInfo(&fileParser);
+//    card.closeFile();
+//    printf("\n");
+//    return 0;
 
-    card.unmount();
-    assert(!card.isMounted());
+    // Initialize TLCs
+    TLC5940 tlc(TLC_PORT, TLC_SCLK, TLC_MOSI, TLC_XLAT, TLC_BLANK, TLC_GSCLK, TLC_NUM);
+
+    // Initialize LEDCube
+    LEDCube cube = LEDCube(&tlc, &card);
+
+    // Alarm
+//    alarm_pool_init_default();
+//    add_alarm_in_ms(2000, alarm_callback, &cube, false);
+
+    cube.openFile(SD_DEFAULT_FILE);
+    printf("Library: %s\n", cube.openedLibrary()->name().c_str());
+    cube.openAnimation(0);
+    printf("Animation: %s\n", cube.openedAnimation()->name().c_str());
+    cube.start();
+
 
     while (true) {
         sleep_ms(1000);

@@ -11,7 +11,7 @@ namespace parser {
         _card->fileSeek(_offset);
 
         _primaryHeader.init(_card, _card->fileTell());
-        if (_primaryHeader.type() != PrimaryHeader::type::FILE)
+        if (_primaryHeader.type() != PrimaryHeader::Type::FILE)
             throw std::invalid_argument("Primary header did not match expected type of: FILE");
 
         _payloadOffset = _card->fileTell();
@@ -26,6 +26,7 @@ namespace parser {
         library->init(_card, _payloadOffset);
         return true;
     }
+    void File::setPayloadIndex(uint32_t index) {}
 
     // #### Public ####
     // Constructor & Destructor
@@ -35,7 +36,7 @@ namespace parser {
     }
 
     // Attributes
-    uint8_t File::type() const {
+    PrimaryHeader::Type File::type() const {
         return _primaryHeader.type();
     }
     uint8_t File::version() const {
@@ -57,5 +58,4 @@ namespace parser {
         getPayload(0, (void *)&library);
         return library;
     }
-
 } // parser

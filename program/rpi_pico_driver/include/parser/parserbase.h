@@ -38,9 +38,10 @@ namespace parser {
         [[nodiscard]] uint64_t offset() const;
         [[nodiscard]] uint64_t payloadOffset() const;
         [[nodiscard]] uint32_t payloadCount() const;
+        [[nodiscard]] uint32_t payloadCurrentIndex() const;
         [[nodiscard]] virtual uint64_t payloadSize(uint32_t index) = 0;
         virtual bool getPayload(uint32_t index, void *obj) = 0;
-
+        virtual void setPayloadIndex(uint32_t index) = 0;
     };
 
 } // parser

@@ -41,7 +41,7 @@ namespace parser {
         } FrameData;
 
         // Attributes
-        [[nodiscard]] uint8_t type() const;
+        [[nodiscard]] PrimaryHeader::Type type() const;
         [[nodiscard]] uint8_t version() const;
         [[nodiscard]] uint16_t duration() const;
         [[nodiscard]] uint16_t dataLength() const;
@@ -50,7 +50,8 @@ namespace parser {
         void init(SDCard *card, uint64_t offset, uint8_t numTLCs);
         [[nodiscard]] uint64_t payloadSize();
         std::vector<uint8_t> getPayload(uint32_t index);
-        FrameData getFrameData(uint32_t index);
+        void setPayloadIndex(uint32_t index) override;
+        FrameData getFrameData();
     };
 
 } // parser

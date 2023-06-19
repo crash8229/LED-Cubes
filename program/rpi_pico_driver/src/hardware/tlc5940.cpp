@@ -36,7 +36,7 @@ TLC5940::~TLC5940() {
 // Private
 /* ****************************************************************************************************************** */
 void TLC5940::init() {
-    gsOutData.reserve(cfg.tlcNum * GRAYSCALE_BIT_SIZE);
+    gsOutData.reserve(cfg.tlcNum * GRAYSCALE_BYTE_SIZE);
 
     // Init GPIO
     gpio_init(cfg.tlcXlat);
@@ -86,7 +86,7 @@ const TLC5940Config *TLC5940::getConfig() {
 
 void TLC5940::setRawGrayscale(uint8_t *outData) const {
     // Set Grayscale
-    spi_write_blocking((spi_inst_t *)cfg.spiPort, outData, GRAYSCALE_BIT_SIZE * cfg.tlcNum);
+    spi_write_blocking((spi_inst_t *)cfg.spiPort, outData, GRAYSCALE_BYTE_SIZE * cfg.tlcNum);
 
     gpio_put(cfg.tlcBlank, true);
 
@@ -102,7 +102,7 @@ void TLC5940::setRawGrayscale(uint8_t *outData) const {
 uint8_t *TLC5940::getRawGrayscale(const uint16_t *values) const {
     // Construct spi data
     int idx;
-    for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
+    for (int gs_idx = 0; gs_idx < GRAYSCALE_BYTE_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b111111110000) >> 4;
         gsOutData[gs_idx + 1] = (values[idx] & 0b1111) << 4 | (values[idx + 1] & 0b111100000000) >> 8;
@@ -119,7 +119,7 @@ void TLC5940::setGrayscale(const uint16_t *values) const {
 uint8_t *TLC5940::getRawGrayscale(const uint8_t *values) const {
     // Construct spi data
     int idx;
-    for (int gs_idx = 0; gs_idx < GRAYSCALE_BIT_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
+    for (int gs_idx = 0; gs_idx < GRAYSCALE_BYTE_SIZE * cfg.tlcNum; gs_idx = gs_idx + 3) {
         idx = gs_idx - gs_idx / 3;
         gsOutData[gs_idx] = (values[idx] & 0b11110000) >> 4;
         gsOutData[gs_idx + 1] = (values[idx] & 0b1111) << 4;
@@ -153,11 +153,11 @@ void TLC5940::gsclkPulse() const {
 }
 
 void TLC5940::ledAllOff() {
-    gsOutData.assign(GRAYSCALE_BIT_SIZE * cfg.tlcNum, 0);
+    gsOutData.assign(GRAYSCALE_BYTE_SIZE * cfg.tlcNum, 0);
     setRawGrayscale(&gsOutData[0]);
 }
 
 void TLC5940::ledAllOn() {
-    gsOutData.assign(GRAYSCALE_BIT_SIZE * cfg.tlcNum, 1);
+    gsOutData.assign(GRAYSCALE_BYTE_SIZE * cfg.tlcNum, 1);
     setRawGrayscale(&gsOutData[0]);
 }

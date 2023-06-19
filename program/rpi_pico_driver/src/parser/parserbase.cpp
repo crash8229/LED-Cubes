@@ -35,7 +35,7 @@ namespace parser {
         ss << std::hex;
 
         for(uint i = offset ; i < length + offset; ++i )
-            ss << std::setw(2) << std::setfill('0') << (int)data[i];
+            ss << std::setw(2) << std::setfill('0') << (uint)data[i];
 
         return ss.str();
     }
@@ -59,5 +59,7 @@ namespace parser {
     uint32_t ParserBase::payloadCount() const {
         return _payloadCount;
     }
-
+    uint32_t ParserBase::payloadCurrentIndex() const {
+        return _payloadCurrentIndex;
+    }
 } // parser
