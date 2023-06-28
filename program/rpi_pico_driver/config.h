@@ -19,19 +19,21 @@
 //#define SD_CARD_TEST_INF
 //#define PARSER_TEST
 
-// If SD_CARD_TEST is defined, then the read.bin file is needed in the /test folder.
-// This is just a binary file of random data of at least ~105MB (100MiB) in size.
-
-// If PARSER_TEST is defined, then the following test binaries are needed in the /test folder:
-// frame_v1.bin
-// animation_v1.bin
-// library_v1.bin
-// cube_file_v1.bin
-//
-// These files are the test binaries from the led-cube-data repository
-// that houses the file specification for my LED cube projects.
-// Link to repository at the location of test files:
-// https://github.com/crash8229/led-cube-data/tree/main/doc/file_specification/objects
+/*
+ * If SD_CARD_TEST is defined, then the read.bin file is needed in the /test folder.
+ * This is just a binary file of random data of at least ~105MB (100MiB) in size.
+ *
+ * If PARSER_TEST is defined, then the following test binaries are needed in the /test folder:
+ * frame_v1.bin
+ * animation_v1.bin
+ * library_v1.bin
+ * cube_file_v1.bin
+ *
+ * These files are the test binaries from the led-cube-data repository
+ * that houses the file specification for my LED cube projects.
+ * Link to repository at the location of test files:
+ * https://github.com/crash8229/led-cube-data/tree/main/doc/file_specification/objects
+*/
 
 // #### UART ####
 static const uart_inst_t* UART_PORT      = uart0;
@@ -50,25 +52,25 @@ const uint8_t            TLC_GSCLK = 20;
 
 //#### SD Card ####
 /*
-    | GPIO  | Pico Pin | microSD | Function    |
-    | ----  | -------- | ------- | ----------- |
-    |  09   |    12    | DET     | Card Detect |
-    |  10   |    14    | CLK     | SDIO_CLK    |
-    |  11   |    15    | CMD     | SDIO_CMD    |
-    |  12   |    16    | DAT0    | SDIO_D0     |
-    |  13   |    17    | DAT1    | SDIO_D1     |
-    |  14   |    19    | DAT2    | SDIO_D2     |
-    |  15   |    20    | DAT3    | SDIO_D3     |
-
-Pins CLK_gpio, D1_gpio, D2_gpio, and D3_gpio are at offsets from pin D0_gpio.
-The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
-    CLK_gpio = (D0_gpio + SDIO_CLK_PIN_D0_OFFSET) % 32;
-    As of this writing, SDIO_CLK_PIN_D0_OFFSET is 30,
-      which is -2 in mod32 arithmetic, so:
-    CLK_gpio = D0_gpio -2.
-    D1_gpio = D0_gpio + 1;
-    D2_gpio = D0_gpio + 2;
-    D3_gpio = D0_gpio + 3;
+ *    | GPIO  | Pico Pin | microSD | Function    |
+ *    | ----  | -------- | ------- | ----------- |
+ *    |  09   |    12    | DET     | Card Detect |
+ *    |  10   |    14    | CLK     | SDIO_CLK    |
+ *    |  11   |    15    | CMD     | SDIO_CMD    |
+ *    |  12   |    16    | DAT0    | SDIO_D0     |
+ *    |  13   |    17    | DAT1    | SDIO_D1     |
+ *    |  14   |    19    | DAT2    | SDIO_D2     |
+ *    |  15   |    20    | DAT3    | SDIO_D3     |
+ *
+ * Pins CLK_gpio, D1_gpio, D2_gpio, and D3_gpio are at offsets from pin D0_gpio.
+ * The offsets are determined by sd_driver\SDIO\rp2040_sdio.pio.
+ *    CLK_gpio = (D0_gpio + SDIO_CLK_PIN_D0_OFFSET) % 32;
+ *    As of this writing, SDIO_CLK_PIN_D0_OFFSET is 30,
+ *      which is -2 in mod32 arithmetic, so:
+ *    CLK_gpio = D0_gpio -2.
+ *    D1_gpio = D0_gpio + 1;
+ *    D2_gpio = D0_gpio + 2;
+ *    D3_gpio = D0_gpio + 3;
 */
 const bool         SD_DET_EN       = true;
 const uint8_t      SD_DET_STATE    = 1;
@@ -90,23 +92,23 @@ static const char* SD_DEFAULT_FILE = "/LEDCUBE.bin";  // Default filepath to use
 
 #endif //RPI_PICO_DRIVER_CONFIG_H
 
-// RPi Pico SD Card Read Test Results with the Adafruit SPI/SDIO Breakout Board
-// Code used to read from the SD Card: https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico
-//
-// SPI:
-// 104857500 bytes in 209715 byte chunks:
-// | Hz       | Cheap 8GB SD card | PNY 32GB SD Card | SAMSUNG 32GB SD Card |
-// | 8928571  | 428.8 KB/s        | 521.9 KB/s       | 500.0 KB/s           |
-// | 10416666 | 459.6 KB/s        | 568.1 KB/s       | 547.6 KB/s           |
-// | 12500000 | 495.1 KB/s        | 623.3 KB/s       | 598.7 KB/s           |
-// | 15625000 | 536.3 KB/s        | 690.2 KB/s       | 660.1 KB/s           |
-// | 20833333 | 585.2 KB/s        | 773.2 KB/s       | 735.7 KB/s           |
-// | 31250000 | N/A               | N/A              | N/A                  |
-//
-// SDIO:
-// Note: Doesn't seem like I can control the clock
-// 104857500 bytes in 209715 byte chunks:
-// | Cheap 8GB SD card | PNY 32GB SD Card | SAMSUNG 32GB SD Card |
-// | 419.5 KB/s        | 2148.4 KB/s      | 1710.5 KB/s          |
-//
+/* RPi Pico SD Card Read Test Results with the Adafruit SPI/SDIO Breakout Board
+ * Code used to read from the SD Card: https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico
+ *
+ * SPI:
+ * 104857500 bytes in 209715 byte chunks:
+ * | Hz       | Cheap 8GB SD card | PNY 32GB SD Card | SAMSUNG 32GB SD Card |
+ * | 8928571  | 428.8 KB/s        | 521.9 KB/s       | 500.0 KB/s           |
+ * | 10416666 | 459.6 KB/s        | 568.1 KB/s       | 547.6 KB/s           |
+ * | 12500000 | 495.1 KB/s        | 623.3 KB/s       | 598.7 KB/s           |
+ * | 15625000 | 536.3 KB/s        | 690.2 KB/s       | 660.1 KB/s           |
+ * | 20833333 | 585.2 KB/s        | 773.2 KB/s       | 735.7 KB/s           |
+ * | 31250000 | N/A               | N/A              | N/A                  |
+ *
+ * SDIO:
+ * Note: Doesn't seem like I can control the clock
+ * 104857500 bytes in 209715 byte chunks:
+ * | Cheap 8GB SD card | PNY 32GB SD Card | SAMSUNG 32GB SD Card |
+ * | 419.5 KB/s        | 2148.4 KB/s      | 1710.5 KB/s          |
+*/
 #pragma clang diagnostic push
