@@ -202,14 +202,16 @@ int main() {
     // Initialize LEDCube
     LEDCube cube = LEDCube(&tlc, &card);
 
-    // Alarm
+//    // Alarm
 //    alarm_pool_init_default();
 //    add_alarm_in_ms(2000, alarm_callback, &cube, false);
 
     cube.openFile(SD_DEFAULT_FILE);
     printf("Library: %s\n", cube.openedLibrary()->name().c_str());
     cube.openAnimation(0);
-    printf("Animation: %s\n", cube.openedAnimation()->name().c_str());
+    if (cube.isAnimationOpen()) {
+        printf("Animation: %s\n", cube.openedAnimation()->name().c_str());
+    }
     cube.start();
 
 

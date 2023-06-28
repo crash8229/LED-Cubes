@@ -115,6 +115,9 @@ parser::Animation *LEDCube::openedAnimation() {
 
 // Functions
 void LEDCube::openFile(const std::string& filePath) {
+    if (currentState == State::STARTED) {
+        stop();
+    }
     if (!card->isCardInserted())
         throw std::runtime_error("SD card not inserted");
     if (!card->isMounted()) {
@@ -130,6 +133,7 @@ void LEDCube::openFile(const std::string& filePath) {
     _filePath = card->filePath();
     _file = parser::File(card, 0);
     _library = _file.getPayload();
+    _animation = parser::Animation();
 
     if (_library.tlcCount() != TLC_NUM) {
         closeFile();
@@ -140,6 +144,9 @@ void LEDCube::openFile(const std::string& filePath) {
 }
 
 void LEDCube::closeFile() {
+    if (currentState == State::STARTED) {
+        stop();
+    }
     card->closeFile();
     _filePath = "";
     _file = parser::File();
@@ -152,7 +159,23 @@ bool LEDCube::isFileOpen() {
 }
 
 void LEDCube::openAnimation(uint8_t index) {
+    if (currentState == State::STARTED) {
+        stop();
+    }
     _animation = _library.getPayload(index);
+}
+
+void LEDCube::closeAnimation() {
+    if (isAnimationOpen()) {
+        if (currentState == State::STARTED) {
+            stop();
+        }
+        _animation = parser::Animation();
+    }
+}
+
+bool LEDCube::isAnimationOpen() {
+    return _animation.version() > 0;
 }
 
 void LEDCube::start() {
@@ -163,6 +186,11 @@ void LEDCube::start() {
 
     if (currentState != State::STOPPED) {
         stop();
+    }
+
+    // Check if animation is open
+    if (!isAnimationOpen()) {
+        throw std::runtime_error("No animation has been opened");
     }
 
     // Start driver on Core 1
@@ -189,8 +217,6 @@ void LEDCube::start() {
             break;
         }
         // Read SD card and fill the queue
-        // TODO: Abstract functon that puts packet in queue
-        // I do not care about what it in, just that it gets put in the queue for the driver
         queueFull = queue_is_full(&data);
         if (!queueFull) {
             packet = getFramePacket();

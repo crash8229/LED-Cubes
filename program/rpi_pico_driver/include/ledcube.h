@@ -77,9 +77,10 @@ public:
     void closeFile();
     bool isFileOpen();
     void openAnimation(uint8_t index);
+    void closeAnimation();
+    bool isAnimationOpen();
     void start();
     void stop();
-    // TODO: Add check if animation opened
 };
 
 #endif //RPI_PICO_DRIVER_LEDCUBE_H
